@@ -1,0 +1,14 @@
+{
+  "id": "elfo",
+  "nome": "Elfo",
+  "descricao": "Elegante e longevo, com afinidade natural com a magia.",
+  "bonus": {
+    "atributos": "Destreza +2, Inteligência +1",
+    "traduzido": {
+      "destreza": 2,
+      "inteligencia": 1
+    }
+  },
+  "caracteristicas": ["Visão no escuro", "Resistência a encantamento", "Longevidade", "Magia natural"]
+}
+

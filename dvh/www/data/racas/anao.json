@@ -1,0 +1,14 @@
+{
+  "id": "anao",
+  "nome": "Anão",
+  "descricao": "Resistente e robusto, excelente em combate e mineração.",
+  "bonus": {
+    "atributos": "Constituição +2, Força +1",
+    "traduzido": {
+      "constituicao": 2,
+      "forca": 1
+    }
+  },
+  "caracteristicas": ["Visão no escuro", "Resistência a veneno", "Proficiência com armas", "Construção"]
+}
+

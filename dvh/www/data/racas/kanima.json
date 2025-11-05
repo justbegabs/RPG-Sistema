@@ -1,0 +1,13 @@
+{
+  "id": "kanima",
+  "nome": "Kanima",
+  "descricao": "Híbrido humano-lagarto com habilidades de escalada e camuflagem.",
+  "bonus": {
+    "atributos": "Destreza +2, Constituição +1",
+    "traduzido": {
+      "destreza": 2,
+      "constituicao": 1
+    }
+  },
+  "caracteristicas": ["Escalada", "Camuflagem", "Visão térmica", "Pele escamosa"]
+}

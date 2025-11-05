@@ -1,0 +1,10 @@
+{
+  "id": "conspiracionista",
+  "nome": "Conspiracionista",
+  "descricao": "Acredita em teorias da conspiração, sempre procurando a verdade oculta.",
+  "bonus": {
+    "habilidades": ["Investigação", "Percepção"],
+    "equipamento": "Documentos secretos, equipamentos de espionagem, moedas"
+  },
+  "caracteristicas": ["Ceticismo", "Paranoia útil", "Conhecimento oculto"]
+}

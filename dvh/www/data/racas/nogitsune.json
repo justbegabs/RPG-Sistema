@@ -1,0 +1,13 @@
+{
+  "id": "nogitsune",
+  "nome": "Nogitsune",
+  "descricao": "Raposa do mal com poderes de ilusão e caos.",
+  "bonus": {
+    "atributos": "Inteligência +2, Carisma +1",
+    "traduzido": {
+      "inteligencia": 2,
+      "carisma": 1
+    }
+  },
+  "caracteristicas": ["Ilusões poderosas", "Manipulação", "Magia do caos", "Múltiplas formas"]
+}

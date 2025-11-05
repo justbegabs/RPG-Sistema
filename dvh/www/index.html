@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com http://localhost:* https://* 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' http://localhost:* https://*;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <meta name="color-scheme" content="light dark">
+        <link rel="stylesheet" href="css/index.css">
+        <title>Sistema de Fichas RPG - Deuses versus Humanos</title>
+    </head>
+    <body>
+        <div class="app-container">
+            <!-- Menu de Navegação -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h1>🎲 RPG Sistema</h1>
+                    <p class="subtitle">Deuses vs Humanos</p>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#" data-page="home" class="nav-item">🏠 Home</a></li>
+                    <li><a href="#" data-page="ficha" class="nav-item active">📝 Ficha</a></li>
+                    <li><a href="#" data-page="racas" class="nav-item">👥 Raças</a></li>
+                    <li><a href="#" data-page="classes" class="nav-item">⚔️ Classes</a></li>
+                    <li><a href="#" data-page="origens" class="nav-item">🌍 Origens</a></li>
+                    <li><a href="#" data-page="atributos" class="nav-item">💪 Atributos</a></li>
+                    <li><a href="#" data-page="base" class="nav-item">📊 Base</a></li>
+                    <li><a href="#" data-page="pericias" class="nav-item">🎯 Perícias</a></li>
+                    <li><a href="#" data-page="habilidades" class="nav-item">✨ Habilidades</a></li>
+                    <li><a href="#" data-page="magias" class="nav-item">🔮 Magias</a></li>
+                    <li><a href="#" data-page="armas" class="nav-item">⚔️ Armas</a></li>
+                    <li><a href="#" data-page="itens" class="nav-item">🎒 Itens</a></li>
+                    <li><a href="#" data-page="criacao-personagens" class="nav-item">👤 Criação de Personagens</a></li>
+                    <li><a href="#" data-page="criacao-mapas" class="nav-item">🗺️ Criação de Mapas</a></li>
+                    <li><a href="#" data-page="musicas-sons" class="nav-item">🎵 Músicas e Sons</a></li>
+                    <li><a href="#" data-page="jogos" class="nav-item">🎮 Jogos</a></li>
+                    <li><a href="#" data-page="mecanicas" class="nav-item">⚙️ Mecânicas</a></li>
+                    <li><a href="#" data-page="efeitos" class="nav-item">💫 Efeitos</a></li>
+                    <li><a href="#" data-page="bestiario" class="nav-item">🐉 Bestiário</a></li>
+                    <li><a href="#" data-page="materiais" class="nav-item">📦 Materiais</a></li>
+                </ul>
+            </nav>
+
+            <!-- Botão para toggle do menu (mobile) -->
+            <button class="menu-toggle" id="menuToggle">☰</button>
+
+            <!-- Conteúdo Principal -->
+            <main class="main-content">
+                <!-- Página: Inicial (Home) -->
+                <div id="page-home" class="page active">
+                    <div class="welcome-container">
+                        <div class="welcome-header">
+                            <h1 class="welcome-title">Bem-vindo ao Sistema dos Deuses</h1>
+                            <p class="welcome-subtitle">Escolha uma das opções abaixo para navegar pelo sistema.</p>
+                        </div>
+                        
+                        <div class="info-box">
+                            <p class="info-text">
+                                A ficha é completamente automatizada, então ela se auto-completará. Para procurar e ver mais informações sobre alguma coisa, entre na página desejada, já que a ficha apresenta apenas um pequeno resumo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra de Navegação Inferior -->
+                <nav class="bottom-nav" id="bottomNav">
+                    <div class="nav-row">
+                        <button class="nav-btn" data-page="ficha">📝 Ficha</button>
+                        <button class="nav-btn" data-page="racas">👥 Raças</button>
+                        <button class="nav-btn" data-page="origens">🌍 Origens</button>
+                        <button class="nav-btn" data-page="classes">⚔️ Classes</button>
+                        <button class="nav-btn" data-page="itens">🎒 Itens</button>
+                        <button class="nav-btn" data-page="armas">⚔️ Armas</button>
+                        <button class="nav-btn" data-page="criacao-personagens">👤 Criação de Personagem</button>
+                        <button class="nav-btn" data-page="criacao-mapas">🗺️ Criação de Mapas</button>
+                    </div>
+                    <div class="nav-row">
+                        <button class="nav-btn" data-page="musicas-sons">🎵 Músicas e Sons</button>
+                        <button class="nav-btn" data-page="jogos">🎮 Jogos</button>
+                        <button class="nav-btn" data-page="mecanicas">⚙️ Mecânicas</button>
+                        <button class="nav-btn" data-page="efeitos">💫 Efeitos</button>
+                        <button class="nav-btn" data-page="pericias">🎯 Perícias</button>
+                        <button class="nav-btn" data-page="bestiario">🐉 Bestiário</button>
+                        <button class="nav-btn" data-page="materiais">📦 Materiais</button>
+                    </div>
+                </nav>
+
+                <!-- Página: Ficha -->
+                <div id="page-ficha" class="page">
+                    <div class="page-header">
+                        <h2>📝 Fichas de Personagem</h2>
+                    </div>
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="showTab('criar')">Criar Ficha</button>
+                        <button class="tab-btn" onclick="showTab('listar')">Listar Fichas</button>
+                    </div>
+
+                    <!-- Tab: Criar Ficha -->
+                    <div id="criar-ficha" class="tab-content active">
+                        <form id="ficha-form" class="ficha-form">
+                            <div class="form-section">
+                                <h2>Informações Básicas</h2>
+                                <div class="form-group">
+                                    <label for="nome">Nome do Personagem *</label>
+                                    <input type="text" id="nome" name="nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="classe">Classe *</label>
+                                    <select id="classe" name="classe" required>
+                                        <option value="">Carregando...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="raca">Raça *</label>
+                                    <select id="raca" name="raca" required>
+                                        <option value="">Carregando...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="origem">Origem *</label>
+                                    <select id="origem" name="origem" required>
+                                        <option value="">Carregando...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nivel">Nível *</label>
+                                    <input type="number" id="nivel" name="nivel" min="1" max="20" value="1" required>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Atributos</h2>
+                                <div class="atributos-grid">
+                                    <div class="form-group">
+                                        <label for="forca">Força</label>
+                                        <input type="number" id="forca" name="forca" min="1" max="20" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="destreza">Destreza</label>
+                                        <input type="number" id="destreza" name="destreza" min="1" max="20" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constituicao">Constituição</label>
+                                        <input type="number" id="constituicao" name="constituicao" min="1" max="20" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inteligencia">Inteligência</label>
+                                        <input type="number" id="inteligencia" name="inteligencia" min="1" max="20" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sabedoria">Sabedoria</label>
+                                        <input type="number" id="sabedoria" name="sabedoria" min="1" max="20" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="carisma">Carisma</label>
+                                        <input type="number" id="carisma" name="carisma" min="1" max="20" value="10" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>Informações Adicionais</h2>
+                                <div class="form-group">
+                                    <label for="vida">Pontos de Vida</label>
+                                    <input type="number" id="vida" name="vida" min="1" value="10" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mana">Pontos de Mana</label>
+                                    <input type="number" id="mana" name="mana" min="0" value="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="historia">História do Personagem</label>
+                                    <textarea id="historia" name="historia" rows="4" placeholder="Conte a história do seu personagem..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Salvar Ficha</button>
+                                <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+                            </div>
+
+                            <div id="mensagem" class="mensagem"></div>
+                        </form>
+                    </div>
+
+                    <!-- Tab: Listar Fichas -->
+                    <div id="listar-fichas" class="tab-content">
+                        <div class="fichas-container">
+                            <div id="fichas-list" class="fichas-list">
+                                <p class="loading">Carregando fichas...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Página: Raças -->
+                <div id="page-racas" class="page">
+                    <div class="page-header">
+                        <h2>👥 Raças</h2>
+                        <p>Explore todas as raças disponíveis no sistema</p>
+                    </div>
+                    <div id="racas-content" class="data-grid">
+                        <p class="loading">Carregando raças...</p>
+                    </div>
+                </div>
+
+                <!-- Página: Detalhes de Raça -->
+                <div id="page-raca-detail" class="page">
+                    <div class="page-header">
+                        <button class="btn btn-secondary" onclick="Router.navigate('racas')">← Voltar para Raças</button>
+                        <h2 id="raca-detail-title">👥 Detalhes da Raça</h2>
+                    </div>
+                    <div id="raca-detail-content" class="detail-container">
+                        <p class="loading">Carregando detalhes...</p>
+                    </div>
+                </div>
+
+                <!-- Página: Classes -->
+                <div id="page-classes" class="page">
+                    <div class="page-header">
+                        <h2>⚔️ Classes</h2>
+                        <p>Explore todas as classes disponíveis no sistema</p>
+                    </div>
+                    <div id="classes-content" class="data-grid">
+                        <p class="loading">Carregando classes...</p>
+                    </div>
+                </div>
+
+                <!-- Página: Detalhes de Classe -->
+                <div id="page-classe-detail" class="page">
+                    <div class="page-header">
+                        <button class="btn btn-secondary" onclick="Router.navigate('classes')">← Voltar para Classes</button>
+                        <h2 id="classe-detail-title">⚔️ Detalhes da Classe</h2>
+                    </div>
+                    <div id="classe-detail-content" class="detail-container">
+                        <p class="loading">Carregando detalhes...</p>
+                    </div>
+                </div>
+
+                <!-- Página: Origens -->
+                <div id="page-origens" class="page">
+                    <div class="page-header">
+                        <h2>🌍 Origens</h2>
+                        <p>Explore todas as origens disponíveis no sistema</p>
+                    </div>
+                    <div id="origens-content" class="data-grid">
+                        <p class="loading">Carregando origens...</p>
+                    </div>
+                </div>
+
+                <!-- Página: Detalhes de Origem -->
+                <div id="page-origem-detail" class="page">
+                    <div class="page-header">
+                        <button class="btn btn-secondary" onclick="Router.navigate('origens')">← Voltar para Origens</button>
+                        <h2 id="origem-detail-title">🌍 Detalhes da Origem</h2>
+                    </div>
+                    <div id="origem-detail-content" class="detail-container">
+                        <p class="loading">Carregando detalhes...</p>
+                    </div>
+                </div>
+
+                <!-- Páginas placeholder para as outras seções -->
+                <div id="page-atributos" class="page">
+                    <div class="page-header">
+                        <h2>💪 Atributos</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Atributos em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-base" class="page">
+                    <div class="page-header">
+                        <h2>📊 Base</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção Base em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-pericias" class="page">
+                    <div class="page-header">
+                        <h2>🎯 Perícias</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Perícias em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-habilidades" class="page">
+                    <div class="page-header">
+                        <h2>✨ Habilidades</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Habilidades em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-magias" class="page">
+                    <div class="page-header">
+                        <h2>🔮 Magias</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Magias em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-armas" class="page">
+                    <div class="page-header">
+                        <h2>⚔️ Armas</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Armas em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-itens" class="page">
+                    <div class="page-header">
+                        <h2>🎒 Itens</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Itens em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-criacao-personagens" class="page">
+                    <div class="page-header">
+                        <h2>👤 Criação de Personagens</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Criação de Personagens em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-criacao-mapas" class="page">
+                    <div class="page-header">
+                        <h2>🗺️ Criação de Mapas</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Criação de Mapas em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-musicas-sons" class="page">
+                    <div class="page-header">
+                        <h2>🎵 Músicas e Sons</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Músicas e Sons em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-jogos" class="page">
+                    <div class="page-header">
+                        <h2>🎮 Jogos</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Jogos em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-mecanicas" class="page">
+                    <div class="page-header">
+                        <h2>⚙️ Mecânicas</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Mecânicas em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-efeitos" class="page">
+                    <div class="page-header">
+                        <h2>💫 Efeitos</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Efeitos em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-bestiario" class="page">
+                    <div class="page-header">
+                        <h2>🐉 Bestiário</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Bestiário em desenvolvimento...</p>
+                    </div>
+                </div>
+
+                <div id="page-materiais" class="page">
+                    <div class="page-header">
+                        <h2>📦 Materiais</h2>
+                    </div>
+                    <div class="page-placeholder">
+                        <p>Seção de Materiais em desenvolvimento...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="cordova.js"></script>
+        <script src="js/data-loader.js"></script>
+        <script src="js/api.js"></script>
+        <script src="js/router.js"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>

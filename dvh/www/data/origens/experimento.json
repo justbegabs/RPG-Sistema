@@ -1,0 +1,10 @@
+{
+  "id": "experimento",
+  "nome": "Experimento",
+  "descricao": "Foi vítima de experimentos, ganhando poderes ou características únicas.",
+  "bonus": {
+    "habilidades": ["Resistência", "Intuição"],
+    "equipamento": "Cicatrizes, lembranças traumáticas, moedas"
+  },
+  "caracteristicas": ["Mudanças físicas", "Trauma", "Poderes únicos"]
+}

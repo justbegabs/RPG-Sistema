@@ -1,0 +1,13 @@
+{
+  "id": "anjocaido",
+  "nome": "Anjo Caído",
+  "descricao": "Anjo que perdeu sua graça, mantendo poderes mas com coração sombrio.",
+  "bonus": {
+    "atributos": "Carisma +2, Inteligência +1",
+    "traduzido": {
+      "carisma": 2,
+      "inteligencia": 1
+    }
+  },
+  "caracteristicas": ["Magia das trevas", "Asas quebradas", "Conhecimento antigo", "Tormenta interior"]
+}

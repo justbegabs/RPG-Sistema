@@ -1,0 +1,13 @@
+{
+  "id": "veliria",
+  "nome": "Velíria",
+  "descricao": "Raça ancestral com conexão profunda com a magia e elementos.",
+  "bonus": {
+    "atributos": "Inteligência +2, Sabedoria +1",
+    "traduzido": {
+      "inteligencia": 2,
+      "sabedoria": 1
+    }
+  },
+  "caracteristicas": ["Magia elemental", "Longevidade", "Sabedoria ancestral", "Resistência mágica"]
+}

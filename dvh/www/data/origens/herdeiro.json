@@ -1,0 +1,10 @@
+{
+  "id": "herdeiro",
+  "nome": "Herdeiro",
+  "descricao": "Nascido em família rica, herdeiro de fortuna e legado familiar.",
+  "bonus": {
+    "habilidades": ["Persuasão", "História"],
+    "equipamento": "Roupas finas, joias, moedas em abundância"
+  },
+  "caracteristicas": ["Riqueza", "Educação refinada", "Responsabilidade familiar"]
+}

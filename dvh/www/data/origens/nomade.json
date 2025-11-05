@@ -1,0 +1,11 @@
+{
+  "id": "nomade",
+  "nome": "Nômade",
+  "descricao": "Viveu viajando, conhecendo diferentes culturas e terras distantes.",
+  "bonus": {
+    "habilidades": ["Sobrevivência", "História (culturas)"],
+    "equipamento": "Equipamento de viagem, mapa, instrumento musical"
+  },
+  "caracteristicas": ["Conhecimento de culturas", "Adaptabilidade", "Experiência de viagem"]
+}
+

@@ -1,0 +1,9 @@
+{
+  "id": "demonologista",
+  "nome": "Demonologista",
+  "descricao": "Estudioso de demônios que invoca e controla criaturas infernais.",
+  "atributoPrincipal": "inteligencia",
+  "habilidades": ["Invocações demoníacas", "Controle", "Conhecimento infernal"],
+  "dadosVida": "1d6",
+  "proficiencias": ["Rituais", "Símbolos mágicos", "Armas simples"]
+}

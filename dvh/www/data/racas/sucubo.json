@@ -1,0 +1,13 @@
+{
+  "id": "sucubo",
+  "nome": "Súcubo",
+  "descricao": "Demônio sedutor que manipula através do desejo e da sedução.",
+  "bonus": {
+    "atributos": "Carisma +3, Inteligência +1",
+    "traduzido": {
+      "carisma": 3,
+      "inteligencia": 1
+    }
+  },
+  "caracteristicas": ["Sedução", "Manipulação mental", "Magia de encantamento", "Asas demoníacas"]
+}

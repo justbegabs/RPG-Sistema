@@ -1,0 +1,9 @@
+{
+  "id": "atirador",
+  "nome": "Atirador",
+  "descricao": "Especialista em combate à distância com armas de fogo ou arcos.",
+  "atributoPrincipal": "destreza",
+  "habilidades": ["Precisão", "Combate à distância", "Mira aprimorada"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Armas à distância", "Armas de fogo", "Armaduras leves"]
+}

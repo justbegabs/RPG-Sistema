@@ -1,0 +1,9 @@
+{
+  "id": "carteado",
+  "nome": "Carteado",
+  "descricao": "Jogador que usa cartas mágicas para realizar feitiços e invocações.",
+  "atributoPrincipal": "carisma",
+  "habilidades": ["Magia de cartas", "Sorte", "Estratégia"],
+  "dadosVida": "1d6",
+  "proficiencias": ["Baralho mágico", "Armas simples", "Armaduras leves"]
+}

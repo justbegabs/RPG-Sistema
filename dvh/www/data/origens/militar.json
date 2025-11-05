@@ -1,0 +1,10 @@
+{
+  "id": "militar",
+  "nome": "Militar",
+  "descricao": "Serviu nas forças armadas, conhecendo disciplina, estratégia e combate.",
+  "bonus": {
+    "habilidades": ["Atletismo", "Intimidação"],
+    "equipamento": "Insígnia militar, uniforme, armas básicas, moedas"
+  },
+  "caracteristicas": ["Disciplina", "Lealdade", "Conhecimento tático"]
+}

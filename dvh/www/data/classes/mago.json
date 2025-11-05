@@ -1,0 +1,10 @@
+{
+  "id": "mago",
+  "nome": "Mago",
+  "descricao": "Usuário de magia arcana, estudioso dos segredos do universo.",
+  "atributoPrincipal": "inteligencia",
+  "habilidades": ["Magia arcana", "Conhecimento", "Magias de combate"],
+  "dadosVida": "1d6",
+  "proficiencias": ["Armas simples", "Varinhas", "Cajados"]
+}
+

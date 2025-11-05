@@ -1,0 +1,9 @@
+{
+  "id": "arsenalhumano",
+  "nome": "Arsenal Humano",
+  "descricao": "Combatente que domina múltiplas armas e táticas de combate.",
+  "atributoPrincipal": "forca",
+  "habilidades": ["Múltiplas armas", "Adaptação tática", "Versatilidade"],
+  "dadosVida": "1d10",
+  "proficiencias": ["Todas as armas", "Armaduras médias", "Escudos"]
+}

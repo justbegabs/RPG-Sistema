@@ -1,0 +1,9 @@
+{
+  "id": "curandeiro",
+  "nome": "Curandeiro",
+  "descricao": "Especialista em medicina e cura, salvando vidas através de conhecimento médico.",
+  "atributoPrincipal": "sabedoria",
+  "habilidades": ["Medicina", "Cura", "Diagnóstico"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Kits médicos", "Ferramentas", "Armas simples"]
+}

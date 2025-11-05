@@ -1,0 +1,32 @@
+{
+  "name": "br.com.dvh",
+  "displayName": "Deuses versus Humanos",
+  "version": "1.0.0",
+  "description": "Sistema de Fichas RPG com funcionalidade POST em JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node server-exemplo.js",
+    "start": "node server-exemplo.js"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "rpg",
+    "fichas",
+    "sistema-rpg"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "cordova-android": "^14.0.1"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
+  }
+}

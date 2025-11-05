@@ -1,0 +1,9 @@
+{
+  "id": "espiao",
+  "nome": "Espião",
+  "descricao": "Agente secreto especializado em infiltração, espionagem e sabotagem.",
+  "atributoPrincipal": "destreza",
+  "habilidades": ["Furtividade", "Infiltração", "Disfarce"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Armas furtivas", "Ferramentas de espionagem", "Armaduras leves"]
+}

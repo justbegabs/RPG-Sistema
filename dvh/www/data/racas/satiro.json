@@ -1,0 +1,13 @@
+{
+  "id": "satiro",
+  "nome": "Sátiro",
+  "descricao": "Criatura meio humano meio bode, conhecida por festividades e música.",
+  "bonus": {
+    "atributos": "Carisma +2, Destreza +1",
+    "traduzido": {
+      "carisma": 2,
+      "destreza": 1
+    }
+  },
+  "caracteristicas": ["Música encantadora", "Alegria contagiante", "Agilidade", "Conhecimento da natureza"]
+}

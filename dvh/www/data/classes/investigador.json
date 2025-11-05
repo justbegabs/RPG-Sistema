@@ -1,0 +1,9 @@
+{
+  "id": "investigador",
+  "nome": "Investigador",
+  "descricao": "Detetive e pesquisador que resolve mistérios através de dedução e análise.",
+  "atributoPrincipal": "inteligencia",
+  "habilidades": ["Investigação", "Dedução", "Análise"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Ferramentas de investigação", "Armas simples", "Armaduras leves"]
+}

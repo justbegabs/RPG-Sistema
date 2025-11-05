@@ -1,0 +1,10 @@
+{
+  "id": "criancaperdida",
+  "nome": "Criança Perdida",
+  "descricao": "Foi separado de sua família em tenra idade, aprendendo a sobreviver sozinho.",
+  "bonus": {
+    "habilidades": ["Sobrevivência", "Percepção"],
+    "equipamento": "Memórias fragmentadas, objeto pessoal, moedas"
+  },
+  "caracteristicas": ["Independência", "Resiliência", "Memórias perdidas"]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "eremita",
+  "nome": "Eremita",
+  "descricao": "Viveu isolado, buscando conhecimento espiritual e sabedoria interior.",
+  "bonus": {
+    "habilidades": ["Religião", "Medicina"],
+    "equipamento": "Livro sagrado, kit de ervas, símbolo religioso, moedas"
+  },
+  "caracteristicas": ["Sabedoria espiritual", "Conhecimento místico", "Paciência"]
+}
+

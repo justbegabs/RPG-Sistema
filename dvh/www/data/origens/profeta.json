@@ -1,0 +1,10 @@
+{
+  "id": "profeta",
+  "nome": "Profeta",
+  "descricao": "Recebe visões do futuro, conhecendo o destino através de profecias.",
+  "bonus": {
+    "habilidades": ["Intuição", "Religião"],
+    "equipamento": "Símbolos proféticos, objetos místicos, moedas"
+  },
+  "caracteristicas": ["Premonições", "Sabedoria divina", "Conexão espiritual"]
+}

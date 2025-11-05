@@ -1,0 +1,10 @@
+{
+  "id": "clerigo",
+  "nome": "Clérigo",
+  "descricao": "Servo divino que usa magia para curar e proteger.",
+  "atributoPrincipal": "sabedoria",
+  "habilidades": ["Cura divina", "Proteção", "Magia divina"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Armas simples", "Armaduras leves", "Armaduras médias", "Escudos"]
+}
+

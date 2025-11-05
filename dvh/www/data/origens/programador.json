@@ -1,0 +1,10 @@
+{
+  "id": "programador",
+  "nome": "Programador",
+  "descricao": "Desenvolvedor de software, conhecendo linguagens de programação e sistemas.",
+  "bonus": {
+    "habilidades": ["Tecnologia", "Investigação"],
+    "equipamento": "Laptop, ferramentas de programação, moedas"
+  },
+  "caracteristicas": ["Lógica", "Paciência", "Resolução de problemas"]
+}

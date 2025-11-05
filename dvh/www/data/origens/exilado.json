@@ -1,0 +1,10 @@
+{
+  "id": "exilado",
+  "nome": "Exilado",
+  "descricao": "Foi banido de sua terra natal, vivendo como fugitivo.",
+  "bonus": {
+    "habilidades": ["Sobrevivência", "Furtividade"],
+    "equipamento": "Poucos pertences, roupas gastas, moedas"
+  },
+  "caracteristicas": ["Resiliência", "Independência", "Memórias do lar"]
+}

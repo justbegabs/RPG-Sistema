@@ -1,0 +1,13 @@
+{
+  "id": "semideus",
+  "nome": "Semi-deus",
+  "descricao": "Descendente de deuses e mortais, com poderes divinos limitados.",
+  "bonus": {
+    "atributos": "Escolha dois atributos +2",
+    "traduzido": {
+      "escolha": 2
+    }
+  },
+  "caracteristicas": ["Poderes divinos limitados", "Longevidade", "Força aumentada", "Herança divina"]
+}
+

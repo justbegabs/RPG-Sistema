@@ -1,0 +1,13 @@
+{
+  "id": "alien",
+  "nome": "Alien",
+  "descricao": "Ser de outro planeta com tecnologia avançada e fisiologia única.",
+  "bonus": {
+    "atributos": "Inteligência +2, Constituição +1",
+    "traduzido": {
+      "inteligencia": 2,
+      "constituicao": 1
+    }
+  },
+  "caracteristicas": ["Tecnologia avançada", "Fisiologia única", "Poderes psíquicos", "Adaptabilidade"]
+}

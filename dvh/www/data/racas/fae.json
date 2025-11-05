@@ -1,0 +1,13 @@
+{
+  "id": "fae",
+  "nome": "Fae",
+  "descricao": "Criatura das fadas com magia natural e conexão com o reino feérico.",
+  "bonus": {
+    "atributos": "Carisma +2, Destreza +1",
+    "traduzido": {
+      "carisma": 2,
+      "destreza": 1
+    }
+  },
+  "caracteristicas": ["Magia natural", "Voo", "Ilusões", "Vulnerabilidade ao ferro"]
+}

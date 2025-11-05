@@ -1,0 +1,10 @@
+{
+  "id": "artista",
+  "nome": "Artista",
+  "descricao": "Dedicou a vida à arte, expressando emoções através de diferentes formas criativas.",
+  "bonus": {
+    "habilidades": ["Persuasão", "Performance"],
+    "equipamento": "Ferramentas artísticas, obras de arte, moedas"
+  },
+  "caracteristicas": ["Criatividade", "Expressão emocional", "Reconhecimento social"]
+}

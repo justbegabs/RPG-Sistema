@@ -1,0 +1,10 @@
+{
+  "id": "motorista",
+  "nome": "Motorista",
+  "descricao": "Trabalhou dirigindo veículos, conhecendo estradas e navegação.",
+  "bonus": {
+    "habilidades": ["Percepção", "Atletismo"],
+    "equipamento": "Chaves, mapa, ferramentas básicas, moedas"
+  },
+  "caracteristicas": ["Conhecimento de rotas", "Observação", "Paciência"]
+}

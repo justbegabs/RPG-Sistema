@@ -1,0 +1,9 @@
+{
+  "id": "armadilheiro",
+  "nome": "Armadilheiro",
+  "descricao": "Especialista em criar e usar armadilhas para capturar ou eliminar inimigos.",
+  "atributoPrincipal": "inteligencia",
+  "habilidades": ["Armadilhas", "Engenharia", "Criatividade tática"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Ferramentas", "Dispositivos", "Armas simples"]
+}

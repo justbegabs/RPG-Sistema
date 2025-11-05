@@ -1,0 +1,10 @@
+{
+  "id": "jornalista",
+  "nome": "Jornalista",
+  "descricao": "Investigador da verdade, sempre buscando descobrir segredos e histórias.",
+  "bonus": {
+    "habilidades": ["Investigação", "Persuasão"],
+    "equipamento": "Câmera, caderno, gravador, moedas"
+  },
+  "caracteristicas": ["Curiosidade", "Objetividade", "Rede de contatos"]
+}

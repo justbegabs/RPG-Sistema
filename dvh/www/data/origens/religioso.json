@@ -1,0 +1,10 @@
+{
+  "id": "religioso",
+  "nome": "Religioso",
+  "descricao": "Serviu em templo ou ordem religiosa, conhecendo rituais e fé.",
+  "bonus": {
+    "habilidades": ["Religião", "Persuasão"],
+    "equipamento": "Símbolo religioso, livro sagrado, vestes, moedas"
+  },
+  "caracteristicas": ["Fé", "Conhecimento espiritual", "Comunidade religiosa"]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "suporte",
+  "nome": "Suporte",
+  "descricao": "Especialista em apoiar aliados através de buffs, curas e estratégia.",
+  "atributoPrincipal": "sabedoria",
+  "habilidades": ["Suporte tático", "Coordenação", "Fortificação"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Equipamentos de suporte", "Armas simples", "Armaduras leves"]
+}

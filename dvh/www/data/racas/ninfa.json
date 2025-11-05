@@ -1,0 +1,13 @@
+{
+  "id": "ninfa",
+  "nome": "Ninfa",
+  "descricao": "Espírito da natureza com beleza etérea e poderes naturais.",
+  "bonus": {
+    "atributos": "Carisma +2, Sabedoria +1",
+    "traduzido": {
+      "carisma": 2,
+      "sabedoria": 1
+    }
+  },
+  "caracteristicas": ["Magia da natureza", "Beleza etérea", "Conexão com elementos", "Longevidade"]
+}

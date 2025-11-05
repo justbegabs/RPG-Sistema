@@ -1,0 +1,9 @@
+{
+  "id": "tecnologico",
+  "nome": "Tecnológico",
+  "descricao": "Especialista em tecnologia avançada, usando dispositivos e engenharia.",
+  "atributoPrincipal": "inteligencia",
+  "habilidades": ["Engenharia", "Tecnologia", "Inovação"],
+  "dadosVida": "1d8",
+  "proficiencias": ["Dispositivos tecnológicos", "Ferramentas", "Armas tecnológicas"]
+}

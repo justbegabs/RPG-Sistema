@@ -1,0 +1,13 @@
+{
+  "id": "metamorfo",
+  "nome": "Metamorfo",
+  "descricao": "Ser que pode assumir qualquer forma física.",
+  "bonus": {
+    "atributos": "Carisma +2, Destreza +1",
+    "traduzido": {
+      "carisma": 2,
+      "destreza": 1
+    }
+  },
+  "caracteristicas": ["Mudança de forma", "Mimetismo", "Adaptabilidade", "Infiltração"]
+}

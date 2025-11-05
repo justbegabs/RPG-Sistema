@@ -1,0 +1,10 @@
+{
+  "id": "servente",
+  "nome": "Servente",
+  "descricao": "Trabalhou como servo ou empregado, conhecendo humildade e serviço.",
+  "bonus": {
+    "habilidades": ["Percepção", "Persuasão"],
+    "equipamento": "Roupas de serviço, ferramentas básicas, moedas"
+  },
+  "caracteristicas": ["Humildade", "Observação", "Lealdade"]
+}

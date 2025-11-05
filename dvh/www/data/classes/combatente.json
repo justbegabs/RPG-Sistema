@@ -1,0 +1,9 @@
+{
+  "id": "combatente",
+  "nome": "Combatente",
+  "descricao": "Lutador especializado em combate corpo a corpo com diversas armas.",
+  "atributoPrincipal": "forca",
+  "habilidades": ["Combate corpo a corpo", "Resistência", "Versatilidade em armas"],
+  "dadosVida": "1d10",
+  "proficiencias": ["Armas simples", "Armas marciais", "Armaduras médias"]
+}

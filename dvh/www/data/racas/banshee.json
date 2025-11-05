@@ -1,0 +1,13 @@
+{
+  "id": "banshee",
+  "nome": "Banshee",
+  "descricao": "Espírito feminino com grito sobrenatural que anuncia a morte.",
+  "bonus": {
+    "atributos": "Sabedoria +2, Carisma +1",
+    "traduzido": {
+      "sabedoria": 2,
+      "carisma": 1
+    }
+  },
+  "caracteristicas": ["Grito da morte", "Visão espiritual", "Imaterialidade parcial", "Premonição"]
+}

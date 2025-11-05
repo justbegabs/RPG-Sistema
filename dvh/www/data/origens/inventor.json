@@ -1,0 +1,10 @@
+{
+  "id": "inventor",
+  "nome": "Inventor",
+  "descricao": "Criador de dispositivos e mecanismos inovadores.",
+  "bonus": {
+    "habilidades": ["Tecnologia", "Engenharia"],
+    "equipamento": "Ferramentas, matérias-primas, protótipos, moedas"
+  },
+  "caracteristicas": ["Criatividade técnica", "Inovação", "Resolução de problemas"]
+}

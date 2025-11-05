@@ -1,0 +1,13 @@
+{
+  "id": "kitsune",
+  "nome": "Kitsune",
+  "descricao": "Humanoide raposa com múltiplas caudas e poderes ilusórios.",
+  "bonus": {
+    "atributos": "Carisma +2, Inteligência +1",
+    "traduzido": {
+      "carisma": 2,
+      "inteligencia": 1
+    }
+  },
+  "caracteristicas": ["Ilusões", "Múltiplas caudas", "Magia de fogo", "Transformação"]
+}
