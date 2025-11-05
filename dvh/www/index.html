@@ -67,15 +67,16 @@
                 <nav class="bottom-nav" id="bottomNav">
                     <div class="nav-row">
                         <button class="nav-btn" data-page="ficha">📝 Ficha</button>
+                        <button class="nav-btn" data-page="atributos">💪 Atributos</button>
                         <button class="nav-btn" data-page="racas">👥 Raças</button>
                         <button class="nav-btn" data-page="origens">🌍 Origens</button>
                         <button class="nav-btn" data-page="classes">⚔️ Classes</button>
                         <button class="nav-btn" data-page="itens">🎒 Itens</button>
                         <button class="nav-btn" data-page="armas">⚔️ Armas</button>
                         <button class="nav-btn" data-page="criacao-personagens">👤 Criação de Personagem</button>
-                        <button class="nav-btn" data-page="criacao-mapas">🗺️ Criação de Mapas</button>
                     </div>
                     <div class="nav-row">
+                        <button class="nav-btn" data-page="criacao-mapas">🗺️ Criação de Mapas</button>
                         <button class="nav-btn" data-page="musicas-sons">🎵 Músicas e Sons</button>
                         <button class="nav-btn" data-page="jogos">🎮 Jogos</button>
                         <button class="nav-btn" data-page="mecanicas">⚙️ Mecânicas</button>
@@ -130,33 +131,39 @@
                             </div>
 
                             <div class="form-section">
-                                <h2>Atributos</h2>
-                                <div class="atributos-grid">
-                                    <div class="form-group">
-                                        <label for="forca">Força</label>
-                                        <input type="number" id="forca" name="forca" min="1" max="20" value="10" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="destreza">Destreza</label>
-                                        <input type="number" id="destreza" name="destreza" min="1" max="20" value="10" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="constituicao">Constituição</label>
-                                        <input type="number" id="constituicao" name="constituicao" min="1" max="20" value="10" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inteligencia">Inteligência</label>
-                                        <input type="number" id="inteligencia" name="inteligencia" min="1" max="20" value="10" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sabedoria">Sabedoria</label>
-                                        <input type="number" id="sabedoria" name="sabedoria" min="1" max="20" value="10" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="carisma">Carisma</label>
-                                        <input type="number" id="carisma" name="carisma" min="1" max="20" value="10" required>
-                                    </div>
+                                <h2>🎲 Atributos de Teste</h2>
+                                <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
+                                <div class="atributos-grid-ficha" id="atributos-teste-ficha">
+                                    <!-- Será preenchido por JavaScript -->
                                 </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>✨ Atributos de Sorte</h2>
+                                <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
+                                <div class="atributos-grid-ficha" id="atributos-sorte-ficha">
+                                    <!-- Será preenchido por JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Área de Resultado na Ficha -->
+                            <div id="resultado-rolagem-ficha" class="resultado-rolagem" style="display: none;">
+                                <h4>📊 Resultado do Teste</h4>
+                                <div id="resultado-conteudo-ficha"></div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>🎯 Perícias</h2>
+                                <p class="form-hint">Valores de -5 a +5 (soma com o atributo base ao testar)</p>
+                                <div id="pericias-ficha">
+                                    <!-- Será preenchido por JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Área de Resultado de Perícias na Ficha -->
+                            <div id="resultado-rolagem-pericias-ficha" class="resultado-rolagem" style="display: none;">
+                                <h4>📊 Resultado do Teste de Perícia</h4>
+                                <div id="resultado-conteudo-pericias-ficha"></div>
                             </div>
 
                             <div class="form-section">
@@ -260,13 +267,32 @@
                     </div>
                 </div>
 
-                <!-- Páginas placeholder para as outras seções -->
+                <!-- Página: Atributos -->
                 <div id="page-atributos" class="page">
                     <div class="page-header">
                         <h2>💪 Atributos</h2>
+                        <p>Clique no nome de um atributo para fazer um teste (rolagem de dados)</p>
                     </div>
-                    <div class="page-placeholder">
-                        <p>Seção de Atributos em desenvolvimento...</p>
+                    <div class="atributos-container">
+                        <div class="atributos-section">
+                            <h3 class="section-title">🎲 Atributos de Teste</h3>
+                            <div class="atributos-grid" id="atributos-teste">
+                                <!-- Será preenchido por JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="atributos-section">
+                            <h3 class="section-title">✨ Atributos de Sorte</h3>
+                            <div class="atributos-grid" id="atributos-sorte">
+                                <!-- Será preenchido por JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Área de Resultado -->
+                        <div id="resultado-rolagem" class="resultado-rolagem" style="display: none;">
+                            <h4>📊 Resultado do Teste</h4>
+                            <div id="resultado-conteudo"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -282,9 +308,18 @@
                 <div id="page-pericias" class="page">
                     <div class="page-header">
                         <h2>🎯 Perícias</h2>
+                        <p>Clique no nome de uma perícia para fazer um teste (usa atributo base + bônus de perícia)</p>
                     </div>
-                    <div class="page-placeholder">
-                        <p>Seção de Perícias em desenvolvimento...</p>
+                    <div class="pericias-container">
+                        <div id="pericias-content">
+                            <!-- Será preenchido por JavaScript -->
+                        </div>
+                        
+                        <!-- Área de Resultado -->
+                        <div id="resultado-rolagem-pericias" class="resultado-rolagem" style="display: none;">
+                            <h4>📊 Resultado do Teste</h4>
+                            <div id="resultado-conteudo-pericias"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -398,10 +433,12 @@
             </main>
         </div>
 
-        <script src="cordova.js"></script>
-        <script src="js/data-loader.js"></script>
-        <script src="js/api.js"></script>
-        <script src="js/router.js"></script>
-        <script src="js/index.js"></script>
+               <script src="cordova.js"></script>
+               <script src="js/data-loader.js"></script>
+               <script src="js/api.js"></script>
+               <script src="js/atributos.js"></script>
+               <script src="js/pericias.js"></script>
+               <script src="js/router.js"></script>
+               <script src="js/index.js"></script>
     </body>
 </html>

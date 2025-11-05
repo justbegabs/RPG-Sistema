@@ -212,6 +212,25 @@ function loadPageData(pageId) {
         case 'origens':
             loadOrigensPage();
             break;
+        case 'atributos':
+            if (window.Atributos) {
+                Atributos.init();
+            }
+            break;
+        case 'pericias':
+            if (window.Pericias) {
+                Pericias.init();
+            }
+            break;
+        case 'ficha':
+            // Recarrega atributos e perícias na ficha quando entrar na página
+            if (typeof popularAtributosFicha === 'function') {
+                popularAtributosFicha();
+            }
+            if (typeof popularPericiasFicha === 'function') {
+                popularPericiasFicha();
+            }
+            break;
         default:
             break;
     }
