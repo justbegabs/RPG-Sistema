@@ -4,9 +4,9 @@
  */
 
 // URL da API - Altere para sua URL de servidor
-const API_URL = 'http://localhost:3000/api/fichas';
+const API_URL = 'https://rpg-sistema.onrender.com/api/fichas';
 // Fallback: usar localStorage se a API não estiver disponível
-const USE_LOCAL_STORAGE = true;
+const USE_LOCAL_STORAGE = false;
 
 /**
  * Função para fazer POST de uma ficha de personagem
