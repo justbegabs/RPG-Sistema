@@ -6,7 +6,11 @@
     "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
       "carisma": 2,
-      "destreza": 1
+      "destreza": 1,
+      "pericias": {
+        "labia": 3,
+        "percepcao": 3
+      }
     }
   },
   "caracteristicas": ["Imortalidade", "Visão no escuro aprimorada", "Regeneração", "Fraqueza à luz solar"]

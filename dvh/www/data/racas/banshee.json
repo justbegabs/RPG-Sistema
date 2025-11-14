@@ -6,7 +6,12 @@
     "atributos": "Sabedoria +2, Carisma +1",
     "traduzido": {
       "sabedoria": 2,
-      "carisma": 1
+      "carisma": 1,
+      "pericias": {
+        "demonologia": 3,
+        "necromancia": 3
+      },
+      "alma": -3
     }
   },
   "caracteristicas": ["Grito da morte", "Visão espiritual", "Imaterialidade parcial", "Premonição"]

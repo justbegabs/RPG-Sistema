@@ -6,7 +6,11 @@
     "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
       "carisma": 2,
-      "destreza": 1
+      "destreza": 1,
+      "pericias": {
+        "ilusao": 3,
+        "astrologia": 3
+      }
     }
   },
   "caracteristicas": ["Magia natural", "Voo", "Ilusões", "Vulnerabilidade ao ferro"]

@@ -6,7 +6,11 @@
     "atributos": "Força +2, Constituição +1",
     "traduzido": {
       "forca": 2,
-      "constituicao": 1
+      "constituicao": 1,
+      "pericias": {
+        "percepcao": 3,
+        "fortitude": 3
+      }
     }
   },
   "caracteristicas": ["Transformação", "Força aumentada", "Sentidos aguçados", "Fraqueza à prata"]

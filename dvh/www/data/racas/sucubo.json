@@ -6,7 +6,12 @@
     "atributos": "Carisma +3, Inteligência +1",
     "traduzido": {
       "carisma": 3,
-      "inteligencia": 1
+      "inteligencia": 1,
+      "pericias": {
+        "seducao": 3,
+        "ilusao": 3
+      },
+      "alma": -3
     }
   },
   "caracteristicas": ["Sedução", "Manipulação mental", "Magia de encantamento", "Asas demoníacas"]

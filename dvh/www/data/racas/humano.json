@@ -10,7 +10,12 @@
       "constituicao": 1,
       "inteligencia": 1,
       "sabedoria": 1,
-      "carisma": 1
+      "carisma": 1,
+      "pericias": {
+        "furtividade": 3,
+        "trapaca": 3
+      },
+      "alma": -3
     }
   },
   "caracteristicas": ["Versátil", "Adaptável", "Sem traços especiais", "Determinação"]

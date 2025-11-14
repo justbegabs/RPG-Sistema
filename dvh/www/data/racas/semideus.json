@@ -5,7 +5,11 @@
   "bonus": {
     "atributos": "Escolha dois atributos +2",
     "traduzido": {
-      "escolha": 2
+      "escolha": 2,
+      "pericias": {
+        "religiao": 3,
+        "astrologia": 3
+      }
     }
   },
   "caracteristicas": ["Poderes divinos limitados", "Longevidade", "Força aumentada", "Herança divina"]

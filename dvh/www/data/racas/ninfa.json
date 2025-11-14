@@ -6,7 +6,11 @@
     "atributos": "Carisma +2, Sabedoria +1",
     "traduzido": {
       "carisma": 2,
-      "sabedoria": 1
+      "sabedoria": 1,
+      "pericias": {
+        "herbologia": 3,
+        "ilusao": 3
+      }
     }
   },
   "caracteristicas": ["Magia da natureza", "Beleza etérea", "Conexão com elementos", "Longevidade"]

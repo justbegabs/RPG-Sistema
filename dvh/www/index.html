@@ -125,8 +125,61 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nivel">Nível *</label>
-                                    <input type="number" id="nivel" name="nivel" min="1" max="20" value="1" required>
+                                    <label for="nivel">Nível (%) *</label>
+                                    <div class="nivel-container">
+                                        <input type="range" id="nivel-slider" name="nivel-slider" min="0" max="100" value="0" step="1">
+                                        <input type="number" id="nivel" name="nivel" min="0" max="100" value="0" required>
+                                    </div>
+                                    <small class="form-hint">Nível de 0% a 100%</small>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>📊 Estatísticas</h2>
+                                <div class="stats-grid">
+                                    <div class="form-group">
+                                        <label for="vida-total">Pontos de Vida (Total)</label>
+                                        <input type="number" id="vida-total" name="vida-total" min="1" value="10" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Resiliência × 3 + 10</small>
+                                        <label for="vida-atual" style="margin-top: 10px;">Pontos de Vida (Atual)</label>
+                                        <input type="number" id="vida-atual" name="vida-atual" min="0" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mana-total">Pontos de Mana (Total)</label>
+                                        <input type="number" id="mana-total" name="mana-total" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Magia × 5 + 15</small>
+                                        <label for="mana-atual" style="margin-top: 10px;">Pontos de Mana (Atual)</label>
+                                        <input type="number" id="mana-atual" name="mana-atual" min="0" value="0" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sanidade-total">Sanidade (Total)</label>
+                                        <input type="number" id="sanidade-total" name="sanidade-total" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Intelecto × 5 + Carisma × 3 + 10</small>
+                                        <label for="sanidade-atual" style="margin-top: 10px;">Sanidade (Atual)</label>
+                                        <input type="number" id="sanidade-atual" name="sanidade-atual" min="0" value="0" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="alma-total">Alma (Total)</label>
+                                        <input type="number" id="alma-total" name="alma-total" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 (não aumenta com níveis)</small>
+                                        <label for="alma-atual" style="margin-top: 10px;">Alma (Atual)</label>
+                                        <input type="number" id="alma-atual" name="alma-atual" min="0" value="0" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="defesa">Defesa</label>
+                                        <input type="number" id="defesa" name="defesa" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Constituição + 10</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="esquiva">Esquiva</label>
+                                        <input type="number" id="esquiva" name="esquiva" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Defesa + Perícia Reflexos + Destreza</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bloqueio">Bloqueio</label>
+                                        <input type="number" id="bloqueio" name="bloqueio" min="0" value="0" required readonly>
+                                        <small class="form-hint">Calculado (nível 0%): Constituição × 2 + Metade da Fortitude (arredondado para cima)</small>
+                                    </div>
                                 </div>
                             </div>
 
@@ -169,14 +222,6 @@
                             <div class="form-section">
                                 <h2>Informações Adicionais</h2>
                                 <div class="form-group">
-                                    <label for="vida">Pontos de Vida</label>
-                                    <input type="number" id="vida" name="vida" min="1" value="10" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="mana">Pontos de Mana</label>
-                                    <input type="number" id="mana" name="mana" min="0" value="0" required>
-                                </div>
-                                <div class="form-group">
                                     <label for="historia">História do Personagem</label>
                                     <textarea id="historia" name="historia" rows="4" placeholder="Conte a história do seu personagem..."></textarea>
                                 </div>
@@ -184,7 +229,7 @@
 
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Salvar Ficha</button>
-                                <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+                                <button type="button" class="btn btn-secondary" onclick="limparAtributosEPericias()">Limpar Formulário</button>
                             </div>
 
                             <div id="mensagem" class="mensagem"></div>

@@ -6,7 +6,11 @@
     "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
       "carisma": 2,
-      "destreza": 1
+      "destreza": 1,
+      "pericias": {
+        "enganacao": 3,
+        "ilusao": 3
+      }
     }
   },
   "caracteristicas": ["Mudança de forma", "Mimetismo", "Adaptabilidade", "Infiltração"]

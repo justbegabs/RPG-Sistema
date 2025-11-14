@@ -6,7 +6,14 @@
     "atributos": "Carisma +2, Constituição +1",
     "traduzido": {
       "carisma": 2,
-      "constituicao": 1
+      "constituicao": 1,
+      "pericias": {
+        "labia": 3,
+        "seducao": 3
+      },
+      "pericias_penalidade": {
+        "reflexos": -3
+      }
     }
   },
   "caracteristicas": ["Respiração aquática", "Voz encantadora", "Natação aprimorada", "Conexão com o mar"]

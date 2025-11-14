@@ -6,7 +6,11 @@
     "atributos": "Inteligência +2, Carisma +1",
     "traduzido": {
       "inteligencia": 2,
-      "carisma": 1
+      "carisma": 1,
+      "pericias": {
+        "enganacao": 3,
+        "explosivos": 3
+      }
     }
   },
   "caracteristicas": ["Ilusões poderosas", "Manipulação", "Magia do caos", "Múltiplas formas"]

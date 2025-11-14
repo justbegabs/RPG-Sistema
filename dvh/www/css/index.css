@@ -1130,6 +1130,12 @@ body:has(#page-home.active) .main-content {
     padding: 15px;
     background: #f8f9fa;
     border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.pericias-grupo-ficha.pericias-grupo-aberto {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .pericias-grupo-title-ficha {
@@ -1138,12 +1144,47 @@ body:has(#page-home.active) .main-content {
     margin-bottom: 15px;
     padding-bottom: 8px;
     border-bottom: 2px solid #667eea;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.pericias-grupo-title-ficha:hover {
+    color: #764ba2;
+    border-bottom-color: #764ba2;
+}
+
+.pericias-toggle-icon {
+    display: inline-block;
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+    color: #667eea;
+}
+
+.pericias-grupo-aberto .pericias-toggle-icon {
+    color: #764ba2;
 }
 
 .pericias-grid-ficha {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 12px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+    }
+    to {
+        opacity: 1;
+        max-height: 2000px;
+    }
 }
 
 .pericia-ficha-item {
@@ -1358,6 +1399,84 @@ header h1 {
 .form-group textarea {
     resize: vertical;
     min-height: 100px;
+}
+
+.form-group small.form-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #888;
+    font-style: italic;
+}
+
+.form-group input[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+/* Grid de Estatísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Container do Nível */
+.nivel-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.nivel-container input[type="range"] {
+    flex: 1;
+    height: 8px;
+    border-radius: 5px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.nivel-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.nivel-container input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
+}
+
+.nivel-container input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.nivel-container input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
+}
+
+.nivel-container input[type="number"] {
+    width: 80px;
+    min-width: 80px;
+    text-align: center;
+    font-weight: 600;
 }
 
 /* Grid de Atributos */

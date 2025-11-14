@@ -6,7 +6,12 @@
     "atributos": "Sabedoria +2, Carisma +1",
     "traduzido": {
       "sabedoria": 2,
-      "carisma": 1
+      "carisma": 1,
+      "pericias": {
+        "exorcismo": 3,
+        "religiao": 3
+      },
+      "alma": 3
     }
   },
   "caracteristicas": ["Resistência a dano radiante", "Voo", "Magia da luz", "Proteção divina"]

@@ -6,7 +6,14 @@
     "atributos": "Destreza +2, Constituição +1",
     "traduzido": {
       "destreza": 2,
-      "constituicao": 1
+      "constituicao": 1,
+      "pericias": {
+        "percepcao": 3,
+        "reflexos": 3
+      },
+      "pericias_penalidade": {
+        "vontade": -3
+      }
     }
   },
   "caracteristicas": ["Escalada", "Camuflagem", "Visão térmica", "Pele escamosa"]

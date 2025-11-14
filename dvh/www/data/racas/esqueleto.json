@@ -6,7 +6,12 @@
     "atributos": "Constituição +2, Destreza +1",
     "traduzido": {
       "constituicao": 2,
-      "destreza": 1
+      "destreza": 1,
+      "pericias": {
+        "intimidacao": 3,
+        "empatia": 3
+      },
+      "alma": -3
     }
   },
   "caracteristicas": ["Imunidade a veneno", "Não precisa respirar", "Resistência a dano", "Vulnerabilidade à magia divina"]

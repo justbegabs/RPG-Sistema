@@ -6,7 +6,11 @@
     "atributos": "Inteligência +2, Sabedoria +1",
     "traduzido": {
       "inteligencia": 2,
-      "sabedoria": 1
+      "sabedoria": 1,
+      "pericias": {
+        "ilusao": 3,
+        "reflexos": 3
+      }
     }
   },
   "caracteristicas": ["Magia elemental", "Longevidade", "Sabedoria ancestral", "Resistência mágica"]

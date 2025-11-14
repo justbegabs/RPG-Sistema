@@ -6,7 +6,11 @@
     "atributos": "Constituição +2, Inteligência +1",
     "traduzido": {
       "constituicao": 2,
-      "inteligencia": 1
+      "inteligencia": 1,
+      "pericias": {
+        "tecnologia": 3,
+        "explosivos": 3
+      }
     }
   },
   "caracteristicas": ["Aprimoramentos tecnológicos", "Resistência física", "Interface tecnológica", "Vulnerabilidade elétrica"]

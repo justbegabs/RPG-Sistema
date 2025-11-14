@@ -6,7 +6,12 @@
     "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
       "carisma": 2,
-      "destreza": 1
+      "destreza": 1,
+      "pericias": {
+        "artes": 3,
+        "religiao": 3
+      },
+      "alma": 3
     }
   },
   "caracteristicas": ["Música encantadora", "Alegria contagiante", "Agilidade", "Conhecimento da natureza"]

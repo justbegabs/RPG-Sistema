@@ -6,7 +6,12 @@
     "atributos": "Carisma +2, Constituição +1",
     "traduzido": {
       "carisma": 2,
-      "constituicao": 1
+      "constituicao": 1,
+      "pericias": {
+        "necromancia": 5,
+        "demonologia": 5
+      },
+      "alma": 0
     }
   },
   "caracteristicas": ["Resistência ao fogo", "Visão no escuro", "Magia das trevas", "Asas demoníacas"]

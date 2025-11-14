@@ -6,7 +6,11 @@
     "atributos": "Inteligência +2, Constituição +1",
     "traduzido": {
       "inteligencia": 2,
-      "constituicao": 1
+      "constituicao": 1,
+      "pericias": {
+        "atualidades": 3,
+        "trapaca": 3
+      }
     }
   },
   "caracteristicas": ["Tecnologia avançada", "Fisiologia única", "Poderes psíquicos", "Adaptabilidade"]
