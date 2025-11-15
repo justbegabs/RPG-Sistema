@@ -123,6 +123,11 @@ function renderizarPericias() {
     if (window.atualizarContadorD6) {
         window.atualizarContadorD6();
     }
+    
+    // Atualiza o contador de Dados Adicionais
+    if (window.atualizarContadorDadosAdicionais) {
+        window.atualizarContadorDadosAdicionais();
+    }
 }
 
 /**
@@ -143,10 +148,61 @@ function criarCardPericia(pericia, atributoKey) {
             br = parseInt(p.bonus_raca) || 0;
         }
     }
-    const valor = d6 + bp + bo + bc + br;
+    
+    // Obtém dados adicionais (D4/D6/D8/D10)
+    const savedDados = localStorage.getItem('pericias_dados_adicionais');
+    let d4add = 0, d6add = 0, d8add = 0, d10add = 0;
+    if (savedDados) {
+        const dados = JSON.parse(savedDados);
+        const p = dados[pericia.id];
+        if (p) {
+            d4add = parseInt(p.d4) || 0;
+            d6add = parseInt(p.d6) || 0;
+            d8add = parseInt(p.d8) || 0;
+            d10add = parseInt(p.d10) || 0;
+        }
+    }
+    
+    const somaAdicionais = d4add + d6add + d8add + d10add;
+    const valor = d6 + bp + bo + bc + br + somaAdicionais;
     const valorFormatado = valor >= 0 ? `+${valor}` : `${valor}`;
     const corClasse = valor > 0 ? 'positivo' : valor < 0 ? 'negativo' : 'neutro';
-    const tooltip = `D6: ${d6 >= 0 ? '+' + d6 : d6}\nPessoal: ${bp >= 0 ? '+' + bp : bp}\nOrigem: ${bo >= 0 ? '+' + bo : bo}\nClasse: ${bc >= 0 ? '+' + bc : bc}\nRaça: ${br >= 0 ? '+' + br : br}`;
+    
+    let tooltip = `D6: ${d6 >= 0 ? '+' + d6 : d6}\nPessoal: ${bp >= 0 ? '+' + bp : bp}\nOrigem: ${bo >= 0 ? '+' + bo : bo}\nClasse: ${bc >= 0 ? '+' + bc : bc}\nRaça: ${br >= 0 ? '+' + br : br}`;
+    if (somaAdicionais > 0) {
+        tooltip += '\n\nDados Adicionais:';
+        if (d4add > 0) tooltip += `\nD4: +${d4add}`;
+        if (d6add > 0) tooltip += `\nD6+: +${d6add}`;
+        if (d8add > 0) tooltip += `\nD8: +${d8add}`;
+        if (d10add > 0) tooltip += `\nD10: +${d10add}`;
+    }
+    
+    // Obtém dados disponíveis para este nível (via window se disponível)
+    let dadosDisponiveis = { d4: null, d6: null, d8: null, d10: null };
+    try {
+        if (window.obterDadosDisponiveisPorNivel && window.obterNivelAtual) {
+            const nivelAtual = window.obterNivelAtual();
+            dadosDisponiveis = window.obterDadosDisponiveisPorNivel(nivelAtual);
+        }
+    } catch (e) {
+        // Se não conseguir, usa valor padrão
+    }
+    
+    // Monta botões de dados adicionais baseado no que está disponível
+    let botoesAdicionais = '';
+    if (dadosDisponiveis.d4) {
+        botoesAdicionais += `<button class="btn-dado-adicional" title="D4: ${d4add}/4" onclick="window.rolarDadoAdicionalPericia('${pericia.id}', 'd4')" style="color: #90caf9;">D4${d4add > 0 ? ':' + d4add : ''}</button>`;
+    }
+    if (dadosDisponiveis.d6) {
+        botoesAdicionais += `<button class="btn-dado-adicional" title="D6: ${d6add}/6" onclick="window.rolarDadoAdicionalPericia('${pericia.id}', 'd6')" style="color: #f48fb1;">D6${d6add > 0 ? ':' + d6add : ''}</button>`;
+    }
+    if (dadosDisponiveis.d8) {
+        botoesAdicionais += `<button class="btn-dado-adicional" title="D8: ${d8add}/8" onclick="window.rolarDadoAdicionalPericia('${pericia.id}', 'd8')" style="color: #a1887f;">D8${d8add > 0 ? ':' + d8add : ''}</button>`;
+    }
+    if (dadosDisponiveis.d10) {
+        botoesAdicionais += `<button class="btn-dado-adicional" title="D10: ${d10add}/10" onclick="window.rolarDadoAdicionalPericia('${pericia.id}', 'd10')" style="color: #ffeb3b;">D10${d10add > 0 ? ':' + d10add : ''}</button>`;
+    }
+    
     return `
         <div class="pericia-card ${corClasse}">
             <button class="pericia-btn" onclick="testarPericia('${pericia.id}', '${atributoKey}')" title="${tooltip}">
@@ -157,6 +213,7 @@ function criarCardPericia(pericia, atributoKey) {
                 <button class="btn-controle" onclick="alterarPericia('${pericia.id}', -1)">-</button>
                 <button class="btn-controle" onclick="alterarPericia('${pericia.id}', 1)">+</button>
             </div>
+            ${botoesAdicionais ? `<div class="pericia-dados-adicionais">${botoesAdicionais}</div>` : ''}
         </div>
     `;
 }

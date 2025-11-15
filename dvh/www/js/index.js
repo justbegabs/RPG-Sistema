@@ -27,6 +27,15 @@ function onDeviceReady() {
  * Inicializa o sistema
  */
 async function init() {
+    // Inicializa variáveis globais
+    window.nivelFichaAtual = 0;
+    
+    // Restaura o nível do localStorage se houver
+    const nivelStorage = localStorage.getItem('nivelFichaAtual');
+    if (nivelStorage) {
+        window.nivelFichaAtual = parseInt(nivelStorage) || 0;
+    }
+    
     // Carrega os dados de classes, raças e origens
     await carregarDados();
     
@@ -514,6 +523,7 @@ function popularPericiasFicha() {
     if (!container || !window.Pericias) return;
     
     const pericias = obterTodasPericias();
+    const nivelAtual = obterNivelAtual();
     
     let html = '';
     
@@ -529,7 +539,7 @@ function popularPericiasFicha() {
                     ${nomeAtributo}
                 </h4>
                 <div class="pericias-grid-ficha" id="pericias-grid-${atributoKey}" style="display: none;">
-                    ${listaPericias.map(pericia => criarPericiaFichaHTML(pericia, atributoKey, pericias)).join('')}
+                    ${listaPericias.map(pericia => criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelAtual)).join('')}
                 </div>
             </div>
         `;
@@ -539,15 +549,94 @@ function popularPericiasFicha() {
     
     // Atualiza o contador de D6
     atualizarContadorD6();
+    
+    // Atualiza o contador de Dados Adicionais
+    atualizarContadorDadosAdicionais();
 }
 
 /**
  * Cria HTML de uma perícia para a ficha com d6 e bônus separados
  */
-function criarPericiaFichaHTML(pericia, atributoKey, pericias) {
+function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
     const periciaData = pericias[pericia.id] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
-    const total = periciaData.d6 + periciaData.bonus_personagem + periciaData.bonus_origem + periciaData.bonus_classe + periciaData.bonus_raca;
+    const dadosAdicionais = obterDadosAdicionaisPericias();
+    const periciaAdicionais = dadosAdicionais[pericia.id] || { d4: 0, d6: 0, d8: 0, d10: 0 };
+    
+    const somaAdicionais = (parseInt(periciaAdicionais.d4) || 0) + 
+                          (parseInt(periciaAdicionais.d6) || 0) + 
+                          (parseInt(periciaAdicionais.d8) || 0) + 
+                          (parseInt(periciaAdicionais.d10) || 0);
+    
+    const total = periciaData.d6 + periciaData.bonus_personagem + periciaData.bonus_origem + periciaData.bonus_classe + periciaData.bonus_raca + somaAdicionais;
     const corClasse = total > 0 ? 'positivo' : total < 0 ? 'negativo' : 'neutro';
+    
+    // Obtém dados disponíveis para este nível
+    // Use o nível passado como parâmetro, ou obtenha do input se não foi passado
+    const nivel = nivelPassed !== undefined ? nivelPassed : obterNivelAtual();
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    
+    // Monta campos de dados adicionais
+    let camposDadosAdicionais = '';
+    
+    if (disponivel.d4) {
+        camposDadosAdicionais += `
+                <div class="pericia-campo">
+                    <span class="pericia-label" title="D4 (até ${disponivel.d4.max})">D4</span>
+                    <input type="number" 
+                           id="pericia-d4-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaAdicionais.d4}" 
+                           min="0" 
+                           max="4" 
+                           readonly>
+                    <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd4')">🎲</button>
+                </div>`;
+    }
+    
+    if (disponivel.d6) {
+        camposDadosAdicionais += `
+                <div class="pericia-campo">
+                    <span class="pericia-label" title="D6 (até ${disponivel.d6.max})">D6+</span>
+                    <input type="number" 
+                           id="pericia-d6-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaAdicionais.d6}" 
+                           min="0" 
+                           max="6" 
+                           readonly>
+                    <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd6')">🎲</button>
+                </div>`;
+    }
+    
+    if (disponivel.d8) {
+        camposDadosAdicionais += `
+                <div class="pericia-campo">
+                    <span class="pericia-label" title="D8 (até ${disponivel.d8.max})">D8</span>
+                    <input type="number" 
+                           id="pericia-d8-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaAdicionais.d8}" 
+                           min="0" 
+                           max="8" 
+                           readonly>
+                    <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd8')">🎲</button>
+                </div>`;
+    }
+    
+    if (disponivel.d10) {
+        camposDadosAdicionais += `
+                <div class="pericia-campo">
+                    <span class="pericia-label" title="D10 (até ${disponivel.d10.max})">D10</span>
+                    <input type="number" 
+                           id="pericia-d10-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaAdicionais.d10}" 
+                           min="0" 
+                           max="10" 
+                           readonly>
+                    <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd10')">🎲</button>
+                </div>`;
+    }
     
     return `
         <div class="pericia-ficha-item">
@@ -566,6 +655,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias) {
                            onchange="rolarD6Pericia('${pericia.id}')">
                     <button type="button" class="btn-rolar" onclick="rolarD6Pericia('${pericia.id}')">🎲</button>
                 </div>
+                ${camposDadosAdicionais}
                 <div class="pericia-campo">
                     <span class="pericia-label">Orig</span>
                         <input type="number" 
@@ -631,7 +721,273 @@ function alterarPericiaFicha(id, delta) {
 }
 
 /**
+ * Rola dados adicionais (D4/D6/D8/D10) para uma perícia
+ * Dados são independentes e todos podem estar ativos simultaneamente
+ * Estrutura: { periciaId: { d4: valor, d6: valor, d8: valor, d10: valor } }
+ */
+function rolarDadoAdicionalPericia(periciaId, tipoDado) {
+    const nivel = obterNivelAtual();
+    
+    // Verifica quais dados estão disponíveis neste nível
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    
+    if (!disponivel[tipoDado]) {
+        alert(`⚠️ ${tipoDado} não está disponível neste nível!`);
+        return;
+    }
+    
+    const dadosAdicionais = obterDadosAdicionaisPericias();
+    if (!dadosAdicionais[periciaId]) {
+        dadosAdicionais[periciaId] = { d4: 0, d6: 0, d8: 0, d10: 0 };
+    }
+    
+    // Se já tem um valor para este dado, remove
+    if (dadosAdicionais[periciaId][tipoDado] > 0) {
+        dadosAdicionais[periciaId][tipoDado] = 0;
+        salvarDadosAdicionaisPericias(dadosAdicionais);
+        
+        const campoDado = document.getElementById(`pericia-${tipoDado}-${periciaId}`);
+        if (campoDado) {
+            campoDado.value = 0;
+        }
+        
+        atualizarTotalPericia(periciaId);
+        atualizarContadorDadosAdicionais();
+        return;
+    }
+    
+    // Conta quantas perícias já têm este dado
+    const maxDado = disponivel[tipoDado].max;
+    const periciasComDado = Object.values(dadosAdicionais).filter(p => (parseInt(p[tipoDado]) || 0) > 0).length;
+    
+    if (periciasComDado >= maxDado) {
+        alert(`⚠️ Limite de ${maxDado} perícias com ${tipoDado.toUpperCase()} atingido!\n\nRemova uma perícia existente para adicionar outra.`);
+        return;
+    }
+    
+    // Rola o dado
+    const maxValue = parseInt(tipoDado.substring(1)); // D4 -> 4, D6 -> 6, etc
+    const resultado = Math.floor(Math.random() * maxValue) + 1;
+    
+    // Atualiza o campo
+    const campoDado = document.getElementById(`pericia-${tipoDado}-${periciaId}`);
+    if (campoDado) {
+        campoDado.value = resultado;
+    }
+    
+    // Salva os dados
+    dadosAdicionais[periciaId][tipoDado] = resultado;
+    salvarDadosAdicionaisPericias(dadosAdicionais);
+    
+    // Atualiza o total
+    atualizarTotalPericia(periciaId);
+    atualizarContadorDadosAdicionais();
+}
+
+/**
+ * Obtém quais dados estão disponíveis para o nível atual
+ * Retorna { d4: { max: 5 }, d6: { max: 6 }, ... }
+ */
+function obterDadosDisponiveisPorNivel(nivel) {
+    nivel = parseInt(nivel) || 0;
+    
+    const disponivel = {
+        d4: null,
+        d6: null,
+        d8: null,
+        d10: null
+    };
+    
+    // 15%: 5 perícias com D4
+    if (nivel >= 15) disponivel.d4 = { max: 5 };
+    
+    // 45%: 6 perícias com D6
+    if (nivel >= 45) disponivel.d6 = { max: 6 };
+    
+    // 75%: 7 perícias com D8
+    if (nivel >= 75) disponivel.d8 = { max: 7 };
+    
+    // 100%: 8 perícias com D10
+    if (nivel >= 100) disponivel.d10 = { max: 8 };
+    
+    return disponivel;
+}
+
+/**
+ * Atualiza os contadores de perícias com dados adicionais
+ * Mostra contador para cada tipo de dado (D4, D6, D8, D10) se disponível
+ */
+function atualizarContadorDadosAdicionais() {
+    const nivel = obterNivelAtual();
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    
+    const dadosAdicionais = obterDadosAdicionaisPericias();
+    
+    // Conta perícias para cada tipo de dado
+    const contadores = {};
+    Object.keys(disponivel).forEach(tipoDado => {
+        if (disponivel[tipoDado]) {
+            const max = disponivel[tipoDado].max;
+            const count = Object.values(dadosAdicionais).filter(p => (parseInt(p[tipoDado]) || 0) > 0).length;
+            contadores[tipoDado] = { count, max };
+        }
+    });
+    
+    // Monta texto do contador (ex: "D4: 2/5, D6: 1/6")
+    let textoContador = Object.entries(contadores)
+        .map(([tipo, { count, max }]) => `${tipo.toUpperCase()}: ${count}/${max}`)
+        .join(', ');
+    
+    // Se nenhum dado disponível, mostra mensagem
+    if (!textoContador) {
+        textoContador = 'Sem dados adicionais';
+    }
+    
+    // Atualiza contador na página de perícias
+    const contador = document.getElementById('contador-dados-adicionais');
+    if (contador) {
+        contador.textContent = textoContador;
+        contador.style.color = '#4caf50';
+        contador.style.fontWeight = 'normal';
+    }
+    
+    // Atualiza contador na ficha
+    const contadorFicha = document.getElementById('contador-dados-adicionais-ficha');
+    if (contadorFicha) {
+        contadorFicha.textContent = textoContador;
+        contadorFicha.style.color = '#4caf50';
+        contadorFicha.style.fontWeight = 'normal';
+    }
+}
+
+/**
  * Rola um d6 para a perícia
+ */
+/**
+ * Calcula dados adicionais (D4/D6/D8/D10) baseado no nível
+ * Retorna { count: número de perícias, dados: tipo de dado }
+ */
+
+/**
+ * Obtém o storage dos dados adicionais
+ */
+function obterDadosAdicionaisPericias() {
+    const saved = localStorage.getItem('pericias_dados_adicionais');
+    return saved ? JSON.parse(saved) : {};
+}
+
+/**
+ * Salva os dados adicionais no storage
+ */
+function salvarDadosAdicionaisPericias(dados) {
+    localStorage.setItem('pericias_dados_adicionais', JSON.stringify(dados));
+}
+
+/**
+ * Calcula o limite de perícias com D6 baseado no nível
+ */
+function calcularLimiteD6(nivel) {
+    nivel = parseInt(nivel) || 0;
+    
+    if (nivel >= 100) return 25;
+    if (nivel >= 95) return 23;
+    if (nivel >= 75) return 21;
+    if (nivel >= 55) return 19;
+    if (nivel >= 35) return 17;
+    if (nivel >= 15) return 15;
+    if (nivel >= 5) return 13;
+    return 10;
+}
+
+/**
+ * Obtém o nível atual do personagem
+ */
+function obterNivelAtual() {
+    // Tenta múltiplas fontes para obter o nível
+    
+    // Fonte 0: Variável global (definida quando ficha é aberta/salva)
+    if (window.nivelFichaAtual && window.nivelFichaAtual > 0) {
+        return window.nivelFichaAtual;
+    }
+    
+    // Fonte 0.5: localStorage (persistência entre recarregamentos)
+    const nivelStorage = localStorage.getItem('nivelFichaAtual');
+    if (nivelStorage) {
+        const nivel = parseInt(nivelStorage) || 0;
+        if (nivel > 0) {
+            window.nivelFichaAtual = nivel; // Restaura para variável global
+            return nivel;
+        }
+    }
+    
+    // Fonte 1: Input de nível (quando editando ficha)
+    const inputNivel = document.getElementById('nivel');
+    if (inputNivel && inputNivel.value) {
+        const nivel = parseInt(inputNivel.value) || 0;
+        if (nivel > 0) {
+            // Armazena no localStorage para usar depois
+            localStorage.setItem('nivelFichaAtual', nivel);
+            window.nivelFichaAtual = nivel;
+            return nivel;
+        }
+    }
+    
+    // Fonte 2: Slider de nível
+    const sliderNivel = document.getElementById('nivel-slider');
+    if (sliderNivel && sliderNivel.value) {
+        const nivel = parseInt(sliderNivel.value) || 0;
+        if (nivel > 0) {
+            // Armazena no localStorage para usar depois
+            localStorage.setItem('nivelFichaAtual', nivel);
+            window.nivelFichaAtual = nivel;
+            return nivel;
+        }
+    }
+    
+    // Fonte 3: Procura qualquer input com atributo de nível no DOM
+    const allInputs = document.querySelectorAll('input[id*="nivel"], input[name*="nivel"]');
+    for (let input of allInputs) {
+        const valor = parseInt(input.value) || 0;
+        if (valor > 0) {
+            // Armazena no localStorage para usar depois
+            localStorage.setItem('nivelFichaAtual', valor);
+            window.nivelFichaAtual = valor;
+            return valor;
+        }
+    }
+    
+    // Fonte 4: Procura no localStorage se houver personagem carregado
+    let fichasJSON = localStorage.getItem('rpg_fichas');
+    if (!fichasJSON) {
+        fichasJSON = localStorage.getItem('fichas');
+    }
+    
+    if (fichasJSON) {
+        try {
+            const fichas = JSON.parse(fichasJSON);
+            // Pega a última ficha carregada ou a primeira disponível
+            const fichasArray = Array.isArray(fichas) ? fichas : Object.values(fichas);
+            if (fichasArray.length > 0) {
+                const ultimaFicha = fichasArray[fichasArray.length - 1];
+                if (ultimaFicha && ultimaFicha.nivel) {
+                    const nivel = parseInt(ultimaFicha.nivel) || 0;
+                    // Armazena no localStorage para usar depois
+                    localStorage.setItem('nivelFichaAtual', nivel);
+                    window.nivelFichaAtual = nivel;
+                    return nivel;
+                }
+            }
+        } catch (e) {
+            console.error('Erro ao parsear fichas:', e);
+        }
+    }
+    
+    // Se nenhuma fonte tiver um valor válido, retorna 0
+    return 0;
+}
+
+/**
+ * Rola D6 para uma perícia com validação de limite
  */
 function rolarD6Pericia(periciaId) {
     const pericias = obterTodasPericias();
@@ -657,9 +1013,13 @@ function rolarD6Pericia(periciaId) {
     // Conta quantas perícias já têm D6 ativo
     const periciasComD6 = Object.values(pericias).filter(p => (parseInt(p.d6) || 0) > 0).length;
     
-    if (periciasComD6 >= 10) {
+    // Obtém o limite baseado no nível
+    const nivel = obterNivelAtual();
+    const limiteD6 = calcularLimiteD6(nivel);
+    
+    if (periciasComD6 >= limiteD6) {
         // Alerta: limite atingido
-        alert('⚠️ Limite de 10 perícias com D6 atingido!\n\nRemova uma perícia existente para adicionar outra.');
+        alert(`⚠️ Limite de ${limiteD6} perícias com D6 atingido (nível ${nivel}%)!\n\nRemova uma perícia existente para adicionar outra.`);
         return;
     }
     
@@ -698,7 +1058,15 @@ function atualizarTotalPericia(periciaId) {
     const bc = parseInt(periciaData.bonus_classe) || 0;
     const br = parseInt(periciaData.bonus_raca) || 0;
 
-    const total = d6 + bp + bo + bc + br;
+    // Obtém e soma todos os dados adicionais (D4/D6/D8/D10)
+    const dadosAdicionais = obterDadosAdicionaisPericias();
+    const periciaAdicionais = dadosAdicionais[periciaId] || { d4: 0, d6: 0, d8: 0, d10: 0 };
+    const somaAdicionais = (parseInt(periciaAdicionais.d4) || 0) + 
+                          (parseInt(periciaAdicionais.d6) || 0) + 
+                          (parseInt(periciaAdicionais.d8) || 0) + 
+                          (parseInt(periciaAdicionais.d10) || 0);
+
+    const total = d6 + bp + bo + bc + br + somaAdicionais;
     
     const campoTotal = document.getElementById(`pericia-total-${periciaId}`);
     if (campoTotal) {
@@ -714,16 +1082,18 @@ function atualizarTotalPericia(periciaId) {
 function atualizarContadorD6() {
     const pericias = obterTodasPericias();
     const periciasComD6 = Object.values(pericias).filter(p => (parseInt(p.d6) || 0) > 0).length;
+    const nivel = obterNivelAtual();
+    const limiteD6 = calcularLimiteD6(nivel);
     
     // Atualiza contador na página de perícias
     const contador = document.getElementById('contador-pericias-d6');
     if (contador) {
-        contador.textContent = `${periciasComD6}/10`;
+        contador.textContent = `${periciasComD6}/${limiteD6}`;
         // Muda cor se estiver no limite
-        if (periciasComD6 >= 10) {
+        if (periciasComD6 >= limiteD6) {
             contador.style.color = '#d32';
             contador.style.fontWeight = 'bold';
-        } else if (periciasComD6 > 5) {
+        } else if (periciasComD6 > limiteD6 * 0.7) {
             contador.style.color = '#ff9800';
             contador.style.fontWeight = 'normal';
         } else {
@@ -735,12 +1105,12 @@ function atualizarContadorD6() {
     // Atualiza contador na ficha
     const contadorFicha = document.getElementById('contador-pericias-d6-ficha');
     if (contadorFicha) {
-        contadorFicha.textContent = `${periciasComD6}/10`;
+        contadorFicha.textContent = `${periciasComD6}/${limiteD6}`;
         // Muda cor se estiver no limite
-        if (periciasComD6 >= 10) {
+        if (periciasComD6 >= limiteD6) {
             contadorFicha.style.color = '#d32';
             contadorFicha.style.fontWeight = 'bold';
-        } else if (periciasComD6 > 5) {
+        } else if (periciasComD6 > limiteD6 * 0.7) {
             contadorFicha.style.color = '#ff9800';
             contadorFicha.style.fontWeight = 'normal';
         } else {
@@ -1367,9 +1737,31 @@ function configurarNivelSlider() {
         // Quando o slider mudar, atualiza o input
         nivelSlider.addEventListener('input', () => {
             nivelInput.value = nivelSlider.value;
+            
+            // Salva o nível no localStorage IMEDIATAMENTE
+            const nivel = parseInt(nivelSlider.value) || 0;
+            localStorage.setItem('nivelFichaAtual', nivel);
+            window.nivelFichaAtual = nivel;
+            
             // Atualiza contadores dependentes do nível
             if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
                 window.Atributos.atualizarContadores();
+            }
+            // Atualiza limite de D6 conforme o nível
+            atualizarContadorD6();
+            // Atualiza dados adicionais conforme o nível
+            atualizarContadorDadosAdicionais();
+            
+            // Atualiza as páginas de perícias E ficha se estiverem visíveis
+            if (typeof popularPericiasFicha === 'function') {
+                const periciasFicha = document.getElementById('pericias-ficha');
+                if (periciasFicha && periciasFicha.parentElement.querySelector('.page.active')) {
+                    popularPericiasFicha();
+                }
+            }
+            
+            if (typeof Pericias !== 'undefined' && typeof Pericias.atualizarCards === 'function') {
+                Pericias.atualizarCards();
             }
         });
         
@@ -1387,15 +1779,37 @@ function configurarNivelSlider() {
             }
             
             nivelSlider.value = valor;
+            
+            // Salva o nível no localStorage IMEDIATAMENTE
+            localStorage.setItem('nivelFichaAtual', valor);
+            window.nivelFichaAtual = valor;
+            
             // Atualiza contadores dependentes do nível
             if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
                 window.Atributos.atualizarContadores();
+            }
+            // Atualiza limite de D6 conforme o nível
+            atualizarContadorD6();
+            // Atualiza dados adicionais conforme o nível
+            atualizarContadorDadosAdicionais();
+            
+            // Atualiza a página de perícias se estiver visível
+            if (typeof popularPericiasFicha === 'function' && document.getElementById('pericias-ficha')) {
+                popularPericiasFicha();
             }
         });
         
         // Sincroniza valores iniciais
         nivelSlider.value = nivelInput.value || 0;
         nivelInput.value = nivelSlider.value;
+        
+        // Carrega o nível do localStorage se houver
+        const nivelStored = localStorage.getItem('nivelFichaAtual');
+        if (nivelStored && parseInt(nivelStored) > 0) {
+            nivelSlider.value = nivelStored;
+            nivelInput.value = nivelStored;
+            window.nivelFichaAtual = parseInt(nivelStored);
+        }
     }
 }
 
@@ -1682,6 +2096,10 @@ window.salvarPericiaFicha = salvarPericiaFicha;
 window.rolarD6Pericia = rolarD6Pericia;
 window.atualizarTotalPericia = atualizarTotalPericia;
 window.atualizarContadorD6 = atualizarContadorD6;
+window.atualizarContadorDadosAdicionais = atualizarContadorDadosAdicionais;
+window.rolarDadoAdicionalPericia = rolarDadoAdicionalPericia;
+window.obterDadosDisponiveisPorNivel = obterDadosDisponiveisPorNivel;
+window.obterNivelAtual = obterNivelAtual;
 window.testarPericiaFicha = testarPericiaFicha;
 window.togglePericiasGrupo = togglePericiasGrupo;
 window.calcularEstatisticas = calcularEstatisticas;
@@ -1747,6 +2165,12 @@ function setupForm() {
                 bloqueio: parseInt(formData.get('bloqueio')) || 0,
                 historia: formData.get('historia') || ''
             };
+            
+            // Armazena o nível na variável global para uso em outras páginas
+            window.nivelFichaAtual = ficha.nivel;
+            
+            // Armazena o nível no localStorage para persistência
+            localStorage.setItem('nivelFichaAtual', ficha.nivel);
             
             // Mostra loading
             showMessage('Salvando ficha...', 'info');

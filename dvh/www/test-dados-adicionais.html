@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Dados Adicionais - Independentes</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .output { background: #f0f0f0; padding: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test: Dados Adicionais Sistema (D4/D6/D8/D10 Independentes)</h1>
+    
+    <div class="test-section">
+        <h2>1. Setup Test Data</h2>
+        <button onclick="setupTestData()">Load Test Personagem</button>
+        <div class="output" id="output1"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Check Storage</h2>
+        <button onclick="checkStorage()">Check localStorage</button>
+        <div class="output" id="output2"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Check Available Dice</h2>
+        <button onclick="checkCounters()">Check Level 50 Config</button>
+        <div class="output" id="output3"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Test Functions</h2>
+        <button onclick="testDadosAdicionaisFunction()">Test Functions</button>
+        <div class="output" id="output4"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Navigate to App</h2>
+        <button onclick="window.location.href = '/'">Go to App (Home)</button>
+        <button onclick="window.location.href = '/#ficha'">Go to App (Ficha)</button>
+        <button onclick="window.location.href = '/index.html?page=pericias'">Go to Perícias</button>
+    </div>
+    
+    <script>
+        // Create minimal test data with independent dice
+        function setupTestData() {
+            const personagem = {
+                nome: 'Test Char',
+                nivel: 50,
+                raca: 'humano',
+                classe: 'mago',
+                origem: 'universitario'
+            };
+            
+            const atributos = {
+                forca: 3,
+                destreza: 4,
+                constituicao: 3,
+                inteligencia: 5,
+                sabedoria: 4,
+                carisma: 3
+            };
+            
+            const pericias_estrutura = {
+                'pericia-1': { d6: 1, bonus_personagem: 0, bonus_origem: 1, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-2': { d6: 1, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 1, bonus_raca: 0 },
+                'pericia-3': { d6: 1, bonus_personagem: 1, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-4': { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-5': { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 }
+            };
+            
+            // Dados INDEPENDENTES por tipo - cada um é um dado separado
+            const pericias_dados_adicionais = {
+                'pericia-1': { d4: 2, d6: 3, d8: 0, d10: 0 },  // D4=2 + D6=3 (soma: 5)
+                'pericia-2': { d4: 0, d6: 0, d8: 0, d10: 0 },  // Nenhum
+                'pericia-3': { d4: 1, d6: 0, d8: 0, d10: 0 },  // D4=1
+                'pericia-4': { d4: 0, d6: 0, d8: 0, d10: 0 },
+                'pericia-5': { d4: 0, d6: 0, d8: 0, d10: 0 }
+            };
+            
+            localStorage.setItem('personagem_nome', personagem.nome);
+            localStorage.setItem('atributos_personagem', JSON.stringify(atributos));
+            localStorage.setItem('personagem_nivel', personagem.nivel.toString());
+            localStorage.setItem('personagem_raca', personagem.raca);
+            localStorage.setItem('personagem_classe', personagem.classe);
+            localStorage.setItem('personagem_origem', personagem.origem);
+            localStorage.setItem('pericias_estrutura', JSON.stringify(pericias_estrutura));
+            localStorage.setItem('pericias_dados_adicionais', JSON.stringify(pericias_dados_adicionais));
+            
+            document.getElementById('output1').innerHTML = '<strong>✓ Test data loaded</strong><br>' +
+                'Personagem: ' + personagem.nome + '<br>' +
+                'Nível: ' + personagem.nivel + '<br>' +
+                'Perícias D6 ativas: 3<br>' +
+                '<br><strong>Dados Adicionais (Independentes):</strong><br>' +
+                'Perícia 1: D4=2 + D6=3 (Soma: 5)<br>' +
+                'Perícia 3: D4=1 (Soma: 1)';
+        }
+        
+        function checkStorage() {
+            const pericias = localStorage.getItem('pericias_estrutura');
+            const dados = localStorage.getItem('pericias_dados_adicionais');
+            const nivel = localStorage.getItem('personagem_nivel');
+            
+            let output = '<strong>Storage Check:</strong><br>';
+            output += 'Nível: ' + (nivel || 'N/A') + '<br>';
+            output += 'Perícias estrutura: ' + (pericias ? '✓ Loaded' : '✗ Missing') + '<br>';
+            output += 'Perícias dados adicionais: ' + (dados ? '✓ Loaded' : '✗ Missing') + '<br>';
+            
+            if (dados) {
+                const dadosObj = JSON.parse(dados);
+                output += '<br><strong>Additional Dice Data (Each Independent):</strong><br>';
+                for (let [key, val] of Object.entries(dadosObj)) {
+                    const soma = (val.d4 || 0) + (val.d6 || 0) + (val.d8 || 0) + (val.d10 || 0);
+                    if (soma > 0) {
+                        output += `${key}: D4=${val.d4}, D6=${val.d6}, D8=${val.d8}, D10=${val.d10} → Soma: ${soma}<br>`;
+                    }
+                }
+            }
+            
+            document.getElementById('output2').innerHTML = output;
+        }
+        
+        function checkCounters() {
+            const nivel = 50;
+            
+            // Dados disponíveis neste nível
+            const disponivel = {
+                d4: null,
+                d6: null,
+                d8: null,
+                d10: null
+            };
+            
+            if (nivel >= 15) disponivel.d4 = { max: 5 };
+            if (nivel >= 45) disponivel.d6 = { max: 6 };
+            if (nivel >= 75) disponivel.d8 = { max: 7 };
+            if (nivel >= 100) disponivel.d10 = { max: 8 };
+            
+            let output = '<strong>Level ' + nivel + ' Configuration:</strong><br>';
+            output += '<br><strong>Cada Dado É Independente:</strong><br>';
+            if (disponivel.d4) output += '✓ D4: Até ' + disponivel.d4.max + ' perícias com 1D4<br>';
+            if (disponivel.d6) output += '✓ D6: Até ' + disponivel.d6.max + ' perícias com 1D6<br>';
+            if (disponivel.d8) output += '✓ D8: Até ' + disponivel.d8.max + ' perícias com 1D8<br>';
+            if (disponivel.d10) output += '✓ D10: Até ' + disponivel.d10.max + ' perícias com 1D10<br>';
+            
+            output += '<br><strong>Expected Counter Display:</strong><br>';
+            output += 'D4: 1/5, D6: 1/6';
+            
+            output += '<br><br><strong>Exemplo de Soma:</strong><br>';
+            output += 'Se uma perícia tem D4=2 + D6=3 + D8=1, o total adicional é: 2+3+1 = 6';
+            
+            document.getElementById('output3').innerHTML = output;
+        }
+        
+        function testDadosAdicionaisFunction() {
+            try {
+                let output = '<strong>Function Tests:</strong><br>';
+                
+                // Test obterDadosDisponiveisPorNivel
+                if (typeof obterDadosDisponiveisPorNivel !== 'undefined') {
+                    const config15 = obterDadosDisponiveisPorNivel(15);
+                    const config50 = obterDadosDisponiveisPorNivel(50);
+                    const config100 = obterDadosDisponiveisPorNivel(100);
+                    
+                    output += '✓ obterDadosDisponiveisPorNivel<br>';
+                    output += 'Level 15: ' + JSON.stringify(config15) + '<br>';
+                    output += 'Level 50: ' + JSON.stringify(config50) + '<br>';
+                    output += 'Level 100: ' + JSON.stringify(config100) + '<br>';
+                } else {
+                    output += '✗ obterDadosDisponiveisPorNivel NOT found<br>';
+                }
+                
+                // Test storage functions
+                output += '<br><strong>Storage Functions:</strong><br>';
+                if (typeof obterDadosAdicionaisPericias !== 'undefined') {
+                    output += '✓ obterDadosAdicionaisPericias available<br>';
+                } else {
+                    output += '✗ obterDadosAdicionaisPericias NOT found<br>';
+                }
+                
+                if (typeof salvarDadosAdicionaisPericias !== 'undefined') {
+                    output += '✓ salvarDadosAdicionaisPericias available<br>';
+                } else {
+                    output += '✗ salvarDadosAdicionaisPericias NOT found<br>';
+                }
+                
+                if (typeof rolarDadoAdicionalPericia !== 'undefined') {
+                    output += '✓ rolarDadoAdicionalPericia available<br>';
+                } else {
+                    output += '✗ rolarDadoAdicionalPericia NOT found<br>';
+                }
+                
+                if (typeof atualizarContadorDadosAdicionais !== 'undefined') {
+                    output += '✓ atualizarContadorDadosAdicionais available<br>';
+                } else {
+                    output += '✗ atualizarContadorDadosAdicionais NOT found<br>';
+                }
+                
+                document.getElementById('output4').innerHTML = output;
+            } catch (error) {
+                document.getElementById('output4').innerHTML = '<strong style="color: red;">Error:</strong> ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

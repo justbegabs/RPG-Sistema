@@ -1125,6 +1125,42 @@ body:has(#page-home.active) .main-content {
     color: white;
 }
 
+/* Dados Adicionais (D4/D6/D8/D10) */
+.pericia-dados-adicionais {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 8px;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+.btn-dado-adicional {
+    flex: 1;
+    min-width: 45px;
+    padding: 6px 4px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-dado-adicional:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateY(-1px);
+}
+
+.btn-dado-adicional:active {
+    transform: translateY(0px);
+}
+
 /* Perícias na Ficha */
 .pericias-grupo-ficha {
     margin-bottom: 25px;

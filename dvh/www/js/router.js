@@ -223,6 +223,29 @@ function loadPageData(pageId) {
             }
             break;
         case 'ficha':
+            // Tenta obter e armazenar o nível
+            let nivel = 0;
+            
+            // Primeiro tenta do input
+            const inputNivel = document.getElementById('nivel');
+            if (inputNivel && inputNivel.value) {
+                nivel = parseInt(inputNivel.value) || 0;
+            }
+            
+            // Se não conseguiu, tenta do localStorage
+            if (nivel === 0) {
+                const nivelStored = localStorage.getItem('nivelFichaAtual');
+                if (nivelStored) {
+                    nivel = parseInt(nivelStored) || 0;
+                }
+            }
+            
+            // Se conseguiu, armazena na variável global
+            if (nivel > 0) {
+                window.nivelFichaAtual = nivel;
+                console.log('[router] Página ficha: nivelFichaAtual =', nivel);
+            }
+            
             // Recarrega atributos e perícias na ficha quando entrar na página
             if (typeof popularAtributosFicha === 'function') {
                 popularAtributosFicha();

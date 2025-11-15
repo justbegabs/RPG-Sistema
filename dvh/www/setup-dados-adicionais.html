@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup e Teste - Dados Adicionais</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 30px; }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 5px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            line-height: 1.6;
+        }
+        .output strong { color: #667eea; }
+        .output .success { color: #27ae60; }
+        .output .info { color: #2196f3; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Setup - Sistema de Dados Adicionais</h1>
+    
+    <div class="section">
+        <h2>1. Criar Personagem Teste (Nível 50)</h2>
+        <button onclick="criarPersonagemTeste()">Setup</button>
+        <div class="output" id="output1"></div>
+    </div>
+    
+    <div class="section">
+        <h2>2. Verificar Dados</h2>
+        <button onclick="verificarDados()">Verificar</button>
+        <div class="output" id="output2"></div>
+    </div>
+    
+    <div class="section">
+        <h2>3. Ir para Perícias</h2>
+        <button onclick="window.location.href = '/index.html'">Abrir Perícias</button>
+    </div>
+    
+    <script>
+        function criarPersonagemTeste() {
+            // Dados básicos
+            localStorage.setItem('personagem_nome', 'Teste D4/D6/D8/D10');
+            localStorage.setItem('personagem_nivel', '50');
+            localStorage.setItem('personagem_raca', 'humano');
+            localStorage.setItem('personagem_classe', 'mago');
+            localStorage.setItem('personagem_origem', 'universitario');
+            
+            // Atributos
+            localStorage.setItem('atributos_personagem', JSON.stringify({
+                forca: 3, destreza: 4, constituicao: 3,
+                inteligencia: 5, sabedoria: 4, carisma: 3
+            }));
+            
+            // Perícias estrutura (D6)
+            const pericias = {
+                'pericia-acrobacia': { d6: 1, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-adestramento': { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-alquimia': { d6: 1, bonus_personagem: 0, bonus_origem: 1, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-atirar': { d6: 1, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 },
+                'pericia-atletismo': { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 }
+            };
+            localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+            
+            // Dados adicionais (independentes)
+            const dadosAdicionais = {
+                'pericia-acrobacia': { d4: 2, d6: 0, d8: 0, d10: 0 },  // D4=2
+                'pericia-adestramento': { d4: 0, d6: 3, d8: 0, d10: 0 }, // D6=3
+                'pericia-alquimia': { d4: 0, d6: 0, d8: 1, d10: 0 },     // D8=1
+                'pericia-atirar': { d4: 1, d6: 2, d8: 0, d10: 0 },       // D4=1, D6=2 (MULTI)
+                'pericia-atletismo': { d4: 0, d6: 0, d8: 0, d10: 0 }     // Nenhum
+            };
+            localStorage.setItem('pericias_dados_adicionais', JSON.stringify(dadosAdicionais));
+            
+            document.getElementById('output1').innerHTML = `
+                <strong>✓ Personagem criado!</strong><br>
+                Nome: Teste D4/D6/D8/D10<br>
+                Nível: 50<br>
+                Perícias: 5<br>
+                <br>
+                <strong>Dados Adicionais:</strong><br>
+                Acrobacia: D4=2<br>
+                Adestramento: D6=3<br>
+                Alquimia: D8=1<br>
+                Atirar: D4=1 + D6=2<br>
+                Atletismo: (nenhum)
+            `;
+        }
+        
+        function verificarDados() {
+            const pericias = localStorage.getItem('pericias_estrutura');
+            const dados = localStorage.getItem('pericias_dados_adicionais');
+            const nivel = localStorage.getItem('personagem_nivel');
+            
+            let output = '<strong>Dados em localStorage:</strong><br>';
+            output += `Nível: ${nivel}<br>`;
+            output += `Perícias D6: ${pericias ? '✓' : '✗'}<br>`;
+            output += `Dados Adicionais: ${dados ? '✓' : '✗'}<br>`;
+            
+            if (dados) {
+                const dadosObj = JSON.parse(dados);
+                output += '<br><strong>Breakdown:</strong><br>';
+                for (let [key, val] of Object.entries(dadosObj)) {
+                    const soma = (val.d4 || 0) + (val.d6 || 0) + (val.d8 || 0) + (val.d10 || 0);
+                    output += `${key}: D4=${val.d4}, D6=${val.d6}, D8=${val.d8}, D10=${val.d10} (soma=${soma})<br>`;
+                }
+            }
+            
+            document.getElementById('output2').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
