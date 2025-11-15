@@ -1,0 +1,19 @@
+{
+  "id": "diario-jornalista",
+  "nome": "Diário de Jornalista",
+  "tipo": "equipamento de origem",
+  "categoria": "itens-origem",
+  "origem": "jornalista",
+  "descricao": "Caderno com anotações de investigações, contatos importantes e histórias documentadas.",
+  "peso": 1,
+  "funcao": "Registra informações importantes, +2 em testes de Investigação e Persuasão",
+  "bonus": {
+    "pericias": {
+      "investigacao": 2,
+      "persuasao": 2
+    }
+  },
+  "propriedades": ["Rede de contatos", "Memória fotográfica"],
+  "raridade": "comum",
+  "preco": 15
+}

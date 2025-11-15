@@ -1,0 +1,14 @@
+{
+  "id": "mochila-aventureiro",
+  "nome": "Mochila de Aventureiro",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Mochila reforçada com múltiplos compartimentos, ideal para longas jornadas.",
+  "peso": 5,
+  "funcao": "Aumenta a capacidade de inventário em +10 espaços",
+  "bonus": {
+    "inventario": 10
+  },
+  "raridade": "comum",
+  "preco": 20
+}

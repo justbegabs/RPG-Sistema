@@ -1,0 +1,15 @@
+{
+  "id": "adaga",
+  "nome": "Adaga",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Uma faca pequena e afiada, fácil de ocultar e eficaz em combates rápidos.",
+  "peso": 1,
+  "dano": "1d4",
+  "tipoDano": "perfurante",
+  "alcance": "corpo a corpo / arremesso 20/60",
+  "proficiencia": "armas simples",
+  "propriedades": ["Leve", "Arremesso", "Acuidade"],
+  "raridade": "comum",
+  "preco": 2
+}

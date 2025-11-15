@@ -189,6 +189,9 @@
                                         <small class="form-hint">Calculado (nível 0%): Constituição × 2 + Metade da Fortitude (arredondado para cima)</small>
                                     </div>
                                 </div>
+                                <!-- Campo oculto para manter compatibilidade com cálculos -->
+                                <input type="hidden" id="inventario" name="inventario" value="0">
+                                <input type="hidden" id="bonus-bolsa" name="bonus-bolsa" value="0">
                             </div>
 
                             <div class="form-section">
@@ -230,6 +233,23 @@
                             <div id="resultado-rolagem-pericias-ficha" class="resultado-rolagem" style="display: none;">
                                 <h4>📊 Resultado do Teste de Perícia</h4>
                                 <div id="resultado-conteudo-pericias-ficha"></div>
+                            </div>
+
+                            <div class="form-section">
+                                <h2>🎒 Inventário</h2>
+                                <div class="form-group">
+                                    <div class="inventario-header" style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px; background: #f5f5f5; border-radius: 8px; transition: background 0.2s;" onclick="abrirModalInventario()">
+                                        <span style="font-size: 24px;">🎒</span>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: bold; font-size: 16px;">Inventário</div>
+                                            <div style="font-size: 14px; color: #666;">
+                                                <span id="inventario-usado">0</span>/<span id="inventario-total-display">0</span> espaços ocupados
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" style="pointer-events: none;">Abrir Inventário</button>
+                                    </div>
+                                    <small class="form-hint">Clique para gerenciar seus itens, armas e equipamentos</small>
+                                </div>
                             </div>
 
                             <div class="form-section">
@@ -415,6 +435,106 @@
                         </div>
                         <div style="margin-top:12px;">
                             <button id="modal-resultado-fechar" class="btn btn-primary">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal: Inventário -->
+                <div id="modal-inventario" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:9999;">
+                    <div class="modal-content" style="background:#fff; padding:20px; width:95%; max-width:900px; border-radius:12px; max-height:85%; overflow:auto;">
+                        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <div>
+                                <h3 style="margin:0;">🎒 Inventário</h3>
+                                <p style="margin:4px 0 0 0; color:#666; font-size:14px;">
+                                    <span id="modal-inventario-usado">0</span>/<span id="modal-inventario-total">0</span> espaços ocupados
+                                </p>
+                            </div>
+                            <button type="button" id="modal-inventario-close" class="btn" style="font-size:20px; padding:4px 12px;">✖</button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <!-- Configuração de Bônus de Bolsa -->
+                            <div style="background:#f0f8ff; padding:12px; border-radius:8px; margin-bottom:16px;">
+                                <label for="modal-bonus-bolsa" style="display:block; margin-bottom:6px; font-weight:bold; font-size:14px;">🎒 Bônus de Capacidade (itens especiais):</label>
+                                <input type="number" id="modal-bonus-bolsa" min="0" value="0" style="width:100px; padding:6px; border:1px solid #ddd; border-radius:4px;">
+                                <small style="color:#666; display:block; margin-top:4px;">Aumenta a capacidade total do inventário</small>
+                            </div>
+                            
+                            <!-- Catálogo de Itens -->
+                            <div id="catalogo-container" style="margin-bottom:18px;">
+                                <h4 style="margin:0 0 8px 0;">📚 Catálogo de Itens</h4>
+                                <input type="search" id="catalogo-busca" placeholder="🔍 Buscar item por nome..." style="width:100%; padding:8px; margin-bottom:12px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;">
+                                <div id="catalogo-itens" style="display:grid; gap:12px;">
+                                    <!-- Seções por categoria serão renderizadas via JS -->
+                                </div>
+                            </div>
+                            
+                            <!-- Abas de Categorias -->
+                            <div class="inventario-tabs" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+                                <button type="button" class="inventario-tab-btn active" data-categoria="todos" style="padding:8px 16px; border:1px solid #ddd; background:#4CAF50; color:white; border-radius:6px; cursor:pointer; font-size:14px;">📦 Todos</button>
+                                <button type="button" class="inventario-tab-btn" data-categoria="armas" style="padding:8px 16px; border:1px solid #ddd; background:#f5f5f5; border-radius:6px; cursor:pointer; font-size:14px;">⚔️ Armas</button>
+                                <button type="button" class="inventario-tab-btn" data-categoria="itens-comuns" style="padding:8px 16px; border:1px solid #ddd; background:#f5f5f5; border-radius:6px; cursor:pointer; font-size:14px;">🔧 Itens Comuns</button>
+                                <button type="button" class="inventario-tab-btn" data-categoria="itens-raca" style="padding:8px 16px; border:1px solid #ddd; background:#f5f5f5; border-radius:6px; cursor:pointer; font-size:14px;">👥 Itens de Raça</button>
+                                <button type="button" class="inventario-tab-btn" data-categoria="itens-classe" style="padding:8px 16px; border:1px solid #ddd; background:#f5f5f5; border-radius:6px; cursor:pointer; font-size:14px;">⚔️ Itens de Classe</button>
+                                <button type="button" class="inventario-tab-btn" data-categoria="itens-origem" style="padding:8px 16px; border:1px solid #ddd; background:#f5f5f5; border-radius:6px; cursor:pointer; font-size:14px;">🌍 Itens de Origem</button>
+                            </div>
+
+                            <!-- Botão Adicionar Novo Item -->
+                            <div style="margin-bottom:16px;">
+                                <button type="button" id="btn-adicionar-item" class="btn btn-primary" style="width:100%;">➕ Adicionar Novo Item</button>
+                            </div>
+
+                            <!-- Lista de Itens -->
+                            <div id="inventario-lista" style="display:grid; gap:12px;">
+                                <!-- Itens serão adicionados aqui -->
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer" style="display:flex; justify-content:flex-end; margin-top:16px;">
+                            <button type="button" id="modal-inventario-fechar" class="btn btn-primary">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal: Adicionar/Editar Item -->
+                <div id="modal-item" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:10000;">
+                    <div class="modal-content" style="background:#fff; padding:20px; width:90%; max-width:500px; border-radius:12px;">
+                        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <h3 style="margin:0;" id="modal-item-titulo">➕ Adicionar Item</h3>
+                            <button type="button" id="modal-item-close" class="btn" style="font-size:20px; padding:4px 12px;">✖</button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label for="item-nome" style="display:block; margin-bottom:4px; font-weight:bold;">Nome do Item *</label>
+                                <input type="text" id="item-nome" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;" placeholder="Ex: Espada Longa" required>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label for="item-categoria" style="display:block; margin-bottom:4px; font-weight:bold;">Categoria *</label>
+                                <select id="item-categoria" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;" required>
+                                    <option value="armas">⚔️ Armas</option>
+                                    <option value="itens-comuns">🔧 Itens Comuns</option>
+                                    <option value="itens-raca">👥 Itens de Raça</option>
+                                    <option value="itens-classe">⚔️ Itens de Classe</option>
+                                    <option value="itens-origem">🌍 Itens de Origem</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label for="item-peso" style="display:block; margin-bottom:4px; font-weight:bold;">Peso (espaços) *</label>
+                                <input type="number" id="item-peso" min="0" step="0.5" value="1" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box;" required>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label for="item-funcao" style="display:block; margin-bottom:4px; font-weight:bold;">Função/Descrição</label>
+                                <textarea id="item-funcao" rows="3" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; box-sizing:border-box; resize:vertical;" placeholder="Descreva a função ou propriedades do item..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+                            <button type="button" id="modal-item-cancelar" class="btn btn-secondary">Cancelar</button>
+                            <button type="button" id="modal-item-salvar" class="btn btn-primary">Salvar Item</button>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,19 @@
+{
+  "id": "laptop-programador",
+  "nome": "Laptop de Programador",
+  "tipo": "equipamento de origem",
+  "categoria": "itens-origem",
+  "origem": "programador",
+  "descricao": "Laptop de alta performance com softwares especializados para programação e hacking.",
+  "peso": 3,
+  "funcao": "Permite hacking, programação e pesquisa avançada, +3 em testes de Tecnologia",
+  "bonus": {
+    "pericias": {
+      "tecnologia": 3,
+      "hacking": 2
+    }
+  },
+  "propriedades": ["Acesso à internet", "Criação de programas", "Invasão de sistemas"],
+  "raridade": "incomum",
+  "preco": 500
+}

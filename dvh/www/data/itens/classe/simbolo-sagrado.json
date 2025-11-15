@@ -1,0 +1,16 @@
+{
+  "id": "simbolo-sagrado",
+  "nome": "Símbolo Sagrado",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "clerigo",
+  "descricao": "Medalhão sagrado que canaliza o poder divino, usado por clérigos devotos.",
+  "peso": 1,
+  "funcao": "Foco divino, permite canalizar divindade, +1 em feitiços de cura",
+  "bonus": {
+    "cura": 1
+  },
+  "propriedades": ["Foco divino", "Proteção contra mortos-vivos"],
+  "raridade": "incomum",
+  "preco": 80
+}

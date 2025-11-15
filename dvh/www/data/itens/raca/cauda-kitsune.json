@@ -1,0 +1,13 @@
+{
+  "id": "cauda-kitsune",
+  "nome": "Cauda de Kitsune",
+  "tipo": "característica racial",
+  "categoria": "itens-raca",
+  "raca": "kitsune",
+  "descricao": "Cauda mágica que cresce com poder e idade, concedendo habilidades místicas.",
+  "peso": 0,
+  "funcao": "Concede +1 em testes de Magia por cauda (máximo 9), permite ilusões menores",
+  "propriedades": ["Magia natural", "Ilusões", "Charme"],
+  "raridade": "lendário",
+  "equipavel": false
+}

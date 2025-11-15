@@ -1,0 +1,13 @@
+{
+  "id": "asas-anjo",
+  "nome": "Asas Angelicais",
+  "tipo": "característica racial",
+  "categoria": "itens-raca",
+  "raca": "anjo",
+  "descricao": "Asas divinas que permitem voo celestial, presente natural dos anjos.",
+  "peso": 0,
+  "funcao": "Permite voar com velocidade de 60 pés, +2 em testes de Carisma ao estar visível",
+  "propriedades": ["Voo", "Presença divina", "Imune a quedas"],
+  "raridade": "lendário",
+  "equipavel": false
+}

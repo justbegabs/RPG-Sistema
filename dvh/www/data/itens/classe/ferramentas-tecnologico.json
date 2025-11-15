@@ -1,0 +1,19 @@
+{
+  "id": "ferramentas-tecnologico",
+  "nome": "Kit Tecnológico Avançado",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "tecnologico",
+  "descricao": "Conjunto de ferramentas high-tech para criar e modificar dispositivos tecnológicos.",
+  "peso": 6,
+  "funcao": "Permite criar gadgets, +2 em testes de Tecnologia e Engenharia",
+  "bonus": {
+    "pericias": {
+      "tecnologia": 2,
+      "engenharia": 2
+    }
+  },
+  "propriedades": ["Criação de gadgets", "Hacking", "Modificação de armas"],
+  "raridade": "raro",
+  "preco": 300
+}

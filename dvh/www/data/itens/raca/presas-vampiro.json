@@ -1,0 +1,15 @@
+{
+  "id": "presas-vampiro",
+  "nome": "Presas Vampíricas",
+  "tipo": "característica racial",
+  "categoria": "itens-raca",
+  "raca": "vampiro",
+  "descricao": "Presas afiadas que drenam a força vital dos inimigos.",
+  "peso": 0,
+  "funcao": "Mordida causa 1d6 de dano necrótico e restaura metade do dano como PV",
+  "dano": "1d6",
+  "tipoDano": "necrótico",
+  "propriedades": ["Drenagem de vida", "Regeneração"],
+  "raridade": "lendário",
+  "equipavel": false
+}

@@ -1,0 +1,15 @@
+{
+  "id": "baralho-carteado",
+  "nome": "Baralho Místico",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "carteado",
+  "descricao": "Baralho encantado com runas místicas, cada carta possui poder único.",
+  "peso": 0.5,
+  "funcao": "Permite usar habilidades de classe, cartas podem causar 1d10 de dano mágico",
+  "dano": "1d10",
+  "tipoDano": "mágico",
+  "propriedades": ["52 cartas mágicas", "Previsão do destino", "Ataques à distância"],
+  "raridade": "raro",
+  "preco": 250
+}

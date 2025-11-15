@@ -1,0 +1,19 @@
+{
+  "id": "kit-sobrevivencia",
+  "nome": "Kit de Sobrevivência",
+  "tipo": "equipamento de origem",
+  "categoria": "itens-origem",
+  "origem": "eremita",
+  "descricao": "Kit completo para sobrevivência em ambientes hostis: faca, pederneira, purificador de água.",
+  "peso": 4,
+  "funcao": "Permite sobreviver na selva, +3 em testes de Sobrevivência e Natureza",
+  "bonus": {
+    "pericias": {
+      "sobrevivencia": 3,
+      "natureza": 2
+    }
+  },
+  "propriedades": ["Purificar água", "Fazer fogo", "Encontrar comida"],
+  "raridade": "comum",
+  "preco": 30
+}

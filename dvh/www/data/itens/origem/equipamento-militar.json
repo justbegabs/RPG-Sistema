@@ -1,0 +1,19 @@
+{
+  "id": "equipamento-militar",
+  "nome": "Equipamento Militar",
+  "tipo": "equipamento de origem",
+  "categoria": "itens-origem",
+  "origem": "militar",
+  "descricao": "Kit completo de equipamento militar: uniforme, insígnias, kit de primeiros socorros.",
+  "peso": 8,
+  "funcao": "Concede autoridade militar, +2 em testes de Liderança e Intimidação",
+  "bonus": {
+    "pericias": {
+      "lideranca": 2,
+      "intimidacao": 2
+    }
+  },
+  "propriedades": ["Disciplina", "Comando"],
+  "raridade": "comum",
+  "preco": 40
+}

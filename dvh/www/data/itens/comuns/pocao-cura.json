@@ -1,0 +1,12 @@
+{
+  "id": "pocao-cura",
+  "nome": "Poção de Cura",
+  "tipo": "consumível",
+  "categoria": "itens-comuns",
+  "descricao": "Uma poção vermelha brilhante que restaura a vitalidade quando consumida.",
+  "peso": 0.5,
+  "efeito": "Restaura 2d4+2 pontos de vida",
+  "uso": "Ação",
+  "raridade": "comum",
+  "preco": 50
+}

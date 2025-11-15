@@ -1,0 +1,15 @@
+{
+  "id": "cajado-arcano",
+  "nome": "Cajado Arcano",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Um cajado entalhado com runas místicas, canaliza energia mágica com eficiência.",
+  "peso": 4,
+  "dano": "1d6",
+  "tipoDano": "concussão",
+  "alcance": "corpo a corpo",
+  "proficiencia": "armas simples",
+  "propriedades": ["Duas mãos", "Foco arcano", "+1 em testes de magia"],
+  "raridade": "incomum",
+  "preco": 100
+}

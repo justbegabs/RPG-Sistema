@@ -1,0 +1,12 @@
+{
+  "id": "tocha",
+  "nome": "Tocha",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Uma vara de madeira envolta em pano embebido em óleo, que queima por 1 hora.",
+  "peso": 1,
+  "funcao": "Ilumina um raio de 6 metros por 1 hora",
+  "usos": "1 hora de duração",
+  "raridade": "comum",
+  "preco": 0.5
+}

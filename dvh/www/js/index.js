@@ -207,6 +207,12 @@ function popularSelects() {
     // Popula perícias na ficha
     popularPericiasFicha();
     
+    // Restaura bônus de bolsa do localStorage
+    const bonusBolsaSalvo = localStorage.getItem('bonus_bolsa');
+    if (bonusBolsaSalvo && document.getElementById('bonus-bolsa')) {
+        document.getElementById('bonus-bolsa').value = bonusBolsaSalvo;
+    }
+    
     // Calcula estatísticas iniciais
     calcularEstatisticas();
     
@@ -218,6 +224,9 @@ function popularSelects() {
     
     // Inicializa estrutura de perícias
     inicializarPericias();
+    
+    // Inicializa sistema de inventário
+    inicializarInventario();
     
     // Aplica bônus se já houver seleções (após um pequeno delay para garantir que os dados estão carregados)
     setTimeout(() => {
@@ -1407,6 +1416,21 @@ function calcularEstatisticas() {
     const bloqueio = (atributos.constituicao || 0) * 2 + metadeFortitude;
     atualizarCampoEstatistica('bloqueio', Math.max(0, bloqueio));
     
+    // Calcula Inventário: Força × 2 + 3 + Bônus de Bolsa
+    const forca = atributos.forca || 0;
+    const bonusBolsaInput = document.getElementById('bonus-bolsa');
+    const bonusBolsa = bonusBolsaInput ? (parseInt(bonusBolsaInput.value) || 0) : 0;
+    const inventario = forca * 2 + 3 + bonusBolsa;
+    atualizarCampoEstatistica('inventario', Math.max(0, inventario));
+    
+    // Atualiza display do inventário
+    if (typeof atualizarDisplayInventario === 'function') {
+        atualizarDisplayInventario();
+    }
+    if (typeof atualizarDisplayInventarioModal === 'function') {
+        atualizarDisplayInventarioModal();
+    }
+    
     // Marca que já calculou pela primeira vez
     primeiraVezCalculandoEstatisticas = false;
 }
@@ -2215,6 +2239,15 @@ function configurarValidacaoEstatisticas() {
             });
         }
     });
+    
+    // Listener para bônus de bolsa recalcular inventário
+    const bonusBolsaInput = document.getElementById('bonus-bolsa');
+    if (bonusBolsaInput) {
+        bonusBolsaInput.addEventListener('change', () => {
+            localStorage.setItem('bonus_bolsa', bonusBolsaInput.value);
+            calcularEstatisticas();
+        });
+    }
 }
 
 /**
@@ -2518,6 +2551,8 @@ function setupForm() {
                 defesa: parseInt(formData.get('defesa')) || 0,
                 esquiva: parseInt(formData.get('esquiva')) || 0,
                 bloqueio: parseInt(formData.get('bloqueio')) || 0,
+                inventario: parseInt(formData.get('inventario')) || 0,
+                bonusBolsa: parseInt(formData.get('bonus-bolsa')) || 0,
                 historia: formData.get('historia') || ''
             };
             
@@ -2754,3 +2789,677 @@ function showTab(tabName) {
         loadFichas();
     }
 }
+
+// =============================================================================
+// SISTEMA DE INVENTÁRIO
+// =============================================================================
+
+/**
+ * Estrutura de item do inventário:
+ * {
+ *   id: string (timestamp único),
+ *   nome: string,
+ *   categoria: 'armas' | 'itens-comuns' | 'itens-raca' | 'itens-classe' | 'itens-origem',
+ *   peso: number,
+ *   funcao: string
+ * }
+ */
+
+let inventarioAtual = [];
+let itemEditandoId = null;
+let categoriaFiltroAtual = 'todos';
+
+/**
+ * Inicializa o sistema de inventário
+ */
+function inicializarInventario() {
+    // Carrega inventário do localStorage
+    const inventarioSalvo = localStorage.getItem('inventario_itens');
+    if (inventarioSalvo) {
+        try {
+            inventarioAtual = JSON.parse(inventarioSalvo);
+        } catch (e) {
+            console.error('Erro ao carregar inventário:', e);
+            inventarioAtual = [];
+        }
+    }
+    
+    // Configura event listeners dos modais
+    const modalInventario = document.getElementById('modal-inventario');
+    const modalInventarioClose = document.getElementById('modal-inventario-close');
+    const modalInventarioFechar = document.getElementById('modal-inventario-fechar');
+    const modalItem = document.getElementById('modal-item');
+    const modalItemClose = document.getElementById('modal-item-close');
+    const modalItemCancelar = document.getElementById('modal-item-cancelar');
+    const modalItemSalvar = document.getElementById('modal-item-salvar');
+    const btnAdicionarItem = document.getElementById('btn-adicionar-item');
+    
+    // Fechar modal de inventário
+    if (modalInventarioClose) {
+        modalInventarioClose.addEventListener('click', fecharModalInventario);
+    }
+    if (modalInventarioFechar) {
+        modalInventarioFechar.addEventListener('click', fecharModalInventario);
+    }
+    
+    // Fechar modal de item
+    if (modalItemClose) {
+        modalItemClose.addEventListener('click', fecharModalItem);
+    }
+    if (modalItemCancelar) {
+        modalItemCancelar.addEventListener('click', fecharModalItem);
+    }
+    
+    // Salvar item
+    if (modalItemSalvar) {
+        modalItemSalvar.addEventListener('click', salvarItem);
+    }
+    
+    // Adicionar novo item
+    if (btnAdicionarItem) {
+        btnAdicionarItem.addEventListener('click', () => abrirModalItem());
+    }
+    
+    // Configurar abas de categoria
+    const tabs = document.querySelectorAll('.inventario-tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const categoria = tab.getAttribute('data-categoria');
+            filtrarPorCategoria(categoria);
+        });
+    });
+    
+    // Sincronizar campo de bônus de bolsa no modal
+    const modalBonusBolsa = document.getElementById('modal-bonus-bolsa');
+    if (modalBonusBolsa) {
+        // Carrega valor atual
+        const bonusBolsaAtual = localStorage.getItem('bonus_bolsa') || '0';
+        modalBonusBolsa.value = bonusBolsaAtual;
+        
+        // Sincroniza ao mudar
+        modalBonusBolsa.addEventListener('change', () => {
+            const valor = modalBonusBolsa.value;
+            const bonusBolsaHidden = document.getElementById('bonus-bolsa');
+            if (bonusBolsaHidden) {
+                bonusBolsaHidden.value = valor;
+            }
+            localStorage.setItem('bonus_bolsa', valor);
+            calcularEstatisticas();
+            atualizarDisplayInventarioModal();
+        });
+    }
+    
+    // Fechar modais ao clicar fora
+    if (modalInventario) {
+        modalInventario.addEventListener('click', (e) => {
+            if (e.target === modalInventario) {
+                fecharModalInventario();
+            }
+        });
+    }
+    if (modalItem) {
+        modalItem.addEventListener('click', (e) => {
+            if (e.target === modalItem) {
+                fecharModalItem();
+            }
+        });
+    }
+    
+    // Atualiza display inicial
+    atualizarDisplayInventario();
+
+    // Renderiza catálogo
+    renderizarCatalogoItens();
+    
+    // Configura busca no catálogo
+    const campoBusca = document.getElementById('catalogo-busca');
+    if (campoBusca) {
+        campoBusca.addEventListener('input', (e) => {
+            filtrarCatalogoPorNome(e.target.value);
+        });
+    }
+}
+
+/**
+ * Abre o modal de inventário
+ */
+function abrirModalInventario() {
+    const modal = document.getElementById('modal-inventario');
+    if (modal) {
+        modal.style.display = 'flex';
+        categoriaFiltroAtual = 'todos';
+        
+        // Sincroniza o valor do bônus de bolsa no modal
+        const modalBonusBolsa = document.getElementById('modal-bonus-bolsa');
+        const bonusBolsaHidden = document.getElementById('bonus-bolsa');
+        if (modalBonusBolsa && bonusBolsaHidden) {
+            modalBonusBolsa.value = bonusBolsaHidden.value || '0';
+        }
+        
+        atualizarListaInventario();
+        atualizarDisplayInventarioModal();
+    }
+}
+
+/**
+ * Fecha o modal de inventário
+ */
+function fecharModalInventario() {
+    const modal = document.getElementById('modal-inventario');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * Abre o modal para adicionar/editar item
+ */
+function abrirModalItem(itemId = null) {
+    const modal = document.getElementById('modal-item');
+    const titulo = document.getElementById('modal-item-titulo');
+    const nomeInput = document.getElementById('item-nome');
+    const categoriaSelect = document.getElementById('item-categoria');
+    const pesoInput = document.getElementById('item-peso');
+    const funcaoTextarea = document.getElementById('item-funcao');
+    
+    if (!modal) return;
+    
+    itemEditandoId = itemId;
+    
+    if (itemId) {
+        // Modo edição
+        const item = inventarioAtual.find(i => i.id === itemId);
+        if (item) {
+            titulo.textContent = '✏️ Editar Item';
+            nomeInput.value = item.nome;
+            categoriaSelect.value = item.categoria;
+            pesoInput.value = item.peso;
+            funcaoTextarea.value = item.funcao || '';
+        }
+    } else {
+        // Modo criação
+        titulo.textContent = '➕ Adicionar Item';
+        nomeInput.value = '';
+        categoriaSelect.value = 'itens-comuns';
+        pesoInput.value = '1';
+        funcaoTextarea.value = '';
+    }
+    
+    modal.style.display = 'flex';
+    nomeInput.focus();
+}
+
+/**
+ * Fecha o modal de item
+ */
+function fecharModalItem() {
+    const modal = document.getElementById('modal-item');
+    if (modal) {
+        modal.style.display = 'none';
+        itemEditandoId = null;
+        // Limpa os campos do formulário para evitar dados residuais
+        const nomeInput = document.getElementById('item-nome');
+        const categoriaSelect = document.getElementById('item-categoria');
+        const pesoInput = document.getElementById('item-peso');
+        const funcaoTextarea = document.getElementById('item-funcao');
+        if (nomeInput) nomeInput.value = '';
+        if (categoriaSelect) categoriaSelect.value = 'itens-comuns';
+        if (pesoInput) pesoInput.value = '1';
+        if (funcaoTextarea) funcaoTextarea.value = '';
+    }
+}
+
+/**
+ * Salva um item (novo ou editado)
+ */
+function salvarItem() {
+    const nomeInput = document.getElementById('item-nome');
+    const categoriaSelect = document.getElementById('item-categoria');
+    const pesoInput = document.getElementById('item-peso');
+    const funcaoTextarea = document.getElementById('item-funcao');
+    
+    const nome = nomeInput.value.trim();
+    const categoria = categoriaSelect.value;
+    const peso = parseFloat(pesoInput.value) || 0;
+    const funcao = funcaoTextarea.value.trim();
+    
+    if (!nome) {
+        alert('Por favor, insira um nome para o item.');
+        nomeInput.focus();
+        return;
+    }
+    
+    if (peso < 0) {
+        alert('O peso não pode ser negativo.');
+        pesoInput.focus();
+        return;
+    }
+    
+    // Calcula o total atual sem o item sendo editado
+    const pesoAtualSemItem = inventarioAtual
+        .filter(i => i.id !== itemEditandoId)
+        .reduce((total, i) => total + (parseFloat(i.peso) || 0), 0);
+    
+    const capacidadeTotal = calcularCapacidadeInventario();
+    
+    if (pesoAtualSemItem + peso > capacidadeTotal) {
+        alert(`Não há espaço suficiente no inventário! Espaço disponível: ${capacidadeTotal - pesoAtualSemItem}`);
+        return;
+    }
+    
+    if (itemEditandoId) {
+        // Editar item existente
+        const index = inventarioAtual.findIndex(i => i.id === itemEditandoId);
+        if (index !== -1) {
+            inventarioAtual[index] = {
+                ...inventarioAtual[index],
+                nome,
+                categoria,
+                peso,
+                funcao
+            };
+        }
+    } else {
+        // Adicionar novo item
+        const novoItem = {
+            id: Date.now().toString(),
+            nome,
+            categoria,
+            peso,
+            funcao
+        };
+        inventarioAtual.push(novoItem);
+    }
+    
+    salvarInventarioLocalStorage();
+    atualizarListaInventario();
+    atualizarDisplayInventario();
+    atualizarDisplayInventarioModal();
+    fecharModalItem();
+}
+
+/**
+ * Remove um item do inventário
+ */
+function removerItem(itemId) {
+    console.log('removerItem chamado com ID:', itemId);
+    console.log('Inventário antes:', inventarioAtual.length, inventarioAtual);
+    const item = inventarioAtual.find(i => i.id === itemId);
+    if (!item) {
+        console.error('Item não encontrado:', itemId);
+        return;
+    }
+    // Remove sem confirmação para evitar bloqueios de UI em alguns ambientes
+    // Remove mutando o array (mantém a mesma referência)
+    const idx = inventarioAtual.findIndex(i => i.id === itemId);
+    if (idx !== -1) {
+        inventarioAtual.splice(idx, 1);
+    }
+    console.log('Inventário depois:', inventarioAtual.length, inventarioAtual);
+    salvarInventarioLocalStorage();
+
+    // Fecha/limpa o formulário se estava editando esse item
+    if (itemEditandoId === itemId) {
+        fecharModalItem();
+    }
+
+    // Se removeu o último item da categoria filtrada, volta para "todos"
+    if (categoriaFiltroAtual !== 'todos') {
+        const temItensNaCategoria = inventarioAtual.some(i => i.categoria === categoriaFiltroAtual);
+        if (!temItensNaCategoria) {
+            console.log('Último item da categoria removido, voltando para "todos"');
+            filtrarPorCategoria('todos');
+            return;
+        }
+    }
+
+    console.log('Atualizando lista...');
+    atualizarListaInventario();
+    console.log('Atualizando displays...');
+    atualizarDisplayInventario();
+    atualizarDisplayInventarioModal();
+    console.log('Remoção concluída');
+}
+
+/**
+ * Filtra itens por categoria
+ */
+function filtrarPorCategoria(categoria) {
+    categoriaFiltroAtual = categoria;
+    
+    // Atualiza visual das abas
+    const tabs = document.querySelectorAll('.inventario-tab-btn');
+    tabs.forEach(tab => {
+        if (tab.getAttribute('data-categoria') === categoria) {
+            tab.style.background = '#4CAF50';
+            tab.style.color = 'white';
+            tab.classList.add('active');
+        } else {
+            tab.style.background = '#f5f5f5';
+            tab.style.color = '#333';
+            tab.classList.remove('active');
+        }
+    });
+    
+    atualizarListaInventario();
+}
+
+/**
+ * Atualiza a lista de itens no modal
+ */
+function atualizarListaInventario() {
+    const lista = document.getElementById('inventario-lista');
+    console.log('atualizarListaInventario - elemento lista:', lista);
+    console.log('atualizarListaInventario - categoriaFiltroAtual:', categoriaFiltroAtual);
+    console.log('atualizarListaInventario - inventarioAtual:', inventarioAtual);
+    
+    if (!lista) return;
+    
+    let itensFiltrados = inventarioAtual;
+    if (categoriaFiltroAtual !== 'todos') {
+        itensFiltrados = inventarioAtual.filter(i => i.categoria === categoriaFiltroAtual);
+    }
+    
+    console.log('atualizarListaInventario - itensFiltrados:', itensFiltrados);
+    
+    if (itensFiltrados.length === 0) {
+        lista.innerHTML = '<p style="text-align:center; color:#999; padding:24px;">Nenhum item nesta categoria.</p>';
+        return;
+    }
+    
+    lista.innerHTML = itensFiltrados.map(item => {
+        const categoriaIcon = {
+            'armas': '⚔️',
+            'itens-comuns': '🔧',
+            'itens-raca': '👥',
+            'itens-classe': '⚔️',
+            'itens-origem': '🌍'
+        }[item.categoria] || '📦';
+        
+        const categoriaNome = {
+            'armas': 'Armas',
+            'itens-comuns': 'Itens Comuns',
+            'itens-raca': 'Itens de Raça',
+            'itens-classe': 'Itens de Classe',
+            'itens-origem': 'Itens de Origem'
+        }[item.categoria] || 'Outro';
+        
+        return `
+            <div class="inventario-item" style="border:1px solid #ddd; border-radius:8px; padding:12px; background:#fafafa;">
+                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
+                    <div style="flex:1;">
+                        <div style="font-weight:bold; font-size:16px; margin-bottom:4px;">
+                            ${categoriaIcon} ${item.nome}
+                        </div>
+                        <div style="font-size:12px; color:#666; margin-bottom:4px;">
+                            ${categoriaNome} • Peso: ${item.peso} ${item.peso === 1 ? 'espaço' : 'espaços'}
+                        </div>
+                        ${item.funcao ? `<div style="font-size:13px; color:#444; margin-top:6px;">${item.funcao}</div>` : ''}
+                    </div>
+                    <div style="display:flex; gap:4px;">
+                        <button type="button" onclick="window.abrirModalItem('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#2196F3; color:white; border:none; border-radius:4px; cursor:pointer;">✏️</button>
+                        <button type="button" onclick="window.removerItem('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+/**
+ * Calcula a capacidade total do inventário
+ */
+function calcularCapacidadeInventario() {
+    const atributos = obterTodosAtributos();
+    const forca = atributos.forca || 0;
+    const bonusBolsaInput = document.getElementById('bonus-bolsa');
+    const bonusBolsa = bonusBolsaInput ? (parseInt(bonusBolsaInput.value) || 0) : 0;
+    return forca * 2 + 3 + bonusBolsa;
+}
+
+/**
+ * Calcula o peso total usado no inventário
+ */
+function calcularPesoUsado() {
+    return inventarioAtual.reduce((total, item) => total + (parseFloat(item.peso) || 0), 0);
+}
+
+/**
+ * Atualiza o display do inventário na ficha
+ */
+function atualizarDisplayInventario() {
+    const usado = calcularPesoUsado();
+    const total = calcularCapacidadeInventario();
+    
+    const usadoElement = document.getElementById('inventario-usado');
+    const totalElement = document.getElementById('inventario-total-display');
+    
+    if (usadoElement) {
+        usadoElement.textContent = usado.toFixed(1);
+    }
+    if (totalElement) {
+        totalElement.textContent = total;
+    }
+}
+
+/**
+ * Atualiza o display do inventário no modal
+ */
+function atualizarDisplayInventarioModal() {
+    const usado = calcularPesoUsado();
+    const total = calcularCapacidadeInventario();
+    
+    const usadoElement = document.getElementById('modal-inventario-usado');
+    const totalElement = document.getElementById('modal-inventario-total');
+    
+    if (usadoElement) {
+        usadoElement.textContent = usado.toFixed(1);
+    }
+    if (totalElement) {
+        totalElement.textContent = total;
+    }
+}
+
+/**
+ * Salva o inventário no localStorage
+ */
+function salvarInventarioLocalStorage() {
+    localStorage.setItem('inventario_itens', JSON.stringify(inventarioAtual));
+}
+
+/**
+ * Limpa o inventário
+ */
+function limparInventario() {
+    if (confirm('Deseja realmente limpar todo o inventário? Esta ação não pode ser desfeita.')) {
+        inventarioAtual = [];
+        salvarInventarioLocalStorage();
+        atualizarListaInventario();
+        atualizarDisplayInventario();
+        atualizarDisplayInventarioModal();
+    }
+}
+
+// Torna funções globais
+window.abrirModalInventario = abrirModalInventario;
+window.fecharModalInventario = fecharModalInventario;
+window.abrirModalItem = abrirModalItem;
+window.fecharModalItem = fecharModalItem;
+window.salvarItem = salvarItem;
+window.removerItem = removerItem;
+window.filtrarPorCategoria = filtrarPorCategoria;
+window.limparInventario = limparInventario;
+
+/**
+ * Renderiza o catálogo completo (todas as categorias) no modal
+ */
+function renderizarCatalogoItens() {
+    const container = document.getElementById('catalogo-itens');
+    if (!container || !window.DadosLoader) return;
+
+    const secoes = [
+        { cat: 'armas', titulo: '⚔️ Armas' },
+        { cat: 'comuns', titulo: '🔧 Itens Comuns' },
+        { cat: 'raca', titulo: '👥 Itens de Raça' },
+        { cat: 'classe', titulo: '⚔️ Itens de Classe' },
+        { cat: 'origem', titulo: '🌍 Itens de Origem' }
+    ];
+
+    container.innerHTML = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo)).join('');
+}
+
+function renderizarSecaoCatalogo(categoria, titulo) {
+    const itens = window.DadosLoader.obterItensPorCategoria(categoria) || [];
+    if (!itens.length) return '';
+
+    const lista = itens.map(item => {
+        const peso = (item.peso != null) ? item.peso : 0;
+        const desc = item.descricao || '';
+        return `
+            <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
+                <div style="flex:1;">
+                    <div style="font-weight:bold;">${item.nome}</div>
+                    <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
+                    ${desc ? `<div style=\"font-size:12px; color:#444; margin-top:4px;\">${desc}</div>` : ''}
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${categoria}','${item.id}')">Adicionar</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div class="catalogo-secao" style="border:1px solid #ddd; border-radius:8px; overflow:hidden; margin-bottom:8px;">
+            <div style="background:#f7f7f7; padding:8px 12px; font-weight:bold; cursor:pointer; user-select:none; display:flex; justify-content:space-between; align-items:center;" onclick="toggleCatalogoSecao('${categoria}')">
+                <span>${titulo} <span style="color:#666; font-weight:normal;">(${itens.length})</span></span>
+                <span id="catalogo-icon-${categoria}" style="font-size:14px;">▶</span>
+            </div>
+            <div id="catalogo-lista-${categoria}" style="padding:8px; display:none; grid-template-columns:1fr; gap:8px;">${lista}</div>
+        </div>
+    `;
+}
+
+/**
+ * Adiciona um item do catálogo diretamente ao inventário (com checagem de capacidade)
+ */
+function adicionarItemCatalogo(categoria, id) {
+    const item = window.DadosLoader.obterItemCatalogo(categoria, id);
+    if (!item) return;
+
+    const pesoItem = parseFloat(item.peso) || 0;
+    const usado = calcularPesoUsado();
+    const total = calcularCapacidadeInventario();
+    if (usado + pesoItem > total) {
+        alert(`Capacidade insuficiente. Espaço disponível: ${(total - usado).toFixed(1)}`);
+        return;
+    }
+
+    // Monta representação interna
+    const novoItem = {
+        id: `${item.id}-${Date.now()}`,
+        nome: item.nome,
+        categoria: categoria === 'comuns' ? 'itens-comuns' : (categoria === 'raca' ? 'itens-raca' : (categoria === 'classe' ? 'itens-classe' : (categoria === 'origem' ? 'itens-origem' : 'armas'))),
+        peso: pesoItem,
+        funcao: item.funcao || item.descricao || ''
+    };
+
+    inventarioAtual.push(novoItem);
+    salvarInventarioLocalStorage();
+    atualizarListaInventario();
+    atualizarDisplayInventario();
+    atualizarDisplayInventarioModal();
+}
+
+// Exporta para uso global nos botões do HTML gerado
+window.adicionarItemCatalogo = adicionarItemCatalogo;
+
+/**
+ * Toggle expansão/colapso de seção do catálogo
+ */
+function toggleCatalogoSecao(categoria) {
+    const lista = document.getElementById(`catalogo-lista-${categoria}`);
+    const icon = document.getElementById(`catalogo-icon-${categoria}`);
+    
+    if (!lista || !icon) return;
+    
+    const isVisible = lista.style.display === 'grid';
+    
+    if (isVisible) {
+        lista.style.display = 'none';
+        icon.textContent = '▶';
+    } else {
+        lista.style.display = 'grid';
+        icon.textContent = '▼';
+    }
+}
+
+window.toggleCatalogoSecao = toggleCatalogoSecao;
+
+/**
+ * Filtra itens do catálogo por nome
+ */
+function filtrarCatalogoPorNome(termoBusca) {
+    const termo = termoBusca.toLowerCase().trim();
+    
+    const secoes = [
+        { cat: 'armas', titulo: '⚔️ Armas' },
+        { cat: 'comuns', titulo: '🔧 Itens Comuns' },
+        { cat: 'raca', titulo: '👥 Itens de Raça' },
+        { cat: 'classe', titulo: '⚔️ Itens de Classe' },
+        { cat: 'origem', titulo: '🌍 Itens de Origem' }
+    ];
+    
+    secoes.forEach(sec => {
+        const lista = document.getElementById(`catalogo-lista-${sec.cat}`);
+        const secaoDiv = lista?.parentElement;
+        const icon = document.getElementById(`catalogo-icon-${sec.cat}`);
+        
+        if (!lista || !secaoDiv) return;
+        
+        if (!termo) {
+            // Sem busca: mostra todas as seções, mas colapsadas
+            secaoDiv.style.display = 'block';
+            lista.style.display = 'none';
+            if (icon) icon.textContent = '▶';
+            return;
+        }
+        
+        // Filtra itens da categoria
+        const itens = window.DadosLoader.obterItensPorCategoria(sec.cat) || [];
+        const itensFiltrados = itens.filter(item => 
+            item.nome.toLowerCase().includes(termo)
+        );
+        
+        if (itensFiltrados.length === 0) {
+            // Esconde seção se nenhum item corresponde
+            secaoDiv.style.display = 'none';
+        } else {
+            // Mostra seção e expande automaticamente
+            secaoDiv.style.display = 'block';
+            lista.style.display = 'grid';
+            if (icon) icon.textContent = '▼';
+            
+            // Re-renderiza apenas os itens filtrados
+            lista.innerHTML = itensFiltrados.map(item => {
+                const peso = (item.peso != null) ? item.peso : 0;
+                const desc = item.descricao || '';
+                return `
+                    <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
+                        <div style="flex:1;">
+                            <div style="font-weight:bold;">${item.nome}</div>
+                            <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
+                            ${desc ? `<div style="font-size:12px; color:#444; margin-top:4px;">${desc}</div>` : ''}
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${sec.cat}','${item.id}')">Adicionar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    });
+}
+
+window.filtrarCatalogoPorNome = filtrarCatalogoPorNome;
+

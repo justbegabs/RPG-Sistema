@@ -1,0 +1,18 @@
+{
+  "id": "grimorio-mago",
+  "nome": "Grimório do Mago",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "mago",
+  "descricao": "Livro de feitiços encadernado em couro arcano, contém conhecimento mágico acumulado.",
+  "peso": 3,
+  "funcao": "Armazena feitiços aprendidos, +2 em testes de Conhecimento Arcano",
+  "bonus": {
+    "pericias": {
+      "conhecimento": 2
+    }
+  },
+  "capacidade": "Até 50 feitiços",
+  "raridade": "raro",
+  "preco": 200
+}

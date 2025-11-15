@@ -7,7 +7,14 @@
 let dadosCache = {
     classes: [],
     racas: [],
-    origens: []
+    origens: [],
+    itens: {
+        armas: [],
+        comuns: [],
+        raca: [],
+        classe: [],
+        origem: []
+    }
 };
 
 // Lista de arquivos conhecidos (pode ser expandida dinamicamente)
@@ -81,6 +88,45 @@ const ARQUIVOS_ORIGENS = [
     'vingativo.json'
 ];
 
+// Arquivos de itens (catálogo)
+const ARQUIVOS_ITENS_ARMAS = [
+    'adaga.json',
+    'arco-longo.json',
+    'cajado-arcano.json',
+    'espada-longa.json'
+];
+
+const ARQUIVOS_ITENS_COMUNS = [
+    'corda-seda.json',
+    'kit-ferramentas.json',
+    'mochila-aventureiro.json',
+    'pocao-cura.json',
+    'tocha.json'
+];
+
+const ARQUIVOS_ITENS_RACA = [
+    'asas-anjo.json',
+    'cauda-kitsune.json',
+    'garras-lobisomem.json',
+    'presas-vampiro.json'
+];
+
+const ARQUIVOS_ITENS_CLASSE = [
+    'baralho-carteado.json',
+    'ferramentas-tecnologico.json',
+    'grimorio-mago.json',
+    'kit-armadilhas.json',
+    'simbolo-sagrado.json'
+];
+
+const ARQUIVOS_ITENS_ORIGEM = [
+    'diario-jornalista.json',
+    'equipamento-militar.json',
+    'ferramentas-artista.json',
+    'kit-sobrevivencia.json',
+    'laptop-programador.json'
+];
+
 /**
  * Carrega um arquivo JSON individual
  * @param {string} caminho - Caminho do arquivo JSON
@@ -130,22 +176,41 @@ async function carregarPasta(pasta, arquivos) {
  */
 async function carregarTodosDados() {
     try {
-        const [classes, racas, origens] = await Promise.all([
+        const [classes, racas, origens, itensArmas, itensComuns, itensRaca, itensClasse, itensOrigem] = await Promise.all([
             carregarPasta('classes', ARQUIVOS_CLASSES),
             carregarPasta('racas', ARQUIVOS_RACAS),
-            carregarPasta('origens', ARQUIVOS_ORIGENS)
+            carregarPasta('origens', ARQUIVOS_ORIGENS),
+            carregarPasta('itens/armas', ARQUIVOS_ITENS_ARMAS),
+            carregarPasta('itens/comuns', ARQUIVOS_ITENS_COMUNS),
+            carregarPasta('itens/raca', ARQUIVOS_ITENS_RACA),
+            carregarPasta('itens/classe', ARQUIVOS_ITENS_CLASSE),
+            carregarPasta('itens/origem', ARQUIVOS_ITENS_ORIGEM)
         ]);
         
         dadosCache = {
             classes: classes,
             racas: racas,
-            origens: origens
+            origens: origens,
+            itens: {
+                armas: itensArmas,
+                comuns: itensComuns,
+                raca: itensRaca,
+                classe: itensClasse,
+                origem: itensOrigem
+            }
         };
         
         console.log('Dados carregados:', {
             classes: classes.length,
             racas: racas.length,
-            origens: origens.length
+            origens: origens.length,
+            itens: {
+                armas: itensArmas.length,
+                comuns: itensComuns.length,
+                raca: itensRaca.length,
+                classe: itensClasse.length,
+                origem: itensOrigem.length
+            }
         });
         
         return dadosCache;
@@ -186,6 +251,24 @@ function obterItemPorId(tipo, id) {
 }
 
 /**
+ * Obtém itens do catálogo por categoria
+ * @param {'armas'|'comuns'|'raca'|'classe'|'origem'} categoria
+ * @returns {Array}
+ */
+function obterItensPorCategoria(categoria) {
+    if (!dadosCache.itens) return [];
+    return dadosCache.itens[categoria] || [];
+}
+
+/**
+ * Obtém item específico do catálogo por categoria e id
+ */
+function obterItemCatalogo(categoria, id) {
+    const lista = obterItensPorCategoria(categoria);
+    return lista.find(i => i.id === id) || null;
+}
+
+/**
  * Inicializa o carregamento de dados
  */
 async function inicializarDados() {
@@ -200,6 +283,8 @@ window.DadosLoader = {
     obterDados: obterDados,
     obterItemPorId: obterItemPorId,
     inicializar: inicializarDados,
-    getCache: () => dadosCache
+    getCache: () => dadosCache,
+    obterItensPorCategoria,
+    obterItemCatalogo
 };
 

@@ -1,0 +1,12 @@
+{
+  "id": "corda-seda",
+  "nome": "Corda de Seda (15m)",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Corda resistente e leve feita de seda, pode suportar até 1.500 kg.",
+  "peso": 5,
+  "funcao": "Escalar, amarrar, criar armadilhas",
+  "durabilidade": "Alta",
+  "raridade": "comum",
+  "preco": 10
+}

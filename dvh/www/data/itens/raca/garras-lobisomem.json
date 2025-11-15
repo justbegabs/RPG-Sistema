@@ -1,0 +1,15 @@
+{
+  "id": "garras-lobisomem",
+  "nome": "Garras de Lobisomem",
+  "tipo": "característica racial",
+  "categoria": "itens-raca",
+  "raca": "lobisomem",
+  "descricao": "Garras afiadas que surgem na forma híbrida ou de lobo, mortais em combate.",
+  "peso": 0,
+  "funcao": "Ataque com garras causa 2d6 de dano cortante, pode atacar duas vezes por turno",
+  "dano": "2d6",
+  "tipoDano": "cortante",
+  "propriedades": ["Ataque duplo", "Forma híbrida", "Regeneração em lua cheia"],
+  "raridade": "lendário",
+  "equipavel": false
+}

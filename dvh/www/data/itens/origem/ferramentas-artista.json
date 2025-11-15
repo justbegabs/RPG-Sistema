@@ -1,0 +1,18 @@
+{
+  "id": "ferramentas-artista",
+  "nome": "Ferramentas Artísticas",
+  "tipo": "equipamento de origem",
+  "categoria": "itens-origem",
+  "origem": "artista",
+  "descricao": "Conjunto completo de materiais artísticos: pincéis, tintas, telas e outros itens criativos.",
+  "peso": 5,
+  "funcao": "Permite criar obras de arte, +3 em testes de Artes",
+  "bonus": {
+    "pericias": {
+      "artes": 3
+    }
+  },
+  "propriedades": ["Criação artística", "Expressão emocional"],
+  "raridade": "comum",
+  "preco": 25
+}

@@ -1,0 +1,12 @@
+{
+  "id": "kit-ferramentas",
+  "nome": "Kit de Ferramentas de Ladrão",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Conjunto de ganzuas, chaves mestras e ferramentas especializadas para abrir fechaduras.",
+  "peso": 1,
+  "funcao": "Concede vantagem em testes de Furtividade para abrir fechaduras",
+  "usos": "Ilimitado (requer perícia)",
+  "raridade": "incomum",
+  "preco": 25
+}

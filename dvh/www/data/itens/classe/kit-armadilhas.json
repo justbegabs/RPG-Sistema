@@ -1,0 +1,18 @@
+{
+  "id": "kit-armadilhas",
+  "nome": "Kit de Armadilhas",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "armadilheiro",
+  "descricao": "Conjunto de ferramentas especializadas para criar e desarmar armadilhas complexas.",
+  "peso": 4,
+  "funcao": "Permite criar armadilhas avançadas, +3 em testes de desarmar armadilhas",
+  "bonus": {
+    "pericias": {
+      "armadilhas": 3
+    }
+  },
+  "usos": "Ilimitado com materiais",
+  "raridade": "raro",
+  "preco": 150
+}
