@@ -447,6 +447,7 @@ function adicionarEventListenersPericias() {
 // Exporta para uso global
 window.Pericias = {
     init: initPericias,
+    renderizar: renderizarPericias,
     PERICIAS: PERICIAS,
     NOMES_ATRIBUTOS: NOMES_ATRIBUTOS,
     testar: testarPericia,

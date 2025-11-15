@@ -525,6 +525,8 @@ function popularPericiasFicha() {
     const pericias = obterTodasPericias();
     const nivelAtual = obterNivelAtual();
     
+    console.log('popularPericiasFicha - Nível detectado:', nivelAtual);
+    
     let html = '';
     
     // Itera sobre cada atributo
@@ -562,18 +564,21 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
     const dadosAdicionais = obterDadosAdicionaisPericias();
     const periciaAdicionais = dadosAdicionais[pericia.id] || { d4: 0, d6: 0, d8: 0, d10: 0 };
     
-    const somaAdicionais = (parseInt(periciaAdicionais.d4) || 0) + 
-                          (parseInt(periciaAdicionais.d6) || 0) + 
-                          (parseInt(periciaAdicionais.d8) || 0) + 
-                          (parseInt(periciaAdicionais.d10) || 0);
+    // Obtém dados disponíveis para este nível ANTES de calcular o total
+    const nivel = nivelPassed !== undefined ? nivelPassed : obterNivelAtual();
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    
+    // Soma apenas os dados que estão disponíveis neste nível
+    let somaAdicionais = 0;
+    if (disponivel.d4) somaAdicionais += (parseInt(periciaAdicionais.d4) || 0);
+    if (disponivel.d6) somaAdicionais += (parseInt(periciaAdicionais.d6) || 0);
+    if (disponivel.d8) somaAdicionais += (parseInt(periciaAdicionais.d8) || 0);
+    if (disponivel.d10) somaAdicionais += (parseInt(periciaAdicionais.d10) || 0);
     
     const total = periciaData.d6 + periciaData.bonus_personagem + periciaData.bonus_origem + periciaData.bonus_classe + periciaData.bonus_raca + somaAdicionais;
     const corClasse = total > 0 ? 'positivo' : total < 0 ? 'negativo' : 'neutro';
     
-    // Obtém dados disponíveis para este nível
-    // Use o nível passado como parâmetro, ou obtenha do input se não foi passado
-    const nivel = nivelPassed !== undefined ? nivelPassed : obterNivelAtual();
-    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    console.log('criarPericiaFichaHTML - Perícia:', pericia.nome, 'Nível:', nivel, 'Dados disponíveis:', disponivel);
     
     // Monta campos de dados adicionais
     let camposDadosAdicionais = '';
@@ -596,9 +601,9 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
     if (disponivel.d6) {
         camposDadosAdicionais += `
                 <div class="pericia-campo">
-                    <span class="pericia-label" title="D6 (até ${disponivel.d6.max})">D6+</span>
+                    <span class="pericia-label" title="D6 adicional (até ${disponivel.d6.max})">D6+</span>
                     <input type="number" 
-                           id="pericia-d6-${pericia.id}" 
+                           id="pericia-d6-add-${pericia.id}" 
                            class="pericia-input"
                            value="${periciaAdicionais.d6}" 
                            min="0" 
@@ -746,7 +751,9 @@ function rolarDadoAdicionalPericia(periciaId, tipoDado) {
         dadosAdicionais[periciaId][tipoDado] = 0;
         salvarDadosAdicionaisPericias(dadosAdicionais);
         
-        const campoDado = document.getElementById(`pericia-${tipoDado}-${periciaId}`);
+        // D6 adicional tem ID diferente para não conflitar com D6 base
+        const idCampo = tipoDado === 'd6' ? `pericia-d6-add-${periciaId}` : `pericia-${tipoDado}-${periciaId}`;
+        const campoDado = document.getElementById(idCampo);
         if (campoDado) {
             campoDado.value = 0;
         }
@@ -769,8 +776,9 @@ function rolarDadoAdicionalPericia(periciaId, tipoDado) {
     const maxValue = parseInt(tipoDado.substring(1)); // D4 -> 4, D6 -> 6, etc
     const resultado = Math.floor(Math.random() * maxValue) + 1;
     
-    // Atualiza o campo
-    const campoDado = document.getElementById(`pericia-${tipoDado}-${periciaId}`);
+    // Atualiza o campo (D6 adicional tem ID diferente para não conflitar com D6 base)
+    const idCampo = tipoDado === 'd6' ? `pericia-d6-add-${periciaId}` : `pericia-${tipoDado}-${periciaId}`;
+    const campoDado = document.getElementById(idCampo);
     if (campoDado) {
         campoDado.value = resultado;
     }
@@ -1058,13 +1066,19 @@ function atualizarTotalPericia(periciaId) {
     const bc = parseInt(periciaData.bonus_classe) || 0;
     const br = parseInt(periciaData.bonus_raca) || 0;
 
-    // Obtém e soma todos os dados adicionais (D4/D6/D8/D10)
+    // Obtém dados disponíveis para o nível atual
+    const nivel = obterNivelAtual();
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+
+    // Soma apenas os dados adicionais que estão disponíveis neste nível
     const dadosAdicionais = obterDadosAdicionaisPericias();
     const periciaAdicionais = dadosAdicionais[periciaId] || { d4: 0, d6: 0, d8: 0, d10: 0 };
-    const somaAdicionais = (parseInt(periciaAdicionais.d4) || 0) + 
-                          (parseInt(periciaAdicionais.d6) || 0) + 
-                          (parseInt(periciaAdicionais.d8) || 0) + 
-                          (parseInt(periciaAdicionais.d10) || 0);
+    
+    let somaAdicionais = 0;
+    if (disponivel.d4) somaAdicionais += (parseInt(periciaAdicionais.d4) || 0);
+    if (disponivel.d6) somaAdicionais += (parseInt(periciaAdicionais.d6) || 0);
+    if (disponivel.d8) somaAdicionais += (parseInt(periciaAdicionais.d8) || 0);
+    if (disponivel.d10) somaAdicionais += (parseInt(periciaAdicionais.d10) || 0);
 
     const total = d6 + bp + bo + bc + br + somaAdicionais;
     
@@ -1074,6 +1088,21 @@ function atualizarTotalPericia(periciaId) {
         // Atualiza cor
         campoTotal.className = total > 0 ? 'pericia-input positivo' : total < 0 ? 'pericia-input negativo' : 'pericia-input neutro';
     }
+}
+
+/**
+ * Atualiza o total de todas as perícias
+ * Útil quando o nível muda e alguns dados ficam indisponíveis
+ */
+function atualizarTodosTotaisPericias() {
+    if (!window.Pericias) return;
+    
+    const pericias = obterTodasPericias();
+    
+    // Atualiza o total de cada perícia
+    Object.keys(pericias).forEach(periciaId => {
+        atualizarTotalPericia(periciaId);
+    });
 }
 
 /**
@@ -1752,16 +1781,17 @@ function configurarNivelSlider() {
             // Atualiza dados adicionais conforme o nível
             atualizarContadorDadosAdicionais();
             
-            // Atualiza as páginas de perícias E ficha se estiverem visíveis
-            if (typeof popularPericiasFicha === 'function') {
-                const periciasFicha = document.getElementById('pericias-ficha');
-                if (periciasFicha && periciasFicha.parentElement.querySelector('.page.active')) {
-                    popularPericiasFicha();
-                }
+            // Atualiza todos os totais das perícias para refletir dados disponíveis no novo nível
+            atualizarTodosTotaisPericias();
+            
+            // Atualiza a página de ficha se estiver visível
+            if (typeof popularPericiasFicha === 'function' && document.getElementById('pericias-ficha')) {
+                popularPericiasFicha();
             }
             
-            if (typeof Pericias !== 'undefined' && typeof Pericias.atualizarCards === 'function') {
-                Pericias.atualizarCards();
+            // Atualiza a página de perícias principal se estiver visível
+            if (window.Pericias && typeof window.Pericias.renderizar === 'function' && document.getElementById('pericias-list')) {
+                window.Pericias.renderizar();
             }
         });
         
@@ -1793,9 +1823,17 @@ function configurarNivelSlider() {
             // Atualiza dados adicionais conforme o nível
             atualizarContadorDadosAdicionais();
             
+            // Atualiza todos os totais das perícias para refletir dados disponíveis no novo nível
+            atualizarTodosTotaisPericias();
+            
             // Atualiza a página de perícias se estiver visível
             if (typeof popularPericiasFicha === 'function' && document.getElementById('pericias-ficha')) {
                 popularPericiasFicha();
+            }
+            
+            // Atualiza a página de perícias principal se estiver visível
+            if (window.Pericias && typeof window.Pericias.renderizar === 'function' && document.getElementById('pericias-list')) {
+                window.Pericias.renderizar();
             }
         });
         
