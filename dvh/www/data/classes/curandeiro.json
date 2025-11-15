@@ -5,5 +5,8 @@
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Medicina", "Cura", "Diagnóstico"],
   "dadosVida": "1d8",
-  "proficiencias": ["Kits médicos", "Ferramentas", "Armas simples"]
+  "proficiencias": ["Kits médicos", "Ferramentas", "Armas simples"],
+  "bonus": {
+    "vida": 7
+  }
 }

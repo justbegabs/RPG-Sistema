@@ -5,5 +5,8 @@
   "atributoPrincipal": "destreza",
   "habilidades": ["Furtividade", "Infiltração", "Disfarce"],
   "dadosVida": "1d8",
-  "proficiencias": ["Armas furtivas", "Ferramentas de espionagem", "Armaduras leves"]
+  "proficiencias": ["Armas furtivas", "Ferramentas de espionagem", "Armaduras leves"],
+  "bonus": {
+    "defesa": 7
+  }
 }

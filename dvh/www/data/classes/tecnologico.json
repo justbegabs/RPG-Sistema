@@ -5,5 +5,8 @@
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Engenharia", "Tecnologia", "Inovação"],
   "dadosVida": "1d8",
-  "proficiencias": ["Dispositivos tecnológicos", "Ferramentas", "Armas tecnológicas"]
+  "proficiencias": ["Dispositivos tecnológicos", "Ferramentas", "Armas tecnológicas"],
+  "bonus": {
+    "periciasD6Extras": 2
+  }
 }

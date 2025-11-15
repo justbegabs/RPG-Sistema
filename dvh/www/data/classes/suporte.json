@@ -5,5 +5,8 @@
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Suporte tático", "Coordenação", "Fortificação"],
   "dadosVida": "1d8",
-  "proficiencias": ["Equipamentos de suporte", "Armas simples", "Armaduras leves"]
+  "proficiencias": ["Equipamentos de suporte", "Armas simples", "Armaduras leves"],
+  "bonus": {
+    "sanidade": 7
+  }
 }

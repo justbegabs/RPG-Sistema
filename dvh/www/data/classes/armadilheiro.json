@@ -5,5 +5,8 @@
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Armadilhas", "Engenharia", "Criatividade tática"],
   "dadosVida": "1d8",
-  "proficiencias": ["Ferramentas", "Dispositivos", "Armas simples"]
+  "proficiencias": ["Ferramentas", "Dispositivos", "Armas simples"],
+  "bonus": {
+    "defesa": 7
+  }
 }

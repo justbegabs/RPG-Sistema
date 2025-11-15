@@ -5,5 +5,8 @@
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Investigação", "Dedução", "Análise"],
   "dadosVida": "1d8",
-  "proficiencias": ["Ferramentas de investigação", "Armas simples", "Armaduras leves"]
+  "proficiencias": ["Ferramentas de investigação", "Armas simples", "Armaduras leves"],
+  "bonus": {
+    "periciasD6Extras": 2
+  }
 }

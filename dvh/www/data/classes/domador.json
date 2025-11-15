@@ -5,5 +5,8 @@
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Adestramento", "Comunicação animal", "Liderança"],
   "dadosVida": "1d10",
-  "proficiencias": ["Armas simples", "Equipamentos de treino", "Armaduras leves"]
+  "proficiencias": ["Armas simples", "Equipamentos de treino", "Armaduras leves"],
+  "bonus": {
+    "mana": 7
+  }
 }

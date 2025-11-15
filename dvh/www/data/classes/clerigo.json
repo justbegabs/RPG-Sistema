@@ -5,6 +5,9 @@
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Cura divina", "Proteção", "Magia divina"],
   "dadosVida": "1d8",
-  "proficiencias": ["Armas simples", "Armaduras leves", "Armaduras médias", "Escudos"]
+  "proficiencias": ["Armas simples", "Armaduras leves", "Armaduras médias", "Escudos"],
+  "bonus": {
+    "sanidade": 7
+  }
 }
 

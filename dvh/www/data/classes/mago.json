@@ -5,6 +5,9 @@
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Magia arcana", "Conhecimento", "Magias de combate"],
   "dadosVida": "1d6",
-  "proficiencias": ["Armas simples", "Varinhas", "Cajados"]
+  "proficiencias": ["Armas simples", "Varinhas", "Cajados"],
+  "bonus": {
+    "mana": 7
+  }
 }
 

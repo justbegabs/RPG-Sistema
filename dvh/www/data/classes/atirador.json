@@ -5,5 +5,8 @@
   "atributoPrincipal": "destreza",
   "habilidades": ["Precisão", "Combate à distância", "Mira aprimorada"],
   "dadosVida": "1d8",
-  "proficiencias": ["Armas à distância", "Armas de fogo", "Armaduras leves"]
+  "proficiencias": ["Armas à distância", "Armas de fogo", "Armaduras leves"],
+  "bonus": {
+    "vida": 7
+  }
 }

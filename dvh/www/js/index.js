@@ -29,6 +29,40 @@ function onDeviceReady() {
 async function init() {
     // Inicializa variáveis globais
     window.nivelFichaAtual = 0;
+    // Mapas de regras por classe (progressão por 5% e escolhas de bônus de perícia)
+    window.CLASSE_PROGRESSO = {
+        // vida/sanidade/mana: { attr: 'atributo', mult: numero }
+        mago: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'magia', mult: 2 }, mana: { attr: 'magia', mult: 3 } },
+        atirador: { vida: { attr: 'resiliencia', mult: 3 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 2 } },
+        armadilheiro: { vida: { attr: 'resiliencia', mult: 3 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 2 } },
+        combatente: { vida: { attr: 'resiliencia', mult: 4 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 2 } },
+        investigador: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 3 }, mana: { attr: 'magia', mult: 2 } },
+        curandeiro: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'magia', mult: 2 }, mana: { attr: 'magia', mult: 3 } },
+        suporte: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 3 }, mana: { attr: 'magia', mult: 2 } },
+        tecnologico: { vida: { attr: 'resiliencia', mult: 3 }, sanidade: { attr: 'carisma', mult: 3 }, mana: { attr: 'magia', mult: 2 } },
+        clerigo: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 3 }, mana: { attr: 'magia', mult: 2 } },
+        demonologista: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 3 } },
+        domador: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 3 } },
+        espiao: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 3 }, mana: { attr: 'magia', mult: 2 } },
+        carteado: { vida: { attr: 'resiliencia', mult: 2 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 3 } },
+        arsenalhumano: { vida: { attr: 'resiliencia', mult: 3 }, sanidade: { attr: 'carisma', mult: 2 }, mana: { attr: 'magia', mult: 2 } }
+    };
+    window.CLASSE_ESCOLHAS = {
+        mago: { ids: ['encantamento', 'runas'], bonus: 7 },
+        atirador: { ids: ['armas_fogo_grandes', 'arcos'], bonus: 7 },
+        armadilheiro: { ids: ['armadilhas', 'explosivos'], bonus: 7 },
+        combatente: { ids: ['luta', 'espadas'], bonus: 5 },
+        investigador: { ids: ['investigacao', 'forense'], bonus: 7 },
+        curandeiro: { ids: ['alquimia', 'medicina'], bonus: 7 },
+        suporte: { ids: ['exorcismo', 'vontade'], bonus: 7 },
+        tecnologico: { ids: ['tecnologia', 'explosivos'], bonus: 7 },
+        clerigo: { ids: ['conhecimento_arcano', 'religiao'], bonus: 7 },
+        demonologista: { ids: ['necromancia', 'demonologia'], bonus: 7 },
+        domador: { ids: ['conjuracao', 'demonologia'], bonus: 7 },
+        espiao: { ids: ['trapaca', 'furtividade'], bonus: 7 },
+        carteado: { ids: ['pontaria', 'armadilhas'], bonus: 7 },
+        arsenalhumano: { ids: ['espadas', 'luta'], bonus: 7 }
+    };
     
     // Restaura o nível do localStorage se houver
     const nivelStorage = localStorage.getItem('nivelFichaAtual');
@@ -77,8 +111,20 @@ function popularSelects() {
             option.textContent = classe.nome;
             selectClasse.appendChild(option);
         });
-        // Adiciona event listener para aplicar bônus
-        selectClasse.addEventListener('change', () => aplicarBonusSelecao('classe', selectClasse.value));
+        // Adiciona event listener para aplicar bônus e salvar seleção
+        selectClasse.addEventListener('change', () => {
+            localStorage.setItem('classe_selecionada', selectClasse.value);
+            aplicarBonusSelecao('classe', selectClasse.value);
+            atualizarEstadoEscolhaClasse(selectClasse.value);
+        });
+        
+        // Restaura seleção anterior se existir
+        const classeSalva = localStorage.getItem('classe_selecionada');
+        if (classeSalva) {
+            selectClasse.value = classeSalva;
+            aplicarBonusSelecao('classe', classeSalva);
+            atualizarEstadoEscolhaClasse(classeSalva);
+        }
     }
     
     // Popula select de raças
@@ -92,8 +138,18 @@ function popularSelects() {
             option.textContent = raca.nome;
             selectRaca.appendChild(option);
         });
-        // Adiciona event listener para aplicar bônus
-        selectRaca.addEventListener('change', () => aplicarBonusSelecao('raca', selectRaca.value));
+        // Adiciona event listener para aplicar bônus e salvar seleção
+        selectRaca.addEventListener('change', () => {
+            localStorage.setItem('raca_selecionada', selectRaca.value);
+            aplicarBonusSelecao('raca', selectRaca.value);
+        });
+        
+        // Restaura seleção anterior se existir
+        const racaSalva = localStorage.getItem('raca_selecionada');
+        if (racaSalva) {
+            selectRaca.value = racaSalva;
+            aplicarBonusSelecao('raca', racaSalva);
+        }
     }
     
     // Popula select de origens
@@ -107,8 +163,19 @@ function popularSelects() {
             option.textContent = origem.nome;
             selectOrigem.appendChild(option);
         });
-        // Adiciona event listener para aplicar bônus
-        selectOrigem.addEventListener('change', () => aplicarBonusSelecao('origem', selectOrigem.value));
+        // Adiciona event listener para aplicar bônus e salvar seleção
+        selectOrigem.addEventListener('change', () => {
+            localStorage.setItem('origem_selecionada', selectOrigem.value);
+            aplicarBonusSelecao('origem', selectOrigem.value);
+        });
+        
+        // Restaura seleção anterior se existir
+        const origemSalva = localStorage.getItem('origem_selecionada');
+        if (origemSalva) {
+            selectOrigem.value = origemSalva;
+            aplicarBonusSelecao('origem', origemSalva);
+        }
+        
         // Botão para abrir modal de escolha de perícias (quando aplicável)
         const btnEscolher = document.getElementById('btn-escolher-origem-pericias');
         if (btnEscolher) {
@@ -120,6 +187,16 @@ function popularSelects() {
                 if (escolherCount && escolherCount > 0) {
                     abrirModalEscolherPericias(id, escolherCount);
                 }
+            });
+        }
+
+        // Botão para abrir modal de escolha de bônus de classe
+        const btnClasseEscolha = document.getElementById('btn-escolher-classe-bonus');
+        if (btnClasseEscolha && selectClasse) {
+            btnClasseEscolha.addEventListener('click', () => {
+                const classeId = selectClasse.value;
+                if (!classeId) return;
+                abrirModalEscolherPericiaClasse(classeId);
             });
         }
     }
@@ -897,14 +974,21 @@ function salvarDadosAdicionaisPericias(dados) {
 function calcularLimiteD6(nivel) {
     nivel = parseInt(nivel) || 0;
     
-    if (nivel >= 100) return 25;
-    if (nivel >= 95) return 23;
-    if (nivel >= 75) return 21;
-    if (nivel >= 55) return 19;
-    if (nivel >= 35) return 17;
-    if (nivel >= 15) return 15;
-    if (nivel >= 5) return 13;
-    return 10;
+    let limite = 10; // Valor base
+    
+    if (nivel >= 100) limite = 25;
+    else if (nivel >= 95) limite = 23;
+    else if (nivel >= 75) limite = 21;
+    else if (nivel >= 55) limite = 19;
+    else if (nivel >= 35) limite = 17;
+    else if (nivel >= 15) limite = 15;
+    else if (nivel >= 5) limite = 13;
+    
+    // Adiciona bônus da classe (Investigador e Tecnológico ganham +2)
+    const bonusClasse = obterBonusClasse();
+    limite += bonusClasse.periciasD6Extras;
+    
+    return limite;
 }
 
 /**
@@ -1173,6 +1257,41 @@ function salvarPericiaFicha(id, valor) {
 let primeiraVezCalculandoEstatisticas = true;
 
 /**
+ * Obtém os bônus da classe selecionada
+ * @returns {Object} Objeto com os bônus: { vida, mana, defesa, sanidade, periciasD6Extras }
+ */
+function obterBonusClasse() {
+    const classeSelect = document.getElementById('classe');
+    if (!classeSelect || !classeSelect.value) {
+        console.log('obterBonusClasse: Nenhuma classe selecionada');
+        return { vida: 0, mana: 0, defesa: 0, sanidade: 0, periciasD6Extras: 0 };
+    }
+    
+    const classeId = classeSelect.value;
+    console.log('obterBonusClasse: Classe selecionada:', classeId);
+    
+    // Obtém os dados da classe do DadosLoader
+    const classeData = DadosLoader.obterItemPorId('classes', classeId);
+    console.log('obterBonusClasse: Dados da classe:', classeData);
+    
+    if (classeData && classeData.bonus) {
+        const bonus = classeData.bonus;
+        const resultado = {
+            vida: bonus.vida || 0,
+            mana: bonus.mana || 0,
+            defesa: bonus.defesa || 0,
+            sanidade: bonus.sanidade || 0,
+            periciasD6Extras: bonus.periciasD6Extras || 0
+        };
+        console.log('obterBonusClasse: Bônus encontrados:', resultado);
+        return resultado;
+    }
+    
+    console.log('obterBonusClasse: Nenhum bônus encontrado');
+    return { vida: 0, mana: 0, defesa: 0, sanidade: 0, periciasD6Extras: 0 };
+}
+
+/**
  * Calcula todas as estatísticas automaticamente (nível 0%)
  */
 function calcularEstatisticas() {
@@ -1182,19 +1301,33 @@ function calcularEstatisticas() {
     // Obtém valores das perícias (nível 0%)
     const pericias = obterTodasPericias();
     
-    // Calcula Vida Total: Resiliência × 3 + 10
-    const vidaTotal = (atributos.resiliencia || 0) * 3 + 10;
+    // Obtém bônus da classe
+    const bonusClasse = obterBonusClasse();
+    
+    console.log('Bônus de classe aplicados:', bonusClasse);
+    
+    // Calcula Vida Total: Resiliência × 3 + 10 + Bônus de Classe + progressão por nível da classe
+    let vidaTotal = (atributos.resiliencia || 0) * 3 + 10 + bonusClasse.vida;
+    let manaTotal = (atributos.magia || 0) * 5 + 15 + bonusClasse.mana;
+    let sanidadeTotal = (atributos.intelecto || 0) * 5 + (atributos.carisma || 0) * 3 + 10 + bonusClasse.sanidade;
+
+    // Progressão a cada 5% por classe
+    const nivelAtual = obterNivelAtual();
+    const steps = Math.floor((parseInt(nivelAtual) || 0) / 5);
+    const selectClasse = document.getElementById('classe');
+    const classeIdAtual = selectClasse && selectClasse.value ? selectClasse.value : null;
+    const prog = classeIdAtual ? (window.CLASSE_PROGRESSO?.[classeIdAtual] || null) : null;
+    if (prog && steps > 0) {
+        const get = (attr) => parseInt(atributos[attr]) || 0;
+        vidaTotal += steps * (get(prog.vida.attr) * prog.vida.mult);
+        sanidadeTotal += steps * (get(prog.sanidade.attr) * prog.sanidade.mult);
+        manaTotal += steps * (get(prog.mana.attr) * prog.mana.mult);
+    }
     atualizarCampoEstatisticaComAjuste('vida-total', 'vida-atual', Math.max(1, vidaTotal), primeiraVezCalculandoEstatisticas);
-    
-    // Calcula Mana Total: Magia × 5 + 15
-    const manaTotal = (atributos.magia || 0) * 5 + 15;
     atualizarCampoEstatisticaComAjuste('mana-total', 'mana-atual', Math.max(0, manaTotal), primeiraVezCalculandoEstatisticas);
-    
-    // Calcula Sanidade Total: Intelecto × 5 + Carisma × 3 + 10
-    const sanidadeTotal = (atributos.intelecto || 0) * 5 + (atributos.carisma || 0) * 3 + 10;
     atualizarCampoEstatisticaComAjuste('sanidade-total', 'sanidade-atual', Math.max(0, sanidadeTotal), primeiraVezCalculandoEstatisticas);
     
-    // Calcula Alma Total: Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 + bônus de raça
+    // Calcula Alma Total: Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 + bônus de raça + efeitos de classe
     let bonusAlma = 0;
     let almaZerada = false; // Flag para saber se alma foi zerada pela raça
     
@@ -1206,11 +1339,21 @@ function calcularEstatisticas() {
         }
     }
     
+    // Penalidade de classe: Demonologista tira 3 pontos de Alma
+    let bonusAlmaClasse = 0;
+    try {
+        const classeSel = document.getElementById('classe');
+        const classeIdSel = classeSel && classeSel.value ? classeSel.value : null;
+        if (classeIdSel === 'demonologista') {
+            bonusAlmaClasse -= 3;
+        }
+    } catch (e) {}
+
     let almaTotal;
     if (almaZerada) {
         almaTotal = 0; // Se alma for zerada pela raça, fica 0
     } else {
-        almaTotal = (atributos.magia || 0) * 5 + (atributos.resiliencia || 0) * 3 + (atributos.intelecto || 0) * 2 + 15 + bonusAlma;
+        almaTotal = (atributos.magia || 0) * 5 + (atributos.resiliencia || 0) * 3 + (atributos.intelecto || 0) * 2 + 15 + bonusAlma + bonusAlmaClasse;
     }
     
     const campoAlmaTotal = document.getElementById('alma-total');
@@ -1222,8 +1365,8 @@ function calcularEstatisticas() {
         campoAlmaAtual.value = Math.max(0, almaTotal);
     }
     
-    // Calcula Defesa: Constituição + 10
-    const defesa = (atributos.constituicao || 0) + 10;
+    // Calcula Defesa: Constituição + 10 + Bônus de Classe
+    const defesa = (atributos.constituicao || 0) + 10 + bonusClasse.defesa;
     atualizarCampoEstatistica('defesa', Math.max(0, defesa));
     
     // Calcula Esquiva: Defesa + Perícia Reflexos + Destreza
@@ -1365,6 +1508,10 @@ function aplicarBonusSelecao(tipo, id) {
     
     // Remove os bônus anteriores deste tipo
     removerBonus(tipo);
+    // Se classe, também remove a escolha anterior de classe
+    if (tipo === 'classe') {
+        removerBonus('classe_escolha');
+    }
     
     // Verifica se há bônus estruturados (pericias) ou outros formatos
     let bonusTraduzido = {};
@@ -1396,6 +1543,25 @@ function aplicarBonusSelecao(tipo, id) {
         popularPericiasFicha();
     }
     
+    // Se for classe e houver opções de bônus, aplica escolha salva (ou habilita botão)
+    if (tipo === 'classe') {
+        atualizarEstadoEscolhaClasse(id);
+        const conf = window.CLASSE_ESCOLHAS?.[id];
+        if (conf) {
+            // aplica escolha salva automaticamente se existir
+            const todas = JSON.parse(localStorage.getItem('classe_escolha') || '{}');
+            const escolhida = todas[id];
+            if (escolhida && conf.ids.includes(escolhida)) {
+                const bonus = { pericias: {} };
+                bonus.pericias[escolhida] = conf.bonus;
+                aplicarBonusCompleto(bonus, 'classe_escolha');
+            } else {
+                // força escolha do usuário
+                abrirModalEscolherPericiaClasse(id);
+            }
+        }
+    }
+
     // Recalcula estatísticas após aplicar bônus
     calcularEstatisticas();
     
@@ -1419,7 +1585,8 @@ function aplicarBonusCompleto(bonus, tipo) {
     const mapaTipo = {
         'raca': 'bonus_raca',
         'classe': 'bonus_classe',
-        'origem': 'bonus_origem'
+        'origem': 'bonus_origem',
+        'classe_escolha': 'bonus_classe'
     };
     const campoBonusChave = mapaTipo[tipo];
     
@@ -1634,6 +1801,149 @@ function aplicarPericiasEscolhidasParaOrigem(origemId, periciaIds) {
 }
 
 /**
+ * Atualiza estado do botão/hint da escolha de classe
+ */
+function atualizarEstadoEscolhaClasse(classeId) {
+    const btn = document.getElementById('btn-escolher-classe-bonus');
+    const hint = document.getElementById('classe-escolha-hint');
+    if (!btn || !hint) return;
+    const conf = window.CLASSE_ESCOLHAS?.[classeId];
+    if (!classeId || !conf) {
+        btn.disabled = true;
+        hint.textContent = '';
+        return;
+    }
+    btn.disabled = false;
+    const escolhasAll = JSON.parse(localStorage.getItem('classe_escolha') || '{}');
+    const escolhido = escolhasAll[classeId];
+    if (escolhido) {
+        // encontra nome
+        let nome = escolhido;
+        if (window.Pericias?.PERICIAS) {
+            const lista = Object.values(window.Pericias.PERICIAS).flat();
+            const p = lista.find(x => x.id === escolhido);
+            if (p) nome = p.nome;
+        }
+        hint.textContent = `Bônus de classe aplicado: ${nome} +${conf.bonus}`;
+    } else {
+        hint.textContent = 'Você ainda não escolheu o bônus de classe.';
+    }
+}
+
+/**
+ * Abre modal para escolher a perícia de bônus da classe (1 escolha)
+ */
+function abrirModalEscolherPericiaClasse(classeId) {
+    const modal = document.getElementById('modal-escolher-pericias');
+    const list = document.getElementById('modal-escolher-list');
+    const title = document.getElementById('modal-escolher-title');
+    const desc = document.getElementById('modal-escolher-desc');
+    const search = document.getElementById('modal-escolher-search');
+    const conf = window.CLASSE_ESCOLHAS?.[classeId];
+    if (!modal || !list || !conf) return;
+
+    const maxEscolhas = 1;
+    title.textContent = `Escolher 1 perícia para bônus da classe (+${conf.bonus})`;
+    desc.textContent = 'Escolha exatamente 1 opção.';
+
+    // Monta a lista limitada às opções
+    const periciasObj = window.Pericias?.PERICIAS || {};
+    const todas = Object.values(periciasObj).flat();
+    const opcoes = todas.filter(p => conf.ids.includes(p.id));
+
+    // Carrega escolha anterior
+    const escolhasAll = JSON.parse(localStorage.getItem('classe_escolha') || '{}');
+    const escolhasAtuais = [];
+    if (escolhasAll[classeId]) escolhasAtuais.push(escolhasAll[classeId]);
+
+    function renderList(filter='') {
+        list.innerHTML = '';
+        const filtro = filter.trim().toLowerCase();
+        opcoes.forEach(p => {
+            if (filtro && p.nome.toLowerCase().indexOf(filtro) === -1) return;
+            const checked = escolhasAtuais.indexOf(p.id) !== -1;
+            const item = document.createElement('label');
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+            item.style.gap = '8px';
+            item.style.padding = '6px';
+            item.style.border = '1px solid #eee';
+            item.style.borderRadius = '4px';
+            item.style.cursor = 'pointer';
+            item.innerHTML = `
+                <input type="checkbox" data-pericia-id="${p.id}" ${checked ? 'checked' : ''}>
+                <span style="flex:1">${p.nome}</span>
+                <small style="color:#666">${p.id}</small>
+            `;
+            const cb = item.querySelector('input');
+            cb.disabled = (!checked && escolhasAtuais.length >= maxEscolhas);
+            cb.onchange = () => {
+                if (cb.checked) {
+                    if (escolhasAtuais.length >= maxEscolhas) {
+                        cb.checked = false;
+                        showMessage(`Você só pode escolher ${maxEscolhas} perícia.`, 'error');
+                        return;
+                    }
+                    escolhasAtuais.splice(0, escolhasAtuais.length, p.id);
+                } else {
+                    const idx = escolhasAtuais.indexOf(p.id);
+                    if (idx !== -1) escolhasAtuais.splice(idx, 1);
+                }
+                const inputs = list.querySelectorAll('input[type=checkbox]');
+                inputs.forEach(i => {
+                    if (!i.checked) {
+                        i.disabled = (escolhasAtuais.length >= maxEscolhas);
+                    } else {
+                        i.disabled = false;
+                    }
+                });
+            };
+            list.appendChild(item);
+        });
+    }
+
+    renderList('');
+    search.value = '';
+    search.oninput = () => renderList(search.value);
+    modal.style.display = 'flex';
+
+    const close = document.getElementById('modal-escolher-close');
+    const cancel = document.getElementById('modal-escolher-cancel');
+    const confirm = document.getElementById('modal-escolher-confirm');
+
+    function fechar() {
+        modal.style.display = 'none';
+        close.removeEventListener('click', fechar);
+        cancel.removeEventListener('click', fechar);
+        confirm.removeEventListener('click', onConfirm);
+    }
+
+    function onConfirm() {
+        if (escolhasAtuais.length !== 1) {
+            showMessage('Escolha 1 perícia.', 'error');
+            return;
+        }
+        const escolhida = escolhasAtuais[0];
+        // Remove bônus anterior específico de escolha de classe
+        removerBonus('classe_escolha');
+        // Aplica novo bônus de classe na perícia escolhida
+        const bonus = { pericias: { } };
+        bonus.pericias[escolhida] = conf.bonus;
+        aplicarBonusCompleto(bonus, 'classe_escolha');
+        // Salva escolha
+        const todas = JSON.parse(localStorage.getItem('classe_escolha') || '{}');
+        todas[classeId] = escolhida;
+        localStorage.setItem('classe_escolha', JSON.stringify(todas));
+        atualizarEstadoEscolhaClasse(classeId);
+        fechar();
+    }
+
+    close.addEventListener('click', fechar);
+    cancel.addEventListener('click', fechar);
+    confirm.addEventListener('click', onConfirm);
+}
+
+/**
  * Atualiza o estado do botão/hint de escolha para a origem atual
  */
 function atualizarEstadoEscolhaOrigem(origemId) {
@@ -1680,7 +1990,8 @@ function removerBonus(tipo) {
     const mapaTipo = {
         'raca': 'bonus_raca',
         'classe': 'bonus_classe',
-        'origem': 'bonus_origem'
+        'origem': 'bonus_origem',
+        'classe_escolha': 'bonus_classe'
     };
     const campoBonusChave = mapaTipo[tipo];
     
@@ -1783,6 +2094,9 @@ function configurarNivelSlider() {
             
             // Atualiza todos os totais das perícias para refletir dados disponíveis no novo nível
             atualizarTodosTotaisPericias();
+
+            // Recalcula estatísticas (progressão por classe a cada 5%)
+            calcularEstatisticas();
             
             // Atualiza a página de ficha se estiver visível
             if (typeof popularPericiasFicha === 'function' && document.getElementById('pericias-ficha')) {
@@ -1825,6 +2139,9 @@ function configurarNivelSlider() {
             
             // Atualiza todos os totais das perícias para refletir dados disponíveis no novo nível
             atualizarTodosTotaisPericias();
+
+            // Recalcula estatísticas (progressão por classe a cada 5%)
+            calcularEstatisticas();
             
             // Atualiza a página de perícias se estiver visível
             if (typeof popularPericiasFicha === 'function' && document.getElementById('pericias-ficha')) {

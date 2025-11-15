@@ -5,5 +5,8 @@
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Invocações demoníacas", "Controle", "Conhecimento infernal"],
   "dadosVida": "1d6",
-  "proficiencias": ["Rituais", "Símbolos mágicos", "Armas simples"]
+  "proficiencias": ["Rituais", "Símbolos mágicos", "Armas simples"],
+  "bonus": {
+    "sanidade": 7
+  }
 }

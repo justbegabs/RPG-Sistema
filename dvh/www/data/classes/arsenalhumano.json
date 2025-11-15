@@ -5,5 +5,8 @@
   "atributoPrincipal": "forca",
   "habilidades": ["Múltiplas armas", "Adaptação tática", "Versatilidade"],
   "dadosVida": "1d10",
-  "proficiencias": ["Todas as armas", "Armaduras médias", "Escudos"]
+  "proficiencias": ["Todas as armas", "Armaduras médias", "Escudos"],
+  "bonus": {
+    "defesa": 7
+  }
 }

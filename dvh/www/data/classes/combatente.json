@@ -5,5 +5,8 @@
   "atributoPrincipal": "forca",
   "habilidades": ["Combate corpo a corpo", "Resistência", "Versatilidade em armas"],
   "dadosVida": "1d10",
-  "proficiencias": ["Armas simples", "Armas marciais", "Armaduras médias"]
+  "proficiencias": ["Armas simples", "Armas marciais", "Armaduras médias"],
+  "bonus": {
+    "vida": 7
+  }
 }

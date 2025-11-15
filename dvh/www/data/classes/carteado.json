@@ -5,5 +5,8 @@
   "atributoPrincipal": "carisma",
   "habilidades": ["Magia de cartas", "Sorte", "Estratégia"],
   "dadosVida": "1d6",
-  "proficiencias": ["Baralho mágico", "Armas simples", "Armaduras leves"]
+  "proficiencias": ["Baralho mágico", "Armas simples", "Armaduras leves"],
+  "bonus": {
+    "mana": 7
+  }
 }
