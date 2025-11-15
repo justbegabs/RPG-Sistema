@@ -3,7 +3,10 @@
   "nome": "Servente",
   "descricao": "Trabalhou como servo ou empregado, conhecendo humildade e serviço.",
   "bonus": {
-    "habilidades": ["Percepção", "Persuasão"],
+    "pericias": {
+      "medicina": 2,
+      "cozinhar": 2
+    },
     "equipamento": "Roupas de serviço, ferramentas básicas, moedas"
   },
   "caracteristicas": ["Humildade", "Observação", "Lealdade"]

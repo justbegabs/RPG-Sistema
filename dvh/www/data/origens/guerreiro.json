@@ -3,7 +3,10 @@
   "nome": "Guerreiro",
   "descricao": "Criado em campos de batalha, treinado desde cedo para combate.",
   "bonus": {
-    "habilidades": ["Intimidação", "Atletismo"],
+    "pericias": {
+      "intimidacao": 2,
+      "atletismo": 2
+    },
     "equipamento": "Armas básicas, armadura leve, insígnia militar"
   },
   "caracteristicas": ["Treinamento militar", "Conhecimento de armas", "Disciplina"]

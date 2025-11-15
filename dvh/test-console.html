@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Console</title>
+</head>
+<body>
+    <h1>Test Console - Open DevTools (F12) to see logs</h1>
+    <button onclick="testClick()">Click Me</button>
+    <div id="modal" style="display:none; background: red; width: 200px; height: 200px;">
+        <p>This is the modal</p>
+    </div>
+    
+    <script>
+        console.log('Page loaded');
+        
+        function testClick() {
+            console.log('testClick called');
+            const modal = document.getElementById('modal');
+            console.log('Modal element:', modal);
+            console.log('Current display:', modal.style.display);
+            modal.style.display = 'block';
+            console.log('Display after change:', modal.style.display);
+        }
+    </script>
+</body>
+</html>

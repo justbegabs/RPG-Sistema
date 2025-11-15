@@ -3,7 +3,7 @@
   "nome": "Escolhido",
   "descricao": "Foi escolhido por forças superiores para um destino especial.",
   "bonus": {
-    "habilidades": ["Carisma", "Intuição"],
+    "escolher_pericias": 2,
     "equipamento": "Marcas do escolhido, símbolos sagrados, moedas"
   },
   "caracteristicas": ["Destino especial", "Poderes únicos", "Responsabilidade divina"]

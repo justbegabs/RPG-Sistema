@@ -3,7 +3,10 @@
   "nome": "Inventor",
   "descricao": "Criador de dispositivos e mecanismos inovadores.",
   "bonus": {
-    "habilidades": ["Tecnologia", "Engenharia"],
+    "pericias": {
+      "artes": 2,
+      "alquimia": 2
+    },
     "equipamento": "Ferramentas, matérias-primas, protótipos, moedas"
   },
   "caracteristicas": ["Criatividade técnica", "Inovação", "Resolução de problemas"]

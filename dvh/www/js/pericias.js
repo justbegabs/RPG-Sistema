@@ -124,13 +124,27 @@ function renderizarPericias() {
  * Cria um card de perícia
  */
 function criarCardPericia(pericia, atributoKey) {
-    const valor = obterValorPericia(pericia.id);
+    // Mostra breakdown no tooltip
+    const saved = localStorage.getItem('pericias_estrutura');
+    let d6 = 0, bp = 0, bo = 0, bc = 0, br = 0;
+    if (saved) {
+        const dados = JSON.parse(saved);
+        const p = dados[pericia.id];
+        if (p) {
+            d6 = parseInt(p.d6) || 0;
+            bp = parseInt(p.bonus_personagem) || 0;
+            bo = parseInt(p.bonus_origem) || 0;
+            bc = parseInt(p.bonus_classe) || 0;
+            br = parseInt(p.bonus_raca) || 0;
+        }
+    }
+    const valor = d6 + bp + bo + bc + br;
     const valorFormatado = valor >= 0 ? `+${valor}` : `${valor}`;
     const corClasse = valor > 0 ? 'positivo' : valor < 0 ? 'negativo' : 'neutro';
-    
+    const tooltip = `D6: ${d6 >= 0 ? '+' + d6 : d6}\nPessoal: ${bp >= 0 ? '+' + bp : bp}\nOrigem: ${bo >= 0 ? '+' + bo : bo}\nClasse: ${bc >= 0 ? '+' + bc : bc}\nRaça: ${br >= 0 ? '+' + br : br}`;
     return `
         <div class="pericia-card ${corClasse}">
-            <button class="pericia-btn" onclick="testarPericia('${pericia.id}', '${atributoKey}')" title="Clique para fazer um teste">
+            <button class="pericia-btn" onclick="testarPericia('${pericia.id}', '${atributoKey}')" title="${tooltip}">
                 <span class="pericia-nome">${pericia.nome}</span>
                 <span class="pericia-valor ${corClasse}">${valorFormatado}</span>
             </button>
@@ -146,10 +160,18 @@ function criarCardPericia(pericia, atributoKey) {
  * Obtém o valor de uma perícia do localStorage
  */
 function obterValorPericia(id) {
-    const saved = localStorage.getItem('pericias_personagem');
+    const saved = localStorage.getItem('pericias_estrutura');
     if (saved) {
         const dados = JSON.parse(saved);
-        return dados[id] !== undefined ? parseInt(dados[id]) : 0;
+        const p = dados[id];
+        if (p) {
+                const d6 = parseInt(p.d6) || 0;
+                const bp = parseInt(p.bonus_personagem) || 0;
+                const bo = parseInt(p.bonus_origem) || 0;
+                const bc = parseInt(p.bonus_classe) || 0;
+                const br = parseInt(p.bonus_raca) || 0;
+                return d6 + bp + bo + bc + br;
+        }
     }
     return 0;
 }
@@ -158,32 +180,37 @@ function obterValorPericia(id) {
  * Salva todas as perícias no localStorage
  */
 function salvarPericias() {
+    // Garante que a estrutura de perícias existe e salva-a (no novo formato)
+    const saved = localStorage.getItem('pericias_estrutura');
+    if (saved) {
+        // reescreve para forçar persistência
+        localStorage.setItem('pericias_estrutura', saved);
+        return;
+    }
+    // Se não existe, cria entradas padrão
     const dados = {};
-    
     Object.values(PERICIAS).flat().forEach(pericia => {
-        dados[pericia.id] = obterValorPericia(pericia.id);
+        dados[pericia.id] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
     });
-    
-    localStorage.setItem('pericias_personagem', JSON.stringify(dados));
+    localStorage.setItem('pericias_estrutura', JSON.stringify(dados));
 }
 
 /**
  * Altera o valor de uma perícia
  */
 function alterarPericia(id, delta) {
-    const valorAtual = obterValorPericia(id);
-    const novoValor = valorAtual + delta;
-    
-    // Limite de -5 a +5 (pode ser ajustado)
-    if (novoValor < -5 || novoValor > 5) {
-        return;
-    }
-    
-    const saved = localStorage.getItem('pericias_personagem');
+    // Atualiza o campo bonus_origem da perícia no novo formato
+    const saved = localStorage.getItem('pericias_estrutura');
     const dados = saved ? JSON.parse(saved) : {};
-    dados[id] = novoValor;
-    localStorage.setItem('pericias_personagem', JSON.stringify(dados));
-    
+    if (!dados[id]) {
+        dados[id] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    }
+    const atual = parseInt(dados[id].bonus_personagem) || 0;
+    const novo = atual + delta;
+    if (novo < -5 || novo > 5) return;
+    dados[id].bonus_personagem = novo;
+    localStorage.setItem('pericias_estrutura', JSON.stringify(dados));
+
     // Re-renderiza
     renderizarPericias();
 }
@@ -192,49 +219,67 @@ function alterarPericia(id, delta) {
  * Testa uma perícia (rolagem de dados)
  */
 function testarPericia(id, atributoKey) {
-    // Obtém o valor da perícia
-    const valorPericia = obterValorPericia(id);
-    
-    // Obtém o valor do atributo base
+    // Obtém dados da perícia diretamente (d6 e bônus separados)
+    const saved = localStorage.getItem('pericias_estrutura');
+    let d6 = 0, bp = 0, bo = 0, bc = 0, br = 0;
+    const dadosAll = saved ? JSON.parse(saved) : {};
+    if (dadosAll[id]) {
+        const p = dadosAll[id];
+        d6 = parseInt(p.d6) || 0;
+        bp = parseInt(p.bonus_personagem) || 0;
+        bo = parseInt(p.bonus_origem) || 0;
+        bc = parseInt(p.bonus_classe) || 0;
+        br = parseInt(p.bonus_raca) || 0;
+    }
+
+    // NÃO gera D6 automaticamente aqui. D6 só é gerado quando clicar no botão D6.
+    // Usa o D6 atual (pode ser 0 se nunca foi gerado)
+
+    // Total da perícia inclui o D6 atual (que pode ser 0)
+    const totalPericia = d6 + bp + bo + bc + br;
+
+    // Obtém o valor do atributo base (número de dados a rolar)
     const valorAtributo = obterValorAtributo(atributoKey);
-    
-    // Valor total = atributo + perícia
-    const valorTotal = valorAtributo + valorPericia;
-    
+
     // Busca nome da perícia
     const pericia = Object.values(PERICIAS).flat().find(p => p.id === id);
     const nomePericia = pericia ? pericia.nome : id;
     const nomeAtributo = NOMES_ATRIBUTOS[atributoKey] || atributoKey;
-    
-    // Faz a rolagem usando o valor total
+
+    // Calcula valor total (atributo + totalPericia) — usado para decidir se pega maior/pior
+    const valorTotal = valorAtributo + totalPericia;
+
+    // Faz a rolagem usando a quantidade do atributo (não inclui D6 na quantidade)
     let quantidadeDados;
-    let resultado;
+    let resultadoPool;
     let dadosRolados = [];
-    
-    if (valorTotal > 0) {
-        quantidadeDados = valorTotal;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.max(...dadosRolados);
-    } else if (valorTotal === 0) {
+
+    if (valorAtributo > 0) {
+        quantidadeDados = valorAtributo;
+    } else if (valorAtributo === 0) {
         quantidadeDados = 2;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.min(...dadosRolados);
     } else {
-        quantidadeDados = Math.abs(valorTotal) + 2;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.min(...dadosRolados);
+        quantidadeDados = Math.abs(valorAtributo) + 2;
     }
-    
-    exibirResultadoPericia(nomePericia, nomeAtributo, valorAtributo, valorPericia, valorTotal, quantidadeDados, dadosRolados, resultado);
+    for (let i = 0; i < quantidadeDados; i++) {
+        const dado = Math.floor(Math.random() * 20) + 1;
+        dadosRolados.push(dado);
+    }
+
+    // Decide se pega maior ou menor com base no valorTotal
+    if (valorTotal > 0) {
+        resultadoPool = Math.max(...dadosRolados);
+    } else if (valorTotal === 0) {
+        resultadoPool = Math.min(...dadosRolados);
+    } else {
+        resultadoPool = Math.min(...dadosRolados);
+    }
+
+    // Resultado final: resultado do pool de atributo + total da perícia (inclui D6)
+    const resultadoFinal = resultadoPool + totalPericia;
+
+    // Exibe resultado com breakdown (inclui D6 e totals)
+    exibirResultadoPericia(nomePericia, nomeAtributo, valorAtributo, dadosAll[id], totalPericia, valorTotal, quantidadeDados, dadosRolados, resultadoPool, resultadoFinal);
 }
 
 /**
@@ -264,18 +309,29 @@ function obterValorAtributo(atributoKey) {
 /**
  * Exibe resultado do teste de perícia
  */
-function exibirResultadoPericia(nomePericia, nomeAtributo, valorAtributo, valorPericia, valorTotal, quantidadeDados, dadosRolados, resultado) {
-    const resultadoDiv = document.getElementById('resultado-rolagem-pericias');
-    const conteudoDiv = document.getElementById('resultado-conteudo-pericias');
+function exibirResultadoPericia(nomePericia, nomeAtributo, valorAtributo, periciaData, totalPericia, valorTotal, quantidadeDados, dadosRolados, resultadoPool, resultadoFinal) {
+    // Reuse the shared modal overlay for consistency with ficha
+    const modal = document.getElementById('modal-resultado-atributo');
+    const titulo = document.getElementById('modal-resultado-titulo');
+    const corpo = document.getElementById('modal-resultado-corpo');
+    const btnFechar = document.getElementById('modal-resultado-fechar');
     
-    if (!resultadoDiv || !conteudoDiv) return;
-    
-    const valorTotalFormatado = valorTotal >= 0 ? `+${valorTotal}` : `${valorTotal}`;
+    if (!modal || !titulo || !corpo || !btnFechar) {
+        console.error('Modal elements not found:', { modal, titulo, corpo, btnFechar });
+        return;
+    }
+
     const valorAtributoFormatado = valorAtributo >= 0 ? `+${valorAtributo}` : `${valorAtributo}`;
-    const valorPericiaFormatado = valorPericia >= 0 ? `+${valorPericia}` : `${valorPericia}`;
-    
+    const d6Real = periciaData ? (parseInt(periciaData.d6) || 0) : 0;
+    const bpReal = periciaData ? (parseInt(periciaData.bonus_personagem) || 0) : 0;
+    const boReal = periciaData ? (parseInt(periciaData.bonus_origem) || 0) : 0;
+    const bcReal = periciaData ? (parseInt(periciaData.bonus_classe) || 0) : 0;
+    const brReal = periciaData ? (parseInt(periciaData.bonus_raca) || 0) : 0;
+
+    const totalPericiaFormatado = totalPericia >= 0 ? `+${totalPericia}` : `${totalPericia}`;
+    const valorTotalFormatado = valorTotal >= 0 ? `+${valorTotal}` : `${valorTotal}`;
+
     let descricao = '';
-    
     if (valorTotal > 0) {
         descricao = `Rolou ${quantidadeDados} dado${quantidadeDados > 1 ? 's' : ''} D20 e pegou o <strong>maior</strong> valor.`;
     } else if (valorTotal === 0) {
@@ -283,35 +339,40 @@ function exibirResultadoPericia(nomePericia, nomeAtributo, valorAtributo, valorP
     } else {
         descricao = `Rolou ${quantidadeDados} dados D20 e pegou o <strong>pior</strong> valor.`;
     }
-    
-    conteudoDiv.innerHTML = `
-        <div class="resultado-header">
-            <span class="resultado-atributo">${nomePericia}</span>
-            <span class="resultado-valor-atributo">${valorTotalFormatado}</span>
-        </div>
-        <div class="resultado-info">
-            <p><strong>Atributo Base (${nomeAtributo}):</strong> ${valorAtributoFormatado}</p>
-            <p><strong>Bônus de Perícia:</strong> ${valorPericiaFormatado}</p>
-            <p><strong>Total:</strong> ${valorTotalFormatado}</p>
-        </div>
-        <p class="resultado-descricao">${descricao}</p>
-        <div class="resultado-dados">
-            <div class="dados-rolados">
-                <strong>Dados rolados:</strong>
-                <div class="dados-lista">
-                    ${dadosRolados.map(dado => `
-                        <span class="dado-valor ${dado === resultado ? 'dado-resultado' : ''}">${dado}</span>
-                    `).join('')}
-                </div>
+
+    titulo.textContent = `${nomePericia} — Resultado`;
+    corpo.innerHTML = `
+        <p style="margin:6px 0;"><strong>Atributo Base (${nomeAtributo}):</strong> ${valorAtributoFormatado}</p>
+        <p style="margin:6px 0;"><strong>D6 da Perícia:</strong> ${d6Real >= 0 ? `+${d6Real}` : d6Real}</p>
+        <p style="margin:6px 0;"><strong>Bônus (personagem):</strong> ${bpReal >= 0 ? `+${bpReal}` : bpReal}</p>
+        <p style="margin:6px 0;"><strong>Bônus (origem):</strong> ${boReal >= 0 ? `+${boReal}` : boReal}</p>
+        <p style="margin:6px 0;"><strong>Bônus (classe):</strong> ${bcReal >= 0 ? `+${bcReal}` : bcReal}</p>
+        <p style="margin:6px 0;"><strong>Bônus (raça):</strong> ${brReal >= 0 ? `+${brReal}` : brReal}</p>
+        <p style="margin:6px 0;"><strong>Total de Perícia (D6 + bônus):</strong> ${totalPericiaFormatado}</p>
+        <p class="resultado-descricao" style="margin:6px 0;"><strong>Total Geral (atributo + perícia):</strong> ${valorTotalFormatado}</p>
+        <p class="resultado-descricao" style="margin:6px 0;">${descricao}</p>
+        <div style="margin-top:8px;">
+            <strong>Dados D20 rolados:</strong>
+            <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+                ${dadosRolados.map(dado => `
+                    <span style="padding:6px 8px; border-radius:6px; background:#eee; ${dado===resultadoPool? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                `).join('')}
             </div>
         </div>
-        <div class="resultado-final">
-            <strong>Resultado Final: <span class="resultado-numero">${resultado}</span></strong>
+        <div style="margin-top:12px; font-size:18px;">
+            <strong>Resultado do Pool: <span style="color:#d32;">${resultadoPool}</span></strong>
+            <div>Resultado Final (pool + perícia): <strong>${resultadoFinal >= 0 ? `+${resultadoFinal}` : resultadoFinal}</strong></div>
         </div>
     `;
+
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
     
-    resultadoDiv.style.display = 'block';
-    resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    btnFechar.onclick = () => { 
+        modal.style.display = 'none'; 
+        btnFechar.onclick = null; 
+    };
 }
 
 /**

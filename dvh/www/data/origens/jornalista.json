@@ -3,7 +3,10 @@
   "nome": "Jornalista",
   "descricao": "Investigador da verdade, sempre buscando descobrir segredos e histórias.",
   "bonus": {
-    "habilidades": ["Investigação", "Persuasão"],
+    "pericias": {
+      "investigacao": 2,
+      "atualidades": 2
+    },
     "equipamento": "Câmera, caderno, gravador, moedas"
   },
   "caracteristicas": ["Curiosidade", "Objetividade", "Rede de contatos"]

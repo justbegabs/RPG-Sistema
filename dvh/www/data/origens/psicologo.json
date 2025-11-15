@@ -3,7 +3,10 @@
   "nome": "Psicólogo",
   "descricao": "Estudou a mente humana, conhecendo comportamentos e emoções.",
   "bonus": {
-    "habilidades": ["Persuasão", "Intuição"],
+      "pericias": {
+        "psicologia": 2,
+        "diplomacia": 2
+      },
     "equipamento": "Livros de psicologia, cadernos, moedas"
   },
   "caracteristicas": ["Empatia", "Análise comportamental", "Compreensão emocional"]

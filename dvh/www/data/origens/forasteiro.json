@@ -3,7 +3,10 @@
   "nome": "Forasteiro",
   "descricao": "Viveu como estrangeiro ou viajante, conhecendo diferentes culturas.",
   "bonus": {
-    "habilidades": ["Sobrevivência", "História (culturas)"],
+    "pericias": {
+      "sobrevivencia": 2,
+      "trapaca": 2
+    },
     "equipamento": "Equipamento de viagem, mapas, moedas estrangeiras"
   },
   "caracteristicas": ["Adaptabilidade", "Conhecimento cultural", "Experiência de viagem"]

@@ -3,7 +3,10 @@
   "nome": "Herdeiro",
   "descricao": "Nascido em família rica, herdeiro de fortuna e legado familiar.",
   "bonus": {
-    "habilidades": ["Persuasão", "História"],
+    "pericias": {
+      "labia": 2,
+      "intimidacao": 2
+    },
     "equipamento": "Roupas finas, joias, moedas em abundância"
   },
   "caracteristicas": ["Riqueza", "Educação refinada", "Responsabilidade familiar"]

@@ -3,7 +3,10 @@
   "nome": "Militar",
   "descricao": "Serviu nas forças armadas, conhecendo disciplina, estratégia e combate.",
   "bonus": {
-    "habilidades": ["Atletismo", "Intimidação"],
+    "pericias": {
+      "armas_fogo_pequenas": 2,
+      "luta": 2
+    },
     "equipamento": "Insígnia militar, uniforme, armas básicas, moedas"
   },
   "caracteristicas": ["Disciplina", "Lealdade", "Conhecimento tático"]

@@ -33,6 +33,71 @@ const LIMITE_MAX = 5;
 function initAtributos() {
     carregarAtributos();
     renderizarAtributos();
+    // Atualiza contadores iniciais
+    atualizarContadores();
+
+    // Atualiza contadores quando o nível mudar
+    const nivelInput = document.getElementById('nivel');
+    if (nivelInput) {
+        nivelInput.addEventListener('input', () => {
+            atualizarContadores();
+        });
+        nivelInput.addEventListener('change', () => {
+            atualizarContadores();
+        });
+    }
+}
+
+/**
+ * Retorna a quantidade de pontos disponíveis pelo nível (percentual)
+ */
+function pontosPorNivel(nivelPercent) {
+    const n = parseInt(nivelPercent) || 0;
+    if (n >= 100) return 30;
+    if (n >= 95) return 28;
+    if (n >= 80) return 26;
+    if (n >= 65) return 24;
+    if (n >= 50) return 22;
+    if (n >= 35) return 20;
+    if (n >= 20) return 18;
+    if (n >= 5) return 16;
+    return 13;
+}
+
+/**
+ * Calcula a soma de todos os valores de atributos (teste + sorte)
+ */
+function somaAtributos() {
+    let s = 0;
+    ATRIBUTOS_TESTE.forEach(a => { s += parseInt(a.valor) || 0; });
+    ATRIBUTOS_SORTE.forEach(a => { s += parseInt(a.valor) || 0; });
+    return s;
+}
+
+/**
+ * Calcula quantos pontos restam no pool (pontosPorNivel - somaAtributos)
+ */
+function calcularRestante() {
+    const nivelInput = document.getElementById('nivel');
+    const nivel = nivelInput ? parseInt(nivelInput.value) || 0 : 0;
+    const total = pontosPorNivel(nivel);
+    return total - somaAtributos();
+}
+
+/**
+ * Atualiza os contadores visuais ao lado dos blocos de atributos (ficha)
+ */
+function atualizarContadores() {
+    const nivelInput = document.getElementById('nivel');
+    const nivel = nivelInput ? parseInt(nivelInput.value) || 0 : 0;
+    const total = pontosPorNivel(nivel);
+    const restante = calcularRestante();
+
+    const cntTeste = document.getElementById('contador-atributos-teste');
+    const cntSorte = document.getElementById('contador-atributos-sorte');
+    const texto = `Pontos restantes: ${restante} (Total: ${total})`;
+    if (cntTeste) cntTeste.textContent = texto;
+    if (cntSorte) cntSorte.textContent = texto;
 }
 
 /**
@@ -74,6 +139,10 @@ function salvarAtributos() {
     });
     
     localStorage.setItem('atributos_personagem', JSON.stringify(dados));
+    // Atualiza contadores visuais quando os atributos são salvos
+    if (typeof atualizarContadores === 'function') {
+        atualizarContadores();
+    }
 }
 
 /**
@@ -97,6 +166,8 @@ function renderizarAtributos() {
     
     // Adiciona event listeners
     adicionarEventListeners();
+    // Atualiza contadores após renderizar
+    atualizarContadores();
 }
 
 /**
@@ -137,16 +208,27 @@ function alterarAtributo(id, isTeste, delta) {
     if (!attr) return;
     
     const novoValor = attr.valor + delta;
-    
-    // Verifica limites
+
+    // Verifica limites individuais
     if (novoValor < LIMITE_MIN || novoValor > LIMITE_MAX) {
         showAtributoMessage(`Valor deve estar entre ${LIMITE_MIN} e ${LIMITE_MAX}`, 'error');
         return;
     }
-    
+
+    // Se estamos tentando aumentar, certifique-se de que haja pontos disponíveis
+    if (delta > 0) {
+        const restante = calcularRestante();
+        if (restante < delta) {
+            showAtributoMessage(`Pontos insuficientes. Restam ${restante}.`, 'error');
+            return;
+        }
+    }
+
     attr.valor = novoValor;
     salvarAtributos();
     renderizarAtributos();
+    // Atualiza contadores na UI
+    atualizarContadores();
 }
 
 /**
@@ -203,14 +285,18 @@ function rolarD20() {
  * Exibe o resultado da rolagem
  */
 function exibirResultado(nomeAtributo, valorAtributo, quantidadeDados, dadosRolados, resultado) {
-    const resultadoDiv = document.getElementById('resultado-rolagem');
-    const conteudoDiv = document.getElementById('resultado-conteudo');
+    const modal = document.getElementById('modal-resultado-atributo');
+    const titulo = document.getElementById('modal-resultado-titulo');
+    const corpo = document.getElementById('modal-resultado-corpo');
+    const btnFechar = document.getElementById('modal-resultado-fechar');
     
-    if (!resultadoDiv || !conteudoDiv) return;
-    
+    if (!modal || !titulo || !corpo || !btnFechar) {
+        console.error('Modal elements not found (exibirResultado - atributos.js):', { modal, titulo, corpo, btnFechar });
+        return;
+    }
+
     const valorFormatado = valorAtributo >= 0 ? `+${valorAtributo}` : `${valorAtributo}`;
     let descricao = '';
-    
     if (valorAtributo > 0) {
         descricao = `Rolou ${quantidadeDados} dado${quantidadeDados > 1 ? 's' : ''} D20 e pegou o <strong>maior</strong> valor.`;
     } else if (valorAtributo === 0) {
@@ -218,30 +304,33 @@ function exibirResultado(nomeAtributo, valorAtributo, quantidadeDados, dadosRola
     } else {
         descricao = `Rolou ${quantidadeDados} dados D20 e pegou o <strong>pior</strong> valor.`;
     }
-    
-    conteudoDiv.innerHTML = `
-        <div class="resultado-header">
-            <span class="resultado-atributo">${nomeAtributo}</span>
-            <span class="resultado-valor-atributo">${valorFormatado}</span>
-        </div>
-        <p class="resultado-descricao">${descricao}</p>
-        <div class="resultado-dados">
-            <div class="dados-rolados">
-                <strong>Dados rolados:</strong>
-                <div class="dados-lista">
-                    ${dadosRolados.map(dado => `
-                        <span class="dado-valor ${dado === resultado ? 'dado-resultado' : ''}">${dado}</span>
-                    `).join('')}
-                </div>
+
+    titulo.textContent = `${nomeAtributo} — Resultado`;
+    corpo.innerHTML = `
+        <p style="margin:6px 0;">Valor do atributo: <strong>${valorFormatado}</strong></p>
+        <p class="resultado-descricao" style="margin:6px 0;">${descricao}</p>
+        <div style="margin-top:8px;">
+            <strong>Dados rolados:</strong>
+            <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+                ${dadosRolados.map(dado => `
+                    <span style="padding:6px 8px; border-radius:6px; background:#222; color:#fff; ${dado===resultado? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                `).join('')}
             </div>
         </div>
-        <div class="resultado-final">
-            <strong>Resultado Final: <span class="resultado-numero">${resultado}</span></strong>
+        <div style="margin-top:12px; font-size:18px;">
+            <strong>Resultado Final: <span style="color:#ffd54f">${resultado}</span></strong>
         </div>
     `;
+
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
     
-    resultadoDiv.style.display = 'block';
-    resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // attach close handler
+    btnFechar.onclick = () => { 
+        modal.style.display = 'none'; 
+        btnFechar.onclick = null; 
+    };
 }
 
 /**
@@ -262,6 +351,10 @@ window.Atributos = {
     testar: testarAtributo,
     alterar: alterarAtributo,
     ATRIBUTOS_TESTE: ATRIBUTOS_TESTE,
-    ATRIBUTOS_SORTE: ATRIBUTOS_SORTE
+    ATRIBUTOS_SORTE: ATRIBUTOS_SORTE,
+    pontosPorNivel: pontosPorNivel,
+    somaAtributos: somaAtributos,
+    calcularRestante: calcularRestante,
+    atualizarContadores: atualizarContadores
 };
 

@@ -3,10 +3,7 @@
   "nome": "Elfo",
   "descricao": "Elegante e longevo, com afinidade natural com a magia.",
   "bonus": {
-    "atributos": "Destreza +2, Inteligência +1",
     "traduzido": {
-      "destreza": 2,
-      "inteligencia": 1,
       "pericias": {
         "religiao": 3,
         "conhecimento_arcano": 3

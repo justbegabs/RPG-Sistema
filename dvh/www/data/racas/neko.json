@@ -3,10 +3,7 @@
   "nome": "Neko",
   "descricao": "Humanoide felino com agilidade e reflexos aprimorados.",
   "bonus": {
-    "atributos": "Destreza +2, Carisma +1",
     "traduzido": {
-      "destreza": 2,
-      "carisma": 1,
       "pericias": {
         "reflexos": 3,
         "furtividade": 3

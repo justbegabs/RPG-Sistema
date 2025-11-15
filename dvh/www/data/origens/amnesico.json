@@ -3,7 +3,7 @@
   "nome": "Amnésico",
   "descricao": "Perdeu a memória, sem lembrar de seu passado ou identidade.",
   "bonus": {
-    "habilidades": ["Investigação", "Intuição"],
+    "escolher_pericias": 2,
     "equipamento": "Objetos misteriosos, roupas desconhecidas, moedas"
   },
   "caracteristicas": ["Mistério", "Adaptabilidade", "Busca por identidade"]

@@ -3,14 +3,7 @@
   "nome": "Humano",
   "descricao": "Adaptável e versátil, os humanos são a raça mais comum.",
   "bonus": {
-    "atributos": "Todos os atributos +1",
     "traduzido": {
-      "forca": 1,
-      "destreza": 1,
-      "constituicao": 1,
-      "inteligencia": 1,
-      "sabedoria": 1,
-      "carisma": 1,
       "pericias": {
         "furtividade": 3,
         "trapaca": 3

@@ -3,7 +3,10 @@
   "nome": "Profeta",
   "descricao": "Recebe visões do futuro, conhecendo o destino através de profecias.",
   "bonus": {
-    "habilidades": ["Intuição", "Religião"],
+      "pericias": {
+        "ilusao": 2,
+        "fortitude": 2
+      },
     "equipamento": "Símbolos proféticos, objetos místicos, moedas"
   },
   "caracteristicas": ["Premonições", "Sabedoria divina", "Conexão espiritual"]

@@ -3,10 +3,7 @@
   "nome": "Sátiro",
   "descricao": "Criatura meio humano meio bode, conhecida por festividades e música.",
   "bonus": {
-    "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
-      "carisma": 2,
-      "destreza": 1,
       "pericias": {
         "artes": 3,
         "religiao": 3

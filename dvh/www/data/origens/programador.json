@@ -3,7 +3,10 @@
   "nome": "Programador",
   "descricao": "Desenvolvedor de software, conhecendo linguagens de programação e sistemas.",
   "bonus": {
-    "habilidades": ["Tecnologia", "Investigação"],
+    "pericias": {
+      "tecnologia": 2,
+      "atualidades": 2
+    },
     "equipamento": "Laptop, ferramentas de programação, moedas"
   },
   "caracteristicas": ["Lógica", "Paciência", "Resolução de problemas"]

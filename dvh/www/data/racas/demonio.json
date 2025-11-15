@@ -3,10 +3,7 @@
   "nome": "Demônio",
   "descricao": "Ser infernal com poderes das trevas e resistência ao fogo.",
   "bonus": {
-    "atributos": "Carisma +2, Constituição +1",
     "traduzido": {
-      "carisma": 2,
-      "constituicao": 1,
       "pericias": {
         "necromancia": 5,
         "demonologia": 5

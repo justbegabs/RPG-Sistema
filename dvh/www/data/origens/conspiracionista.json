@@ -3,7 +3,10 @@
   "nome": "Conspiracionista",
   "descricao": "Acredita em teorias da conspiração, sempre procurando a verdade oculta.",
   "bonus": {
-    "habilidades": ["Investigação", "Percepção"],
+    "pericias": {
+      "percepcao": 2,
+      "raciocinio": 2
+    },
     "equipamento": "Documentos secretos, equipamentos de espionagem, moedas"
   },
   "caracteristicas": ["Ceticismo", "Paranoia útil", "Conhecimento oculto"]

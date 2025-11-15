@@ -3,10 +3,7 @@
   "nome": "Anjo",
   "descricao": "Ser celestial com poderes da luz e proteção divina.",
   "bonus": {
-    "atributos": "Sabedoria +2, Carisma +1",
     "traduzido": {
-      "sabedoria": 2,
-      "carisma": 1,
       "pericias": {
         "exorcismo": 3,
         "religiao": 3

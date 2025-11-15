@@ -3,7 +3,10 @@
   "nome": "Vingativo",
   "descricao": "Motivado por vingança, busca justiça através da retaliação.",
   "bonus": {
-    "habilidades": ["Intimidação", "Investigação"],
+    "pericias": {
+      "fortitude": 2,
+      "vontade": 2
+    },
     "equipamento": "Lembranças do passado, armas, moedas"
   },
   "caracteristicas": ["Determinação", "Foco", "Justiça pessoal"]

@@ -3,7 +3,10 @@
   "nome": "Artista",
   "descricao": "Dedicou a vida à arte, expressando emoções através de diferentes formas criativas.",
   "bonus": {
-    "habilidades": ["Persuasão", "Performance"],
+    "pericias": {
+      "artes": 2,
+      "cozinhar": 2
+    },
     "equipamento": "Ferramentas artísticas, obras de arte, moedas"
   },
   "caracteristicas": ["Criatividade", "Expressão emocional", "Reconhecimento social"]

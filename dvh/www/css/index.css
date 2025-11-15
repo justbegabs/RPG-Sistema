@@ -12,6 +12,7 @@ body {
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
     -webkit-user-select: none;
+    user-select: none;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 16px;
@@ -1210,6 +1211,88 @@ body:has(#page-home.active) .main-content {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.pericia-detalhes {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pericia-campo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 50px;
+}
+
+.pericia-campo.total {
+    min-width: 60px;
+    font-weight: bold;
+}
+
+.pericia-label {
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.pericia-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.pericia-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.pericia-input.positivo {
+    color: #27ae60;
+    border-color: #27ae60;
+    background-color: #f0fdf4;
+}
+
+.pericia-input.negativo {
+    color: #e74c3c;
+    border-color: #e74c3c;
+    background-color: #fef2f2;
+}
+
+.pericia-input.neutro {
+    color: #555;
+    border-color: #ddd;
+}
+
+.pericia-input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.btn-rolar {
+    padding: 4px 8px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.2s ease;
+}
+
+.btn-rolar:hover {
+    background: #764ba2;
+    transform: scale(1.1);
 }
 
 .resultado-info {

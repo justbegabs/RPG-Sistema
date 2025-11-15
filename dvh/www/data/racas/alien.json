@@ -3,10 +3,7 @@
   "nome": "Alien",
   "descricao": "Ser de outro planeta com tecnologia avançada e fisiologia única.",
   "bonus": {
-    "atributos": "Inteligência +2, Constituição +1",
     "traduzido": {
-      "inteligencia": 2,
-      "constituicao": 1,
       "pericias": {
         "atualidades": 3,
         "trapaca": 3

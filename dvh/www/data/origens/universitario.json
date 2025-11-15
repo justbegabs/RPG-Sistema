@@ -3,7 +3,10 @@
   "nome": "Universitário",
   "descricao": "Estudou em universidade, adquirindo conhecimento acadêmico especializado.",
   "bonus": {
-    "habilidades": ["Investigação", "História"],
+    "pericias": {
+      "raciocinio": 2,
+      "percepcao": 2
+    },
     "equipamento": "Livros, material de estudo, diploma, moedas"
   },
   "caracteristicas": ["Conhecimento acadêmico", "Pensamento crítico", "Rede de contatos"]

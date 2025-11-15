@@ -3,10 +3,7 @@
   "nome": "Anão",
   "descricao": "Resistente e robusto, excelente em combate e mineração.",
   "bonus": {
-    "atributos": "Constituição +2, Força +1",
     "traduzido": {
-      "constituicao": 2,
-      "forca": 1,
       "pericias": {
         "espadas": 3,
         "escudos": 3

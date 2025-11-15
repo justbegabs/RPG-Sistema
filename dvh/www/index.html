@@ -118,11 +118,15 @@
                                         <option value="">Carregando...</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group origem-group">
                                     <label for="origem">Origem *</label>
-                                    <select id="origem" name="origem" required>
-                                        <option value="">Carregando...</option>
-                                    </select>
+                                    <div class="origem-controls">
+                                        <select id="origem" name="origem" required>
+                                            <option value="">Carregando...</option>
+                                        </select>
+                                        <button type="button" id="btn-escolher-origem-pericias" class="btn btn-secondary" style="margin-left:8px;" disabled>Escolher perícias</button>
+                                    </div>
+                                    <div id="origem-escolha-hint" class="form-hint" style="margin-top:6px;color:#666;font-size:0.9em;"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="nivel">Nível (%) *</label>
@@ -184,7 +188,7 @@
                             </div>
 
                             <div class="form-section">
-                                <h2>🎲 Atributos de Teste</h2>
+                                <h2>🎲 Atributos de Teste <span id="contador-atributos-teste" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
                                 <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
                                 <div class="atributos-grid-ficha" id="atributos-teste-ficha">
                                     <!-- Será preenchido por JavaScript -->
@@ -192,7 +196,7 @@
                             </div>
 
                             <div class="form-section">
-                                <h2>✨ Atributos de Sorte</h2>
+                                <h2>✨ Atributos de Sorte <span id="contador-atributos-sorte" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
                                 <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
                                 <div class="atributos-grid-ficha" id="atributos-sorte-ficha">
                                     <!-- Será preenchido por JavaScript -->
@@ -364,6 +368,38 @@
                         <div id="resultado-rolagem-pericias" class="resultado-rolagem" style="display: none;">
                             <h4>📊 Resultado do Teste</h4>
                             <div id="resultado-conteudo-pericias"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal: Escolher Perícias -->
+                <div id="modal-escolher-pericias" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:9999;">
+                    <div class="modal-content" style="background:#fff; padding:16px; width:90%; max-width:700px; border-radius:8px; max-height:80%; overflow:auto;">
+                        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3 id="modal-escolher-title">Escolher Perícias</h3>
+                            <button type="button" id="modal-escolher-close" class="btn">✖</button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="modal-escolher-desc">Escolha as perícias desejadas.</p>
+                            <input type="search" id="modal-escolher-search" placeholder="Buscar perícias por nome..." style="width:100%; padding:8px; margin:8px 0; box-sizing:border-box;">
+                            <div id="modal-escolher-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px;"></div>
+                        </div>
+                        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+                            <button type="button" id="modal-escolher-cancel" class="btn btn-secondary">Cancelar</button>
+                            <button type="button" id="modal-escolher-confirm" class="btn btn-primary">Confirmar escolha</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal: Resultado de Atributo (Overlay) -->
+                <div id="modal-resultado-atributo" class="modal" style="display:none; position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; z-index:10000;">
+                    <div class="modal-content" style="background:#111; color:#fff; padding:18px; width:90%; max-width:520px; border-radius:10px; text-align:center;">
+                        <div style="font-size:48px; margin-bottom:8px;">🎲</div>
+                        <h3 id="modal-resultado-titulo" style="margin:0 0 8px 0;"></h3>
+                        <div id="modal-resultado-corpo" style="font-size:16px; line-height:1.4;">
+                        </div>
+                        <div style="margin-top:12px;">
+                            <button id="modal-resultado-fechar" class="btn btn-primary">Fechar</button>
                         </div>
                     </div>
                 </div>

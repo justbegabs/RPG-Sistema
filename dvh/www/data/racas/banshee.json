@@ -3,10 +3,7 @@
   "nome": "Banshee",
   "descricao": "Espírito feminino com grito sobrenatural que anuncia a morte.",
   "bonus": {
-    "atributos": "Sabedoria +2, Carisma +1",
     "traduzido": {
-      "sabedoria": 2,
-      "carisma": 1,
       "pericias": {
         "demonologia": 3,
         "necromancia": 3

@@ -3,10 +3,7 @@
   "nome": "Lobisomem",
   "descricao": "Ser que se transforma em lobo, com força e ferocidade aumentadas.",
   "bonus": {
-    "atributos": "Força +2, Constituição +1",
     "traduzido": {
-      "forca": 2,
-      "constituicao": 1,
       "pericias": {
         "percepcao": 3,
         "fortitude": 3

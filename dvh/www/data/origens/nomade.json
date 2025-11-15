@@ -3,7 +3,10 @@
   "nome": "Nômade",
   "descricao": "Viveu viajando, conhecendo diferentes culturas e terras distantes.",
   "bonus": {
-    "habilidades": ["Sobrevivência", "História (culturas)"],
+      "pericias": {
+        "sobrevivencia": 2,
+        "historia": 2
+      },
     "equipamento": "Equipamento de viagem, mapa, instrumento musical"
   },
   "caracteristicas": ["Conhecimento de culturas", "Adaptabilidade", "Experiência de viagem"]

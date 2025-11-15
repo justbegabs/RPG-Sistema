@@ -3,7 +3,10 @@
   "nome": "Eremita",
   "descricao": "Viveu isolado, buscando conhecimento espiritual e sabedoria interior.",
   "bonus": {
-    "habilidades": ["Religião", "Medicina"],
+      "pericias": {
+        "herbologia": 2,
+        "sobrevivencia": 2
+      },
     "equipamento": "Livro sagrado, kit de ervas, símbolo religioso, moedas"
   },
   "caracteristicas": ["Sabedoria espiritual", "Conhecimento místico", "Paciência"]

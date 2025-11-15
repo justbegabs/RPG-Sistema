@@ -3,10 +3,7 @@
   "nome": "Sereia",
   "descricao": "Ser aquático com cauda de peixe e voz encantadora.",
   "bonus": {
-    "atributos": "Carisma +2, Constituição +1",
     "traduzido": {
-      "carisma": 2,
-      "constituicao": 1,
       "pericias": {
         "labia": 3,
         "seducao": 3

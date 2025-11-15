@@ -3,10 +3,7 @@
   "nome": "Ninfa",
   "descricao": "Espírito da natureza com beleza etérea e poderes naturais.",
   "bonus": {
-    "atributos": "Carisma +2, Sabedoria +1",
     "traduzido": {
-      "carisma": 2,
-      "sabedoria": 1,
       "pericias": {
         "herbologia": 3,
         "ilusao": 3

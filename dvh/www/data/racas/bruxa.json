@@ -3,10 +3,7 @@
   "nome": "Bruxa",
   "descricao": "Usuária de magia que canaliza poder através de rituais e pactos.",
   "bonus": {
-    "atributos": "Inteligência +2, Sabedoria +1",
     "traduzido": {
-      "inteligencia": 2,
-      "sabedoria": 1,
       "pericias": {
         "conhecimento_arcano": 3,
         "encantamento": 3

@@ -3,7 +3,10 @@
   "nome": "Ginasta",
   "descricao": "Treinou desde cedo em acrobacias e movimentos corporais avançados.",
   "bonus": {
-    "habilidades": ["Acrobacia", "Atletismo"],
+      "pericias": {
+        "atletismo": 2,
+        "acrobacia": 2
+      },
     "equipamento": "Roupas de treino, equipamentos de ginástica, moedas"
   },
   "caracteristicas": ["Agilidade", "Flexibilidade", "Disciplina física"]

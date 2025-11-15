@@ -3,10 +3,7 @@
   "nome": "Metamorfo",
   "descricao": "Ser que pode assumir qualquer forma física.",
   "bonus": {
-    "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
-      "carisma": 2,
-      "destreza": 1,
       "pericias": {
         "enganacao": 3,
         "ilusao": 3

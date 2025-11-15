@@ -100,6 +100,19 @@ function popularSelects() {
         });
         // Adiciona event listener para aplicar bônus
         selectOrigem.addEventListener('change', () => aplicarBonusSelecao('origem', selectOrigem.value));
+        // Botão para abrir modal de escolha de perícias (quando aplicável)
+        const btnEscolher = document.getElementById('btn-escolher-origem-pericias');
+        if (btnEscolher) {
+            btnEscolher.addEventListener('click', () => {
+                const id = selectOrigem.value;
+                if (!id) return;
+                const item = DadosLoader.obterItemPorId('origens', id);
+                const escolherCount = item?.bonus?.escolher_pericias || 0;
+                if (escolherCount && escolherCount > 0) {
+                    abrirModalEscolherPericias(id, escolherCount);
+                }
+            });
+        }
     }
 
     // Popula atributos na ficha
@@ -117,10 +130,86 @@ function popularSelects() {
     // Configura sincronização do nível (slider + input)
     configurarNivelSlider();
     
+    // Inicializa estrutura de perícias
+    inicializarPericias();
+    
     // Aplica bônus se já houver seleções (após um pequeno delay para garantir que os dados estão carregados)
     setTimeout(() => {
         aplicarBonusSelecoesExistentes();
     }, 100);
+}
+
+/**
+ * Inicializa a estrutura de perícias no localStorage
+ */
+function inicializarPericias() {
+    const periciasSalvas = localStorage.getItem('pericias_estrutura');
+    
+    // Se já existe, não precisa fazer nada
+    if (periciasSalvas) {
+        return;
+    }
+    // Se existe armazenamento legado em pericias_personagem, migra os dados
+    const legado = localStorage.getItem('pericias_personagem');
+    if (legado) {
+        try {
+            const dadosLegado = JSON.parse(legado);
+            const pericias = {};
+            // Converte cada entrada legada em um objeto da nova estrutura
+            Object.keys(dadosLegado).forEach(periciaId => {
+                const valor = parseInt(dadosLegado[periciaId]) || 0;
+                pericias[periciaId] = {
+                    d6: 0,
+                    // Coloca o valor legado em bonus_personagem para preservar pontos do jogador
+                    bonus_personagem: Math.max(-5, Math.min(5, valor)),
+                    bonus_origem: 0,
+                    bonus_classe: 0,
+                    bonus_raca: 0
+                };
+            });
+
+            // Preenche perícias faltantes com zeros (garante consistência)
+            if (window.Pericias) {
+                Object.keys(window.Pericias.PERICIAS).forEach(atributoKey => {
+                    const listaPericias = window.Pericias.PERICIAS[atributoKey];
+                    listaPericias.forEach(pericia => {
+                        if (!pericias[pericia.id]) {
+                            pericias[pericia.id] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+                        }
+                    });
+                });
+            }
+
+            localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+
+            // Remove chave legada
+            localStorage.removeItem('pericias_personagem');
+            console.info('Migração: pericias_personagem -> pericias_estrutura concluída.');
+            return;
+        } catch (e) {
+            console.error('Falha ao migrar pericias_personagem:', e);
+            // Se falhar, continua e cria estrutura vazia abaixo
+        }
+    }
+
+    // Cria estrutura inicial de perícias
+    const pericias = {};
+    if (window.Pericias) {
+        Object.keys(window.Pericias.PERICIAS).forEach(atributoKey => {
+            const listaPericias = window.Pericias.PERICIAS[atributoKey];
+            listaPericias.forEach(pericia => {
+                pericias[pericia.id] = {
+                    d6: 0,
+                    bonus_personagem: 0,
+                    bonus_origem: 0,
+                    bonus_classe: 0,
+                    bonus_raca: 0
+                };
+            });
+        });
+    }
+
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
 }
 
 /**
@@ -141,6 +230,12 @@ function aplicarBonusSelecoesExistentes() {
     
     if (selectOrigem && selectOrigem.value) {
         aplicarBonusSelecao('origem', selectOrigem.value);
+        // Se houver escolhas salvas para essa origem, aplique-as
+        const origemId = selectOrigem.value;
+        const escolhas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+        if (escolhas[origemId]) {
+            aplicarPericiasEscolhidasParaOrigem(origemId, escolhas[origemId]);
+        }
     }
 }
 
@@ -168,6 +263,10 @@ function popularAtributosFicha() {
     if (containerSorte) {
         containerSorte.innerHTML = criarAtributosFichaHTML('sorte', valoresAtributos);
         adicionarEventListenersFicha('sorte');
+    }
+    // Atualiza os contadores compartilhados
+    if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
+        window.Atributos.atualizarContadores();
     }
 }
 
@@ -223,11 +322,25 @@ function alterarAtributoFicha(id, tipo, delta) {
     if (novoValor < -5 || novoValor > 5) {
         return;
     }
-    
+
+    // If increasing, check shared pool availability
+    if (delta > 0 && window.Atributos && typeof window.Atributos.calcularRestante === 'function') {
+        const restante = window.Atributos.calcularRestante();
+        if (restante < delta) {
+            showMessage(`Pontos insuficientes. Restam ${restante}.`, 'error');
+            return;
+        }
+    }
+
     input.value = novoValor;
     salvarAtributoFicha(id, novoValor);
     atualizarVisualAtributo(input, novoValor);
-    
+
+    // Atualiza contadores compartilhados
+    if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
+        window.Atributos.atualizarContadores();
+    }
+
     // Recalcula estatísticas quando atributos mudam
     calcularEstatisticas();
 }
@@ -238,7 +351,29 @@ function alterarAtributoFicha(id, tipo, delta) {
 function salvarAtributoFicha(id, valor) {
     const saved = localStorage.getItem('atributos_personagem');
     const dados = saved ? JSON.parse(saved) : {};
-    dados[id] = parseInt(valor) || 0;
+    const novo = parseInt(valor) || 0;
+
+    // Enforce shared pool: compute current total and check if this increase is allowed
+    if (window.Atributos && typeof window.Atributos.calcularRestante === 'function') {
+        // obtain current value for this attr
+        const listaTeste = window.Atributos.ATRIBUTOS_TESTE || [];
+        const listaSorte = window.Atributos.ATRIBUTOS_SORTE || [];
+        const attr = [...listaTeste, ...listaSorte].find(a => a.id === id);
+        const atual = attr ? (parseInt(attr.valor) || 0) : (parseInt(dados[id]) || 0);
+        const delta = novo - atual;
+        if (delta > 0) {
+            const restante = window.Atributos.calcularRestante();
+            if (restante < delta) {
+                showMessage(`Pontos insuficientes. Restam ${restante}.`, 'error');
+                // revert UI value to previous
+                const input = document.getElementById(`ficha-${id}`);
+                if (input) input.value = atual;
+                return;
+            }
+        }
+    }
+
+    dados[id] = novo;
     localStorage.setItem('atributos_personagem', JSON.stringify(dados));
     
     // Atualiza o sistema de atributos se disponível
@@ -253,6 +388,10 @@ function salvarAtributoFicha(id, valor) {
     
     // Recalcula estatísticas quando atributos mudam
     calcularEstatisticas();
+    // Atualiza contadores compartilhados
+    if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
+        window.Atributos.atualizarContadores();
+    }
 }
 
 /**
@@ -314,20 +453,24 @@ function testarAtributoFicha(id, tipo) {
  * Exibe resultado na ficha
  */
 function exibirResultadoFicha(id, valorAtributo, quantidadeDados, dadosRolados, resultado) {
-    const resultadoDiv = document.getElementById('resultado-rolagem-ficha');
-    const conteudoDiv = document.getElementById('resultado-conteudo-ficha');
+    const modal = document.getElementById('modal-resultado-atributo');
+    const titulo = document.getElementById('modal-resultado-titulo');
+    const corpo = document.getElementById('modal-resultado-corpo');
+    const btnFechar = document.getElementById('modal-resultado-fechar');
     
-    if (!resultadoDiv || !conteudoDiv) return;
-    
+    if (!modal || !titulo || !corpo || !btnFechar) {
+        console.error('Modal elements not found (exibirResultadoFicha):', { modal, titulo, corpo, btnFechar });
+        return;
+    }
+
     // Busca nome do atributo
     const listaTeste = window.Atributos?.ATRIBUTOS_TESTE || [];
     const listaSorte = window.Atributos?.ATRIBUTOS_SORTE || [];
     const attr = [...listaTeste, ...listaSorte].find(a => a.id === id);
     const nomeAtributo = attr ? attr.nome : id;
-    
+
     const valorFormatado = valorAtributo >= 0 ? `+${valorAtributo}` : `${valorAtributo}`;
     let descricao = '';
-    
     if (valorAtributo > 0) {
         descricao = `Rolou ${quantidadeDados} dado${quantidadeDados > 1 ? 's' : ''} D20 e pegou o <strong>maior</strong> valor.`;
     } else if (valorAtributo === 0) {
@@ -335,30 +478,32 @@ function exibirResultadoFicha(id, valorAtributo, quantidadeDados, dadosRolados, 
     } else {
         descricao = `Rolou ${quantidadeDados} dados D20 e pegou o <strong>pior</strong> valor.`;
     }
-    
-    conteudoDiv.innerHTML = `
-        <div class="resultado-header">
-            <span class="resultado-atributo">${nomeAtributo}</span>
-            <span class="resultado-valor-atributo">${valorFormatado}</span>
-        </div>
-        <p class="resultado-descricao">${descricao}</p>
-        <div class="resultado-dados">
-            <div class="dados-rolados">
-                <strong>Dados rolados:</strong>
-                <div class="dados-lista">
-                    ${dadosRolados.map(dado => `
-                        <span class="dado-valor ${dado === resultado ? 'dado-resultado' : ''}">${dado}</span>
-                    `).join('')}
-                </div>
+
+    titulo.textContent = `${nomeAtributo} — Resultado`;
+    corpo.innerHTML = `
+        <p style="margin:6px 0;">Valor do atributo: <strong>${valorFormatado}</strong></p>
+        <p class="resultado-descricao" style="margin:6px 0;">${descricao}</p>
+        <div style="margin-top:8px;">
+            <strong>Dados rolados:</strong>
+            <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+                ${dadosRolados.map(dado => `
+                    <span style="padding:6px 8px; border-radius:6px; background:#eee; ${dado===resultado? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                `).join('')}
             </div>
         </div>
-        <div class="resultado-final">
-            <strong>Resultado Final: <span class="resultado-numero">${resultado}</span></strong>
+        <div style="margin-top:12px; font-size:18px;">
+            <strong>Resultado Final: <span style="color:#d32;">${resultado}</span></strong>
         </div>
     `;
+
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
     
-    resultadoDiv.style.display = 'block';
-    resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    btnFechar.onclick = () => { 
+        modal.style.display = 'none'; 
+        btnFechar.onclick = null; 
+    };
 }
 
 /**
@@ -368,15 +513,14 @@ function popularPericiasFicha() {
     const container = document.getElementById('pericias-ficha');
     if (!container || !window.Pericias) return;
     
-    const saved = localStorage.getItem('pericias_personagem');
-    const valores = saved ? JSON.parse(saved) : {};
+    const pericias = obterTodasPericias();
     
     let html = '';
     
     // Itera sobre cada atributo
     Object.keys(window.Pericias.PERICIAS).forEach(atributoKey => {
         const nomeAtributo = window.Pericias.NOMES_ATRIBUTOS[atributoKey];
-        const pericias = window.Pericias.PERICIAS[atributoKey];
+        const listaPericias = window.Pericias.PERICIAS[atributoKey];
         
         html += `
             <div class="pericias-grupo-ficha">
@@ -385,7 +529,7 @@ function popularPericiasFicha() {
                     ${nomeAtributo}
                 </h4>
                 <div class="pericias-grid-ficha" id="pericias-grid-${atributoKey}" style="display: none;">
-                    ${pericias.map(pericia => criarPericiaFichaHTML(pericia, atributoKey, valores)).join('')}
+                    ${listaPericias.map(pericia => criarPericiaFichaHTML(pericia, atributoKey, pericias)).join('')}
                 </div>
             </div>
         `;
@@ -395,28 +539,68 @@ function popularPericiasFicha() {
 }
 
 /**
- * Cria HTML de uma perícia para a ficha
+ * Cria HTML de uma perícia para a ficha com d6 e bônus separados
  */
-function criarPericiaFichaHTML(pericia, atributoKey, valores) {
-    const valor = valores[pericia.id] !== undefined ? valores[pericia.id] : 0;
-    const corClasse = valor > 0 ? 'positivo' : valor < 0 ? 'negativo' : 'neutro';
+function criarPericiaFichaHTML(pericia, atributoKey, pericias) {
+    const periciaData = pericias[pericia.id] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    const total = periciaData.d6 + periciaData.bonus_personagem + periciaData.bonus_origem + periciaData.bonus_classe + periciaData.bonus_raca;
+    const corClasse = total > 0 ? 'positivo' : total < 0 ? 'negativo' : 'neutro';
     
     return `
         <div class="pericia-ficha-item">
-            <label class="pericia-ficha-label" onclick="testarPericiaFicha('${pericia.id}', '${atributoKey}')" title="Clique para fazer um teste">
+            <label class="pericia-ficha-label" title="${pericia.nome}" onclick="testarPericiaFicha('${pericia.id}', '${atributoKey}')">
                 ${pericia.nome}
             </label>
-            <div class="pericia-ficha-controles">
-                <button type="button" class="btn-controle-ficha" onclick="alterarPericiaFicha('${pericia.id}', -1)">-</button>
-                <input type="number" 
-                       id="ficha-pericia-${pericia.id}" 
-                       name="pericia_${pericia.id}" 
-                       class="atributo-ficha-input ${corClasse}"
-                       value="${valor}" 
-                       min="-5" 
-                       max="5" 
-                       onchange="salvarPericiaFicha('${pericia.id}', this.value)">
-                <button type="button" class="btn-controle-ficha" onclick="alterarPericiaFicha('${pericia.id}', 1)">+</button>
+            <div class="pericia-detalhes">
+                <div class="pericia-campo">
+                    <span class="pericia-label">D6</span>
+                    <input type="number" 
+                           id="pericia-d6-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaData.d6}" 
+                           min="0" 
+                           max="6" 
+                           onchange="rolarD6Pericia('${pericia.id}')">
+                    <button type="button" class="btn-rolar" onclick="rolarD6Pericia('${pericia.id}')">🎲</button>
+                </div>
+                <div class="pericia-campo">
+                    <span class="pericia-label">Orig</span>
+                        <input type="number" 
+                               id="pericia-origem-${pericia.id}" 
+                               class="pericia-input"
+                               value="${periciaData.bonus_origem}" 
+                               min="-5" 
+                               max="5" 
+                               readonly>
+                </div>
+                <div class="pericia-campo">
+                    <span class="pericia-label">Classe</span>
+                    <input type="number" 
+                           id="pericia-classe-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaData.bonus_classe}" 
+                           min="-5" 
+                           max="5" 
+                           readonly>
+                </div>
+                <div class="pericia-campo">
+                    <span class="pericia-label">Raça</span>
+                    <input type="number" 
+                           id="pericia-raca-${pericia.id}" 
+                           class="pericia-input"
+                           value="${periciaData.bonus_raca}" 
+                           min="-5" 
+                           max="5" 
+                           readonly>
+                </div>
+                <div class="pericia-campo total">
+                    <span class="pericia-label">Total</span>
+                    <input type="number" 
+                           id="pericia-total-${pericia.id}" 
+                           class="pericia-input ${corClasse}"
+                           value="${total}" 
+                           readonly>
+                </div>
             </div>
         </div>
     `;
@@ -444,14 +628,73 @@ function alterarPericiaFicha(id, delta) {
 }
 
 /**
+ * Rola um d6 para a perícia
+ */
+function rolarD6Pericia(periciaId) {
+    // Gera um número aleatório de 1 a 6
+    const resultado = Math.floor(Math.random() * 6) + 1;
+    
+    // Atualiza o campo d6
+    const campoD6 = document.getElementById(`pericia-d6-${periciaId}`);
+    if (campoD6) {
+        campoD6.value = resultado;
+    }
+    
+    // Obtém os dados da perícia
+    const pericias = obterTodasPericias();
+    const periciaData = pericias[periciaId] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    
+    // Atualiza a perícia com o novo d6
+    periciaData.d6 = resultado;
+    pericias[periciaId] = periciaData;
+    
+    // Salva no localStorage
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+    
+    // Atualiza o total
+    atualizarTotalPericia(periciaId);
+}
+
+/**
+ * Atualiza o total de uma perícia
+ */
+function atualizarTotalPericia(periciaId) {
+    const pericias = obterTodasPericias();
+    const periciaData = pericias[periciaId] || {};
+
+    // Safely coerce values to integers, fallback to 0 to avoid NaN or missing fields
+    const d6 = parseInt(periciaData.d6) || 0;
+    const bp = parseInt(periciaData.bonus_personagem) || 0;
+    const bo = parseInt(periciaData.bonus_origem) || 0;
+    const bc = parseInt(periciaData.bonus_classe) || 0;
+    const br = parseInt(periciaData.bonus_raca) || 0;
+
+    const total = d6 + bp + bo + bc + br;
+    
+    const campoTotal = document.getElementById(`pericia-total-${periciaId}`);
+    if (campoTotal) {
+        campoTotal.value = total;
+        // Atualiza cor
+        campoTotal.className = total > 0 ? 'pericia-input positivo' : total < 0 ? 'pericia-input negativo' : 'pericia-input neutro';
+    }
+}
+
+/**
  * Salva perícia individual
  */
 function salvarPericiaFicha(id, valor) {
-    const saved = localStorage.getItem('pericias_personagem');
+    // Salva no novo formato pericias_estrutura (mapeando o valor recebido para bonus_origem)
+    const saved = localStorage.getItem('pericias_estrutura');
     const dados = saved ? JSON.parse(saved) : {};
-    dados[id] = parseInt(valor) || 0;
-    localStorage.setItem('pericias_personagem', JSON.stringify(dados));
-    
+    if (!dados[id]) {
+        dados[id] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    }
+    dados[id].bonus_personagem = Math.max(-5, Math.min(5, parseInt(valor) || 0));
+    localStorage.setItem('pericias_estrutura', JSON.stringify(dados));
+
+    // Atualiza total na interface
+    atualizarTotalPericia(id);
+
     // Recalcula estatísticas quando perícias mudam
     calcularEstatisticas();
 }
@@ -483,24 +726,70 @@ function calcularEstatisticas() {
     
     // Calcula Alma Total: Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 + bônus de raça
     let bonusAlma = 0;
+    let almaZerada = false; // Flag para saber se alma foi zerada pela raça
+    
     if (bonusAplicados.raca && bonusAplicados.raca.alma !== undefined) {
         bonusAlma = bonusAplicados.raca.alma;
+        // Apenas a raça 'demonio' deve zerar completamente a alma quando definida como 0
+        if (bonusAplicados.raca.alma === 0 && selecionadosIds.raca === 'demonio') {
+            almaZerada = true;
+        }
     }
-    const almaTotal = (atributos.magia || 0) * 5 + (atributos.resiliencia || 0) * 3 + (atributos.intelecto || 0) * 2 + 15 + bonusAlma;
-    atualizarCampoEstatisticaComAjuste('alma-total', 'alma-atual', Math.max(0, almaTotal), primeiraVezCalculandoEstatisticas);
+    
+    let almaTotal;
+    if (almaZerada) {
+        almaTotal = 0; // Se alma for zerada pela raça, fica 0
+    } else {
+        almaTotal = (atributos.magia || 0) * 5 + (atributos.resiliencia || 0) * 3 + (atributos.intelecto || 0) * 2 + 15 + bonusAlma;
+    }
+    
+    const campoAlmaTotal = document.getElementById('alma-total');
+    const campoAlmaAtual = document.getElementById('alma-atual');
+    if (campoAlmaTotal) {
+        campoAlmaTotal.value = Math.max(0, almaTotal);
+    }
+    if (campoAlmaAtual) {
+        campoAlmaAtual.value = Math.max(0, almaTotal);
+    }
     
     // Calcula Defesa: Constituição + 10
     const defesa = (atributos.constituicao || 0) + 10;
     atualizarCampoEstatistica('defesa', Math.max(0, defesa));
     
     // Calcula Esquiva: Defesa + Perícia Reflexos + Destreza
-    const reflexos = pericias.reflexos || 0;
+    // Obtém valor numérico da perícia 'reflexos' (pode vir do helper em pericias.js ou do storage)
+    let reflexos = 0;
+    if (typeof obterValorPericia === 'function') {
+        try {
+            reflexos = obterValorPericia('reflexos') || 0;
+        } catch (e) {
+            reflexos = 0;
+        }
+    } else {
+        const reflexosData = pericias['reflexos'];
+        if (reflexosData) {
+            reflexos = (parseInt(reflexosData.d6) || 0) + (parseInt(reflexosData.bonus_personagem) || 0) + (parseInt(reflexosData.bonus_origem) || 0) + (parseInt(reflexosData.bonus_classe) || 0) + (parseInt(reflexosData.bonus_raca) || 0);
+        }
+    }
     const destreza = atributos.destreza || 0;
     const esquiva = defesa + reflexos + destreza;
     atualizarCampoEstatistica('esquiva', Math.max(0, esquiva));
     
     // Calcula Bloqueio: Constituição × 2 + Metade da Fortitude (arredondado para cima)
-    const fortitude = pericias.fortitude || 0;
+    // Obtém valor numérico da perícia 'fortitude'
+    let fortitude = 0;
+    if (typeof obterValorPericia === 'function') {
+        try {
+            fortitude = obterValorPericia('fortitude') || 0;
+        } catch (e) {
+            fortitude = 0;
+        }
+    } else {
+        const fortData = pericias['fortitude'];
+        if (fortData) {
+            fortitude = (parseInt(fortData.d6) || 0) + (parseInt(fortData.bonus_personagem) || 0) + (parseInt(fortData.bonus_origem) || 0) + (parseInt(fortData.bonus_classe) || 0) + (parseInt(fortData.bonus_raca) || 0);
+        }
+    }
     const metadeFortitude = Math.ceil(fortitude / 2);
     const bloqueio = (atributos.constituicao || 0) * 2 + metadeFortitude;
     atualizarCampoEstatistica('bloqueio', Math.max(0, bloqueio));
@@ -521,14 +810,22 @@ function obterTodosAtributos() {
 }
 
 /**
- * Obtém todos os valores de perícias
+ * Obtém todos os valores de perícias com a nova estrutura
  */
 function obterTodasPericias() {
-    const saved = localStorage.getItem('pericias_personagem');
+    const saved = localStorage.getItem('pericias_estrutura');
     if (saved) {
         return JSON.parse(saved);
     }
     return {};
+}
+
+/**
+ * Obtém a perícia com todos os seus dados
+ */
+function obterPericia(periciaId) {
+    const pericias = obterTodasPericias();
+    return pericias[periciaId] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
 }
 
 /**
@@ -573,6 +870,13 @@ let bonusAplicados = {
     origem: null
 };
 
+// Armazena os ids selecionados atualmente (classe, raca, origem)
+let selecionadosIds = {
+    classe: null,
+    raca: null,
+    origem: null
+};
+
 /**
  * Aplica os bônus de classe, raça ou origem aos atributos
  */
@@ -580,6 +884,7 @@ function aplicarBonusSelecao(tipo, id) {
     if (!id) {
         // Se não houver seleção, remove os bônus anteriores deste tipo
         removerBonus(tipo);
+        if (tipo === 'origem') atualizarEstadoEscolhaOrigem(null);
         return;
     }
     
@@ -591,22 +896,30 @@ function aplicarBonusSelecao(tipo, id) {
     // Remove os bônus anteriores deste tipo
     removerBonus(tipo);
     
-    // Verifica se há bônus de atributos, perícias ou alma
-    let bonusTraduzido = null;
-    
-    if (item.bonus && item.bonus.traduzido) {
-        // Raça ou origem com bônus traduzidos
-        bonusTraduzido = item.bonus.traduzido;
-    } else if (item.bonus && item.bonus.atributos) {
-        // Pode ter bônus em formato diferente
-        bonusTraduzido = item.bonus.atributos;
+    // Verifica se há bônus estruturados (pericias) ou outros formatos
+    let bonusTraduzido = {};
+
+    if (item.bonus) {
+        // Preferência: objeto completo que já contenha 'pericias'
+        if (item.bonus.pericias && typeof item.bonus.pericias === 'object') {
+            // Usa o próprio objeto bonus (contendo pericias, pericias_penalidade, alma, etc.)
+            bonusTraduzido = item.bonus;
+        }
+        // Compatibilidade com formatos antigos/traduzidos
+        else if (item.bonus.traduzido) {
+            bonusTraduzido = item.bonus.traduzido;
+        } else if (item.bonus.atributos) {
+            bonusTraduzido = item.bonus.atributos;
+        }
     }
     
     // Aplica os bônus se existirem
-    if (bonusTraduzido && typeof bonusTraduzido === 'object') {
-        aplicarBonusCompleto(bonusTraduzido);
+    if (typeof bonusTraduzido === 'object') {
+        aplicarBonusCompleto(bonusTraduzido, tipo);
         // Salva os bônus aplicados para poder removê-los depois
         bonusAplicados[tipo] = bonusTraduzido;
+        // Salva o id selecionado (útil para regras específicas como alma zerada apenas para demônio)
+        selecionadosIds[tipo] = id;
         
         // Atualiza a interface após aplicar bônus
         popularAtributosFicha();
@@ -615,87 +928,55 @@ function aplicarBonusSelecao(tipo, id) {
     
     // Recalcula estatísticas após aplicar bônus
     calcularEstatisticas();
+    
+    // Se for origem e a origem permite escolher perícias, atualiza estado do botão/hint
+    if (tipo === 'origem') {
+        atualizarEstadoEscolhaOrigem(id);
+        // Se houver escolhas salvas, aplique-as (garante aplicação ao trocar de origem)
+        const escolhas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+        if (escolhas[id] && escolhas[id].length > 0) {
+            aplicarPericiasEscolhidasParaOrigem(id, escolhas[id]);
+        }
+    }
 }
 
 /**
- * Aplica bônus completos (atributos, perícias e alma)
+ * Aplica bônus completos (apenas perícias e alma, sem atributos)
+ * Tipo: 'raca', 'classe' ou 'origem'
  */
-function aplicarBonusCompleto(bonus) {
-    const atributos = obterTodosAtributos();
+function aplicarBonusCompleto(bonus, tipo) {
     const pericias = obterTodasPericias();
+    const mapaTipo = {
+        'raca': 'bonus_raca',
+        'classe': 'bonus_classe',
+        'origem': 'bonus_origem'
+    };
+    const campoBonusChave = mapaTipo[tipo];
     
-    // Aplica bônus de atributos
-    Object.keys(bonus).forEach(key => {
-        const valor = bonus[key];
-        
-        // Ignora objetos aninhados (pericias, pericias_penalidade)
-        if (typeof valor === 'object' && valor !== null) {
-            return;
-        }
-        
-        // Ignora "alma" aqui, será tratado separadamente
-        if (key === 'alma') {
-            return;
-        }
-        
-        if (typeof valor === 'number') {
-            // Mapeia nomes de atributos (pode ter variações)
-            const mapAtributos = {
-                'forca': 'forca',
-                'destreza': 'destreza',
-                'constituicao': 'constituicao',
-                'intelecto': 'intelecto',
-                'inteligencia': 'intelecto', // Pode ter variação
-                'sabedoria': 'sabedoria',
-                'carisma': 'carisma',
-                'magia': 'magia',
-                'resiliencia': 'resiliencia',
-                'sorte': 'sorte',
-                'fama': 'fama',
-                'fe': 'fe',
-                'criatividade': 'criatividade'
-            };
-            
-            const atributoId = mapAtributos[key] || key;
-            
-            // Adiciona o bônus ao valor atual
-            const valorAtual = atributos[atributoId] || 0;
-            const novoValor = valorAtual + valor;
-            
-            // Limita entre -5 e +5
-            const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-            
-            // Salva o novo valor
-            atributos[atributoId] = valorLimitado;
-            
-            // Atualiza na interface
-            const input = document.getElementById(`ficha-${atributoId}`);
-            if (input) {
-                input.value = valorLimitado;
-                atualizarVisualAtributo(input, valorLimitado);
-            }
-        }
-    });
+    if (!campoBonusChave) return;
     
     // Aplica bônus de perícias
     if (bonus.pericias && typeof bonus.pericias === 'object') {
         Object.keys(bonus.pericias).forEach(periciaId => {
             const bonusValor = bonus.pericias[periciaId];
             if (typeof bonusValor === 'number') {
-                const valorAtual = pericias[periciaId] || 0;
+                // Inicializa perícia se não existir
+                if (!pericias[periciaId]) {
+                    pericias[periciaId] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+                }
+                
+                // Adiciona o bônus ao campo específico
+                const valorAtual = pericias[periciaId][campoBonusChave] || 0;
                 const novoValor = valorAtual + bonusValor;
                 
                 // Limita entre -5 e +5
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-                
-                // Salva o novo valor
-                pericias[periciaId] = valorLimitado;
+                pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const input = document.getElementById(`ficha-pericia-${periciaId}`);
-                if (input) {
-                    input.value = valorLimitado;
-                    atualizarVisualAtributo(input, valorLimitado);
+                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                if (campoInput) {
+                    campoInput.value = valorLimitado;
                 }
             }
         });
@@ -706,38 +987,215 @@ function aplicarBonusCompleto(bonus) {
         Object.keys(bonus.pericias_penalidade).forEach(periciaId => {
             const bonusValor = bonus.pericias_penalidade[periciaId];
             if (typeof bonusValor === 'number') {
-                const valorAtual = pericias[periciaId] || 0;
-                const novoValor = valorAtual + bonusValor; // bonusValor já é negativo
+                // Inicializa perícia se não existir
+                if (!pericias[periciaId]) {
+                    pericias[periciaId] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+                }
+                
+                // Adiciona a penalidade (bonusValor é negativo)
+                const valorAtual = pericias[periciaId][campoBonusChave] || 0;
+                const novoValor = valorAtual + bonusValor;
                 
                 // Limita entre -5 e +5
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-                
-                // Salva o novo valor
-                pericias[periciaId] = valorLimitado;
+                pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const input = document.getElementById(`ficha-pericia-${periciaId}`);
-                if (input) {
-                    input.value = valorLimitado;
-                    atualizarVisualAtributo(input, valorLimitado);
+                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                if (campoInput) {
+                    campoInput.value = valorLimitado;
                 }
             }
         });
     }
     
-    // Aplica bônus/penalidade de alma
-    if (bonus.alma !== undefined && typeof bonus.alma === 'number') {
-        const campoAlma = document.getElementById('alma-total');
-        if (campoAlma) {
-            // O bônus de alma é aplicado diretamente ao total (não ao atual)
-            // Isso será recalculado na função calcularEstatisticas
-            // Por enquanto, apenas marcamos que há um bônus de alma
-        }
+    // Atualiza totais de todas as perícias afetadas
+    Object.keys(pericias).forEach(periciaId => {
+        atualizarTotalPericia(periciaId);
+    });
+    // Atualiza interface dos cards principais (pericias.js) se existir
+    if (window.Pericias && typeof window.Pericias.init === 'function') {
+        window.Pericias.init();
     }
     
-    // Salva os atributos e perícias atualizados
-    localStorage.setItem('atributos_personagem', JSON.stringify(atributos));
-    localStorage.setItem('pericias_personagem', JSON.stringify(pericias));
+    // Salva as perícias atualizadas
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+
+    // Atualiza registro de bônus aplicados (útil para remover depois)
+    bonusAplicados[tipo] = bonus;
+    // selecionadosIds não é alterado aqui, chama a função que iniciou a aplicação para definir se necessário
+}
+
+/**
+ * Abre modal para escolher perícias para uma origem
+ */
+function abrirModalEscolherPericias(origemId, maxEscolhas) {
+    const modal = document.getElementById('modal-escolher-pericias');
+    const list = document.getElementById('modal-escolher-list');
+    const title = document.getElementById('modal-escolher-title');
+    const desc = document.getElementById('modal-escolher-desc');
+    const search = document.getElementById('modal-escolher-search');
+
+    if (!modal || !list) return;
+
+    title.textContent = `Escolher ${maxEscolhas} perícia${maxEscolhas>1?'s':''}`;
+    desc.textContent = `Escolha até ${maxEscolhas} perícia${maxEscolhas>1?'s':''}. Você pode buscar por nome.`;
+
+    // Build list of pericias
+    const periciasObj = window.Pericias?.PERICIAS || {};
+    const periciasFlat = Object.values(periciasObj).flat();
+
+    // Load previously saved choices for this origem
+    const escolhasAll = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+    // copy to avoid mutating stored structure accidentally
+    const escolhasAtuais = (escolhasAll[origemId] || []).slice();
+
+    function renderList(filter='') {
+        list.innerHTML = '';
+        const filtro = filter.trim().toLowerCase();
+        periciasFlat.forEach(p => {
+            if (filtro && p.nome.toLowerCase().indexOf(filtro) === -1) return;
+            const checked = escolhasAtuais.indexOf(p.id) !== -1;
+            const item = document.createElement('label');
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+            item.style.gap = '8px';
+            item.style.padding = '6px';
+            item.style.border = '1px solid #eee';
+            item.style.borderRadius = '4px';
+            item.style.cursor = 'pointer';
+            item.innerHTML = `
+                <input type="checkbox" data-pericia-id="${p.id}" ${checked ? 'checked' : ''}>
+                <span style="flex:1">${p.nome}</span>
+                <small style="color:#666">${p.id}</small>
+            `;
+            const cb = item.querySelector('input');
+            // set initial disabled state if already at max
+            cb.disabled = (!checked && escolhasAtuais.length >= maxEscolhas);
+            cb.onchange = () => {
+                if (cb.checked) {
+                    if (escolhasAtuais.length >= maxEscolhas) {
+                        // revert and inform
+                        cb.checked = false;
+                        showMessage(`Você só pode escolher ${maxEscolhas} perícia${maxEscolhas>1?'s':''}.`, 'error');
+                        return;
+                    }
+                    escolhasAtuais.push(p.id);
+                } else {
+                    const idx = escolhasAtuais.indexOf(p.id);
+                    if (idx !== -1) escolhasAtuais.splice(idx, 1);
+                }
+                // update disabled state of other checkboxes
+                const inputs = list.querySelectorAll('input[type=checkbox]');
+                inputs.forEach(i => {
+                    if (!i.checked) {
+                        i.disabled = (escolhasAtuais.length >= maxEscolhas);
+                    } else {
+                        i.disabled = false;
+                    }
+                });
+            };
+            list.appendChild(item);
+        });
+    }
+
+    renderList('');
+
+    // Search handler
+    search.value = '';
+    search.oninput = () => renderList(search.value);
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Close handlers
+    const close = document.getElementById('modal-escolher-close');
+    const cancel = document.getElementById('modal-escolher-cancel');
+    const confirm = document.getElementById('modal-escolher-confirm');
+
+    function fechar() {
+        modal.style.display = 'none';
+        // cleanup handlers
+        close.removeEventListener('click', fechar);
+        cancel.removeEventListener('click', fechar);
+        confirm.removeEventListener('click', onConfirm);
+    }
+
+    function onConfirm() {
+        // Apply choices
+        aplicarPericiasEscolhidasParaOrigem(origemId, escolhasAtuais);
+        // Save escolhas
+        const todas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+        todas[origemId] = escolhasAtuais;
+        localStorage.setItem('origem_escolhas', JSON.stringify(todas));
+        // Update hint/button state
+        atualizarEstadoEscolhaOrigem(origemId);
+        fechar();
+    }
+
+    close.addEventListener('click', fechar);
+    cancel.addEventListener('click', fechar);
+    confirm.addEventListener('click', onConfirm);
+}
+
+/**
+ * Aplica as perícias escolhidas para a origem (adiciona +2 em bonus_origem)
+ */
+function aplicarPericiasEscolhidasParaOrigem(origemId, periciaIds) {
+    if (!Array.isArray(periciaIds) || periciaIds.length === 0) return;
+    // Remove quaisquer bônus anteriores de origem
+    removerBonus('origem');
+
+    const bonus = { pericias: {} };
+    periciaIds.forEach(id => {
+        bonus.pericias[id] = 2;
+    });
+
+    // Aplica via a rotina existente
+    aplicarBonusCompleto(bonus, 'origem');
+
+    // Marca como aplicados e selecionado
+    bonusAplicados['origem'] = bonus;
+    selecionadosIds['origem'] = origemId;
+
+    // Atualiza interfaces
+    popularPericiasFicha();
+    if (window.Pericias && typeof window.Pericias.init === 'function') window.Pericias.init();
+}
+
+/**
+ * Atualiza o estado do botão/hint de escolha para a origem atual
+ */
+function atualizarEstadoEscolhaOrigem(origemId) {
+    const btn = document.getElementById('btn-escolher-origem-pericias');
+    const hint = document.getElementById('origem-escolha-hint');
+    if (!origemId) {
+        if (btn) btn.disabled = true;
+        if (hint) hint.textContent = '';
+        return;
+    }
+    const item = DadosLoader.obterItemPorId('origens', origemId);
+    const escolherCount = item?.bonus?.escolher_pericias || 0;
+    if (escolherCount && escolherCount > 0) {
+        if (btn) btn.disabled = false;
+        const escolhas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+        const escolhidas = escolhas[origemId] || [];
+        if (escolhidas.length > 0) {
+            // Mapear ids para nomes amigáveis quando possível
+            const periciasMap = window.Pericias?.PERICIAS || {};
+            const flat = Object.values(periciasMap).flat();
+            const nomes = escolhidas.map(id => {
+                const p = flat.find(x => x.id === id);
+                return p ? p.nome : id;
+            });
+            if (hint) hint.textContent = `Perícias escolhidas: ${nomes.join(', ')} (clique em 'Escolher perícias' para alterar)`;
+        } else {
+            if (hint) hint.textContent = `Esta origem permite escolher ${escolherCount} perícia(s). Clique em 'Escolher perícias' para selecionar agora ou faça depois.`;
+        }
+    } else {
+        if (btn) btn.disabled = true;
+        if (hint) hint.textContent = '';
+    }
 }
 
 /**
@@ -747,80 +1205,38 @@ function removerBonus(tipo) {
     if (!bonusAplicados[tipo]) return;
     
     const bonus = bonusAplicados[tipo];
-    const atributos = obterTodosAtributos();
     const pericias = obterTodasPericias();
     
-    // Remove bônus de atributos
-    Object.keys(bonus).forEach(key => {
-        const valor = bonus[key];
-        
-        // Ignora objetos aninhados
-        if (typeof valor === 'object' && valor !== null) {
-            return;
-        }
-        
-        // Ignora "alma" aqui
-        if (key === 'alma') {
-            return;
-        }
-        
-        if (typeof valor === 'number') {
-            const mapAtributos = {
-                'forca': 'forca',
-                'destreza': 'destreza',
-                'constituicao': 'constituicao',
-                'intelecto': 'intelecto',
-                'inteligencia': 'intelecto',
-                'sabedoria': 'sabedoria',
-                'carisma': 'carisma',
-                'magia': 'magia',
-                'resiliencia': 'resiliencia',
-                'sorte': 'sorte',
-                'fama': 'fama',
-                'fe': 'fe',
-                'criatividade': 'criatividade'
-            };
-            
-            const atributoId = mapAtributos[key] || key;
-            
-            // Remove o bônus do valor atual
-            const valorAtual = atributos[atributoId] || 0;
-            const novoValor = valorAtual - valor;
-            
-            // Limita entre -5 e +5
-            const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-            
-            // Salva o novo valor
-            atributos[atributoId] = valorLimitado;
-            
-            // Atualiza na interface
-            const input = document.getElementById(`ficha-${atributoId}`);
-            if (input) {
-                input.value = valorLimitado;
-                atualizarVisualAtributo(input, valorLimitado);
-            }
-        }
-    });
+    const mapaTipo = {
+        'raca': 'bonus_raca',
+        'classe': 'bonus_classe',
+        'origem': 'bonus_origem'
+    };
+    const campoBonusChave = mapaTipo[tipo];
+    
+    if (!campoBonusChave) return;
     
     // Remove bônus de perícias
     if (bonus.pericias && typeof bonus.pericias === 'object') {
         Object.keys(bonus.pericias).forEach(periciaId => {
             const bonusValor = bonus.pericias[periciaId];
             if (typeof bonusValor === 'number') {
-                const valorAtual = pericias[periciaId] || 0;
+                if (!pericias[periciaId]) {
+                    pericias[periciaId] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+                }
+                
+                // Remove o bônus do campo específico
+                const valorAtual = pericias[periciaId][campoBonusChave] || 0;
                 const novoValor = valorAtual - bonusValor;
                 
                 // Limita entre -5 e +5
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-                
-                // Salva o novo valor
-                pericias[periciaId] = valorLimitado;
+                pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const input = document.getElementById(`ficha-pericia-${periciaId}`);
-                if (input) {
-                    input.value = valorLimitado;
-                    atualizarVisualAtributo(input, valorLimitado);
+                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                if (campoInput) {
+                    campoInput.value = valorLimitado;
                 }
             }
         });
@@ -831,31 +1247,38 @@ function removerBonus(tipo) {
         Object.keys(bonus.pericias_penalidade).forEach(periciaId => {
             const bonusValor = bonus.pericias_penalidade[periciaId];
             if (typeof bonusValor === 'number') {
-                const valorAtual = pericias[periciaId] || 0;
-                const novoValor = valorAtual - bonusValor; // Remove a penalidade (subtrai o negativo = soma)
+                if (!pericias[periciaId]) {
+                    pericias[periciaId] = { d6: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+                }
+                
+                // Remove a penalidade
+                const valorAtual = pericias[periciaId][campoBonusChave] || 0;
+                const novoValor = valorAtual - bonusValor;
                 
                 // Limita entre -5 e +5
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
-                
-                // Salva o novo valor
-                pericias[periciaId] = valorLimitado;
+                pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const input = document.getElementById(`ficha-pericia-${periciaId}`);
-                if (input) {
-                    input.value = valorLimitado;
-                    atualizarVisualAtributo(input, valorLimitado);
+                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                if (campoInput) {
+                    campoInput.value = valorLimitado;
                 }
             }
         });
     }
     
-    // Salva os atributos e perícias atualizados
-    localStorage.setItem('atributos_personagem', JSON.stringify(atributos));
-    localStorage.setItem('pericias_personagem', JSON.stringify(pericias));
+    // Atualiza totais de todas as perícias afetadas
+    Object.keys(pericias).forEach(periciaId => {
+        atualizarTotalPericia(periciaId);
+    });
     
-    // Limpa o registro dos bônus
+    // Salva as perícias atualizadas
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+    
+    // Limpa o registro dos bônus e o id selecionado
     bonusAplicados[tipo] = null;
+    selecionadosIds[tipo] = null;
     
     // Atualiza a interface após remover bônus
     popularAtributosFicha();
@@ -873,6 +1296,10 @@ function configurarNivelSlider() {
         // Quando o slider mudar, atualiza o input
         nivelSlider.addEventListener('input', () => {
             nivelInput.value = nivelSlider.value;
+            // Atualiza contadores dependentes do nível
+            if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
+                window.Atributos.atualizarContadores();
+            }
         });
         
         // Quando o input mudar, atualiza o slider
@@ -889,6 +1316,10 @@ function configurarNivelSlider() {
             }
             
             nivelSlider.value = valor;
+            // Atualiza contadores dependentes do nível
+            if (window.Atributos && typeof window.Atributos.atualizarContadores === 'function') {
+                window.Atributos.atualizarContadores();
+            }
         });
         
         // Sincroniza valores iniciais
@@ -951,48 +1382,65 @@ function configurarValidacaoEstatisticas() {
  */
 function testarPericiaFicha(id, atributoKey) {
     if (!window.Pericias) return;
-    
-    const input = document.getElementById(`ficha-pericia-${id}`);
-    if (!input) return;
-    
-    const valorPericia = parseInt(input.value) || 0;
+    // Obtém dados da perícia no novo formato
+    const pericias = obterTodasPericias();
+    if (!pericias) return;
+    if (!pericias[id]) pericias[id] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    const periciaData = pericias[id];
+
+    // NÃO rola um D6 aqui. D6 só é gerado quando clicar no botão D6.
+    // Usa o D6 atual (pode ser 0 se nunca foi gerado)
+    const d6 = parseInt(periciaData.d6) || 0;
+
+    // Calcula os componentes (incluindo D6 atual, que pode ser 0)
+    const bp = parseInt(periciaData.bonus_personagem) || 0;
+    const bo = parseInt(periciaData.bonus_origem) || 0;
+    const bc = parseInt(periciaData.bonus_classe) || 0;
+    const br = parseInt(periciaData.bonus_raca) || 0;
+    const totalPericia = d6 + bp + bo + bc + br;
+
+    // Usa apenas o atributo para determinar o pool de D20
     const valorAtributo = obterValorAtributoFicha(atributoKey);
-    const valorTotal = valorAtributo + valorPericia;
-    
-    // Busca nome da perícia
+
+    // Busca nome da perícia e do atributo
     const pericia = Object.values(window.Pericias.PERICIAS).flat().find(p => p.id === id);
     const nomePericia = pericia ? pericia.nome : id;
     const nomeAtributo = window.Pericias.NOMES_ATRIBUTOS[atributoKey] || atributoKey;
-    
-    // Faz a rolagem
+
+    // Calcula valor total (atributo + perícia)
+    const valorTotal = valorAtributo + totalPericia;
+
+    // Rola pool de D20 com base no atributo
     let quantidadeDados;
-    let resultado;
+    let resultadoPool;
     let dadosRolados = [];
-    
-    if (valorTotal > 0) {
-        quantidadeDados = valorTotal;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.max(...dadosRolados);
-    } else if (valorTotal === 0) {
+
+    if (valorAtributo > 0) {
+        quantidadeDados = valorAtributo;
+    } else if (valorAtributo === 0) {
         quantidadeDados = 2;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.min(...dadosRolados);
     } else {
-        quantidadeDados = Math.abs(valorTotal) + 2;
-        for (let i = 0; i < quantidadeDados; i++) {
-            const dado = Math.floor(Math.random() * 20) + 1;
-            dadosRolados.push(dado);
-        }
-        resultado = Math.min(...dadosRolados);
+        quantidadeDados = Math.abs(valorAtributo) + 2;
     }
-    
-    exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, valorPericia, valorTotal, quantidadeDados, dadosRolados, resultado);
+    for (let i = 0; i < quantidadeDados; i++) {
+        const dado = Math.floor(Math.random() * 20) + 1;
+        dadosRolados.push(dado);
+    }
+
+    // Decide se pega maior ou menor com base no valorTotal
+    if (valorTotal > 0) {
+        resultadoPool = Math.max(...dadosRolados);
+    } else if (valorTotal === 0) {
+        resultadoPool = Math.min(...dadosRolados);
+    } else {
+        resultadoPool = Math.min(...dadosRolados);
+    }
+
+    // Resultado final: pool do atributo + total da perícia
+    const resultadoFinal = resultadoPool + totalPericia;
+
+    // Exibe resultado na ficha
+    exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, periciaData, totalPericia, valorTotal, quantidadeDados, dadosRolados, resultadoPool, resultadoFinal);
 }
 
 /**
@@ -1009,18 +1457,29 @@ function obterValorAtributoFicha(atributoKey) {
 /**
  * Exibe resultado de perícia na ficha
  */
-function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, valorPericia, valorTotal, quantidadeDados, dadosRolados, resultado) {
-    const resultadoDiv = document.getElementById('resultado-rolagem-pericias-ficha');
-    const conteudoDiv = document.getElementById('resultado-conteudo-pericias-ficha');
+function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, periciaData, totalPericia, valorTotal, quantidadeDados, dadosRolados, resultadoPool, resultadoFinal) {
+    // Use the shared modal overlay for results
+    const modal = document.getElementById('modal-resultado-atributo');
+    const titulo = document.getElementById('modal-resultado-titulo');
+    const corpo = document.getElementById('modal-resultado-corpo');
+    const btnFechar = document.getElementById('modal-resultado-fechar');
     
-    if (!resultadoDiv || !conteudoDiv) return;
-    
-    const valorTotalFormatado = valorTotal >= 0 ? `+${valorTotal}` : `${valorTotal}`;
+    if (!modal || !titulo || !corpo || !btnFechar) {
+        console.error('Modal elements not found (exibirResultadoPericiaFicha):', { modal, titulo, corpo, btnFechar });
+        return;
+    }
+
     const valorAtributoFormatado = valorAtributo >= 0 ? `+${valorAtributo}` : `${valorAtributo}`;
-    const valorPericiaFormatado = valorPericia >= 0 ? `+${valorPericia}` : `${valorPericia}`;
-    
+    const d6 = periciaData ? (parseInt(periciaData.d6) || 0) : 0;
+    const bp = periciaData ? (parseInt(periciaData.bonus_personagem) || 0) : 0;
+    const bo = periciaData ? (parseInt(periciaData.bonus_origem) || 0) : 0;
+    const bc = periciaData ? (parseInt(periciaData.bonus_classe) || 0) : 0;
+    const br = periciaData ? (parseInt(periciaData.bonus_raca) || 0) : 0;
+
+    const totalPericiaFormatado = totalPericia >= 0 ? `+${totalPericia}` : `${totalPericia}`;
+    const valorTotalFormatado = valorTotal >= 0 ? `+${valorTotal}` : `${valorTotal}`;
+
     let descricao = '';
-    
     if (valorTotal > 0) {
         descricao = `Rolou ${quantidadeDados} dado${quantidadeDados > 1 ? 's' : ''} D20 e pegou o <strong>maior</strong> valor.`;
     } else if (valorTotal === 0) {
@@ -1028,35 +1487,40 @@ function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, v
     } else {
         descricao = `Rolou ${quantidadeDados} dados D20 e pegou o <strong>pior</strong> valor.`;
     }
-    
-    conteudoDiv.innerHTML = `
-        <div class="resultado-header">
-            <span class="resultado-atributo">${nomePericia}</span>
-            <span class="resultado-valor-atributo">${valorTotalFormatado}</span>
-        </div>
-        <div class="resultado-info">
-            <p><strong>Atributo Base (${nomeAtributo}):</strong> ${valorAtributoFormatado}</p>
-            <p><strong>Bônus de Perícia:</strong> ${valorPericiaFormatado}</p>
-            <p><strong>Total:</strong> ${valorTotalFormatado}</p>
-        </div>
-        <p class="resultado-descricao">${descricao}</p>
-        <div class="resultado-dados">
-            <div class="dados-rolados">
-                <strong>Dados rolados:</strong>
-                <div class="dados-lista">
-                    ${dadosRolados.map(dado => `
-                        <span class="dado-valor ${dado === resultado ? 'dado-resultado' : ''}">${dado}</span>
-                    `).join('')}
-                </div>
+
+    titulo.textContent = `${nomePericia} — Resultado`;
+    corpo.innerHTML = `
+        <p style="margin:6px 0;"><strong>Atributo Base (${nomeAtributo}):</strong> ${valorAtributoFormatado}</p>
+        <p style="margin:6px 0;"><strong>D6 da Perícia:</strong> ${d6 >= 0 ? `+${d6}` : d6}</p>
+        <p style="margin:6px 0;"><strong>Bônus (personagem):</strong> ${bp >= 0 ? `+${bp}` : bp}</p>
+        <p style="margin:6px 0;"><strong>Bônus (origem):</strong> ${bo >= 0 ? `+${bo}` : bo}</p>
+        <p style="margin:6px 0;"><strong>Bônus (classe):</strong> ${bc >= 0 ? `+${bc}` : bc}</p>
+        <p style="margin:6px 0;"><strong>Bônus (raça):</strong> ${br >= 0 ? `+${br}` : br}</p>
+        <p style="margin:6px 0;"><strong>Total de Perícia (D6 + bônus):</strong> ${totalPericiaFormatado}</p>
+        <p class="resultado-descricao" style="margin:6px 0;"><strong>Total Geral (atributo + perícia):</strong> ${valorTotalFormatado}</p>
+        <p class="resultado-descricao" style="margin:6px 0;">${descricao}</p>
+        <div style="margin-top:8px;">
+            <strong>Dados D20 rolados:</strong>
+            <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+                ${dadosRolados.map(dado => `
+                    <span style="padding:6px 8px; border-radius:6px; background:#eee; ${dado===resultadoPool? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                `).join('')}
             </div>
         </div>
-        <div class="resultado-final">
-            <strong>Resultado Final: <span class="resultado-numero">${resultado}</span></strong>
+        <div style="margin-top:12px; font-size:18px;">
+            <strong>Resultado do Pool: <span style="color:#d32;">${resultadoPool}</span></strong>
+            <div>Resultado Final (pool + perícia): <strong>${resultadoFinal >= 0 ? `+${resultadoFinal}` : resultadoFinal}</strong></div>
         </div>
     `;
+
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
     
-    resultadoDiv.style.display = 'block';
-    resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    btnFechar.onclick = () => { 
+        modal.style.display = 'none'; 
+        btnFechar.onclick = null; 
+    };
 }
 
 // Torna as funções globais para uso nos onclick do HTML (após definição)
@@ -1109,7 +1573,7 @@ function limparAtributosEPericias() {
     localStorage.removeItem('atributos_personagem');
     
     // Limpa perícias do localStorage
-    localStorage.removeItem('pericias_personagem');
+    localStorage.removeItem('pericias_estrutura');
     
     // Reseta os campos de atributos e perícias na interface
     popularAtributosFicha();
@@ -1144,6 +1608,8 @@ window.popularAtributosFicha = popularAtributosFicha;
 window.popularPericiasFicha = popularPericiasFicha;
 window.alterarPericiaFicha = alterarPericiaFicha;
 window.salvarPericiaFicha = salvarPericiaFicha;
+window.rolarD6Pericia = rolarD6Pericia;
+window.atualizarTotalPericia = atualizarTotalPericia;
 window.testarPericiaFicha = testarPericiaFicha;
 window.togglePericiasGrupo = togglePericiasGrupo;
 window.calcularEstatisticas = calcularEstatisticas;

@@ -3,10 +3,7 @@
   "nome": "Vampiro",
   "descricao": "Ser imortal que se alimenta de sangue, com habilidades sobrenaturais e fraqueza à luz solar.",
   "bonus": {
-    "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
-      "carisma": 2,
-      "destreza": 1,
       "pericias": {
         "labia": 3,
         "percepcao": 3

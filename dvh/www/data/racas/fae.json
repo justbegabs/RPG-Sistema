@@ -3,10 +3,7 @@
   "nome": "Fae",
   "descricao": "Criatura das fadas com magia natural e conexão com o reino feérico.",
   "bonus": {
-    "atributos": "Carisma +2, Destreza +1",
     "traduzido": {
-      "carisma": 2,
-      "destreza": 1,
       "pericias": {
         "ilusao": 3,
         "astrologia": 3

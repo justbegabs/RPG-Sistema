@@ -3,10 +3,7 @@
   "nome": "Esqueleto",
   "descricao": "Morto-vivo mantido por magia negra, sem necessidade de órgãos.",
   "bonus": {
-    "atributos": "Constituição +2, Destreza +1",
     "traduzido": {
-      "constituicao": 2,
-      "destreza": 1,
       "pericias": {
         "intimidacao": 3,
         "empatia": 3
