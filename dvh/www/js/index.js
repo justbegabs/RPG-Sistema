@@ -536,6 +536,9 @@ function popularPericiasFicha() {
     });
     
     container.innerHTML = html;
+    
+    // Atualiza o contador de D6
+    atualizarContadorD6();
 }
 
 /**
@@ -631,6 +634,35 @@ function alterarPericiaFicha(id, delta) {
  * Rola um d6 para a perícia
  */
 function rolarD6Pericia(periciaId) {
+    const pericias = obterTodasPericias();
+    const periciaData = pericias[periciaId] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    
+    // Se já tem D6, remove (limpa para 0)
+    if (periciaData.d6 > 0) {
+        periciaData.d6 = 0;
+        pericias[periciaId] = periciaData;
+        localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+        
+        const campoD6 = document.getElementById(`pericia-d6-${periciaId}`);
+        if (campoD6) {
+            campoD6.value = 0;
+        }
+        
+        atualizarTotalPericia(periciaId);
+        atualizarContadorD6();
+        return;
+    }
+    
+    // Se D6 é 0, tenta rolar um novo
+    // Conta quantas perícias já têm D6 ativo
+    const periciasComD6 = Object.values(pericias).filter(p => (parseInt(p.d6) || 0) > 0).length;
+    
+    if (periciasComD6 >= 10) {
+        // Alerta: limite atingido
+        alert('⚠️ Limite de 10 perícias com D6 atingido!\n\nRemova uma perícia existente para adicionar outra.');
+        return;
+    }
+    
     // Gera um número aleatório de 1 a 6
     const resultado = Math.floor(Math.random() * 6) + 1;
     
@@ -639,10 +671,6 @@ function rolarD6Pericia(periciaId) {
     if (campoD6) {
         campoD6.value = resultado;
     }
-    
-    // Obtém os dados da perícia
-    const pericias = obterTodasPericias();
-    const periciaData = pericias[periciaId] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
     
     // Atualiza a perícia com o novo d6
     periciaData.d6 = resultado;
@@ -653,6 +681,7 @@ function rolarD6Pericia(periciaId) {
     
     // Atualiza o total
     atualizarTotalPericia(periciaId);
+    atualizarContadorD6();
 }
 
 /**
@@ -676,6 +705,48 @@ function atualizarTotalPericia(periciaId) {
         campoTotal.value = total;
         // Atualiza cor
         campoTotal.className = total > 0 ? 'pericia-input positivo' : total < 0 ? 'pericia-input negativo' : 'pericia-input neutro';
+    }
+}
+
+/**
+ * Atualiza o contador de perícias com D6 ativo
+ */
+function atualizarContadorD6() {
+    const pericias = obterTodasPericias();
+    const periciasComD6 = Object.values(pericias).filter(p => (parseInt(p.d6) || 0) > 0).length;
+    
+    // Atualiza contador na página de perícias
+    const contador = document.getElementById('contador-pericias-d6');
+    if (contador) {
+        contador.textContent = `${periciasComD6}/10`;
+        // Muda cor se estiver no limite
+        if (periciasComD6 >= 10) {
+            contador.style.color = '#d32';
+            contador.style.fontWeight = 'bold';
+        } else if (periciasComD6 > 5) {
+            contador.style.color = '#ff9800';
+            contador.style.fontWeight = 'normal';
+        } else {
+            contador.style.color = '#4caf50';
+            contador.style.fontWeight = 'normal';
+        }
+    }
+    
+    // Atualiza contador na ficha
+    const contadorFicha = document.getElementById('contador-pericias-d6-ficha');
+    if (contadorFicha) {
+        contadorFicha.textContent = `${periciasComD6}/10`;
+        // Muda cor se estiver no limite
+        if (periciasComD6 >= 10) {
+            contadorFicha.style.color = '#d32';
+            contadorFicha.style.fontWeight = 'bold';
+        } else if (periciasComD6 > 5) {
+            contadorFicha.style.color = '#ff9800';
+            contadorFicha.style.fontWeight = 'normal';
+        } else {
+            contadorFicha.style.color = '#4caf50';
+            contadorFicha.style.fontWeight = 'normal';
+        }
     }
 }
 
@@ -1610,6 +1681,7 @@ window.alterarPericiaFicha = alterarPericiaFicha;
 window.salvarPericiaFicha = salvarPericiaFicha;
 window.rolarD6Pericia = rolarD6Pericia;
 window.atualizarTotalPericia = atualizarTotalPericia;
+window.atualizarContadorD6 = atualizarContadorD6;
 window.testarPericiaFicha = testarPericiaFicha;
 window.togglePericiasGrupo = togglePericiasGrupo;
 window.calcularEstatisticas = calcularEstatisticas;

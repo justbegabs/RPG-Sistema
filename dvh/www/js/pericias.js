@@ -118,6 +118,11 @@ function renderizarPericias() {
     
     container.innerHTML = html;
     adicionarEventListenersPericias();
+    
+    // Atualiza o contador de D6
+    if (window.atualizarContadorD6) {
+        window.atualizarContadorD6();
+    }
 }
 
 /**
