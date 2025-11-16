@@ -45,6 +45,11 @@
             <!-- Botão para toggle do menu (mobile) -->
             <button class="menu-toggle" id="menuToggle">☰</button>
 
+            <!-- Botão de Modo Escuro -->
+            <button class="dark-mode-toggle" id="darkModeToggle" title="Alternar modo escuro">
+                <span class="dark-mode-icon"></span>
+            </button>
+
             <!-- Conteúdo Principal -->
             <main class="main-content">
                 <!-- Página: Inicial (Home) -->
@@ -102,36 +107,43 @@
                         <form id="ficha-form" class="ficha-form">
                             <div class="form-section">
                                 <h2>Informações Básicas</h2>
-                                <div class="form-group">
-                                    <label for="nome">Nome do Personagem *</label>
-                                    <input type="text" id="nome" name="nome" required>
-                                </div>
-                                <div class="form-group classe-group">
-                                    <label for="classe">Classe *</label>
-                                    <div class="origem-controls">
-                                        <select id="classe" name="classe" required>
-                                            <option value="">Carregando...</option>
-                                        </select>
-                                        <button type="button" id="btn-escolher-classe-bonus" class="btn btn-secondary" style="margin-left:8px;" disabled>Escolher bônus da classe</button>
+                                <!-- Linha 1: Nome (largura completa) -->
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div class="form-group">
+                                        <label for="nome">Nome do Personagem *</label>
+                                        <input type="text" id="nome" name="nome" required>
                                     </div>
-                                    <div id="classe-escolha-hint" class="form-hint" style="margin-top:6px;color:#666;font-size:0.9em;"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="raca">Raça *</label>
-                                    <select id="raca" name="raca" required>
-                                        <option value="">Carregando...</option>
-                                    </select>
-                                </div>
-                                <div class="form-group origem-group">
-                                    <label for="origem">Origem *</label>
-                                    <div class="origem-controls">
-                                        <select id="origem" name="origem" required>
-                                            <option value="">Carregando...</option>
-                                        </select>
-                                        <button type="button" id="btn-escolher-origem-pericias" class="btn btn-secondary" style="margin-left:8px;" disabled>Escolher perícias</button>
+                                
+                                <!-- Linha 2: Idade e Data de Nascimento -->
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-bottom: 16px;">
+                                    <div class="form-group">
+                                        <label for="idade">Idade *</label>
+                                        <input type="text" id="idade" name="idade" required>
                                     </div>
-                                    <div id="origem-escolha-hint" class="form-hint" style="margin-top:6px;color:#666;font-size:0.9em;"></div>
+                                    <div class="form-group">
+                                        <label for="data_nascimento">Data de Nascimento *</label>
+                                        <input type="text" id="data_nascimento" name="data_nascimento" required>
+                                    </div>
                                 </div>
+                                
+                                <!-- Linha 3: Altura, Sexualidade e Tipo Sanguíneo -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div class="form-group">
+                                        <label for="altura">Altura *</label>
+                                        <input type="text" id="altura" name="altura" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sexualidade">Sexualidade *</label>
+                                        <input type="text" id="sexualidade" name="sexualidade" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tipo_sanguineo">Tipo Sanguíneo *</label>
+                                        <input type="text" id="tipo_sanguineo" name="tipo_sanguineo" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Nível -->
                                 <div class="form-group">
                                     <label for="nivel">Nível (%) *</label>
                                     <div class="nivel-container">
@@ -144,69 +156,122 @@
 
                             <div class="form-section">
                                 <h2>📊 Estatísticas</h2>
-                                <div class="stats-grid">
+                                <!-- Status Vitais em Grid 2x2 -->
+                                <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 24px;">
                                     <div class="form-group">
-                                        <label for="vida-total">Pontos de Vida (Total)</label>
-                                        <input type="number" id="vida-total" name="vida-total" min="1" value="10" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Resiliência × 3 + 10</small>
-                                        <label for="vida-atual" style="margin-top: 10px;">Pontos de Vida (Atual)</label>
-                                        <input type="number" id="vida-atual" name="vida-atual" min="0" value="10" required>
+                                        <label>❤️ Vida</label>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="number" id="vida-atual" name="vida-atual" min="0" value="10" required style="flex: 1; text-align: center;">
+                                            <span style="font-weight: bold; color: #666;">/</span>
+                                            <input type="number" id="vida-total" name="vida-total" min="1" value="10" required readonly style="flex: 1; text-align: center; background: #f5f5f5;">
+                                        </div>
+                                        <small class="form-hint">Resiliência × 3 + 10</small>
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <label for="mana-total">Pontos de Mana (Total)</label>
-                                        <input type="number" id="mana-total" name="mana-total" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Magia × 5 + 15</small>
-                                        <label for="mana-atual" style="margin-top: 10px;">Pontos de Mana (Atual)</label>
-                                        <input type="number" id="mana-atual" name="mana-atual" min="0" value="0" required>
+                                        <label>💬 Sanidade</label>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="number" id="sanidade-atual" name="sanidade-atual" min="0" value="0" required style="flex: 1; text-align: center;">
+                                            <span style="font-weight: bold; color: #666;">/</span>
+                                            <input type="number" id="sanidade-total" name="sanidade-total" min="0" value="0" required readonly style="flex: 1; text-align: center; background: #f5f5f5;">
+                                        </div>
+                                        <small class="form-hint">Intelecto × 5 + Carisma × 3 + 10</small>
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <label for="sanidade-total">Sanidade (Total)</label>
-                                        <input type="number" id="sanidade-total" name="sanidade-total" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Intelecto × 5 + Carisma × 3 + 10</small>
-                                        <label for="sanidade-atual" style="margin-top: 10px;">Sanidade (Atual)</label>
-                                        <input type="number" id="sanidade-atual" name="sanidade-atual" min="0" value="0" required>
+                                        <label>⚡ Mana</label>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="number" id="mana-atual" name="mana-atual" min="0" value="0" required style="flex: 1; text-align: center;">
+                                            <span style="font-weight: bold; color: #666;">/</span>
+                                            <input type="number" id="mana-total" name="mana-total" min="0" value="0" required readonly style="flex: 1; text-align: center; background: #f5f5f5;">
+                                        </div>
+                                        <small class="form-hint">Magia × 5 + 15</small>
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <label for="alma-total">Alma (Total)</label>
-                                        <input type="number" id="alma-total" name="alma-total" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 (não aumenta com níveis)</small>
-                                        <label for="alma-atual" style="margin-top: 10px;">Alma (Atual)</label>
-                                        <input type="number" id="alma-atual" name="alma-atual" min="0" value="0" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="defesa">Defesa</label>
-                                        <input type="number" id="defesa" name="defesa" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Constituição + 10</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="esquiva">Esquiva</label>
-                                        <input type="number" id="esquiva" name="esquiva" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Defesa + Perícia Reflexos + Destreza</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="bloqueio">Bloqueio</label>
-                                        <input type="number" id="bloqueio" name="bloqueio" min="0" value="0" required readonly>
-                                        <small class="form-hint">Calculado (nível 0%): Constituição × 2 + Metade da Fortitude (arredondado para cima)</small>
+                                        <label>⭐ Alma</label>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="number" id="alma-atual" name="alma-atual" min="0" value="0" required style="flex: 1; text-align: center;">
+                                            <span style="font-weight: bold; color: #666;">/</span>
+                                            <input type="number" id="alma-total" name="alma-total" min="0" value="0" required readonly style="flex: 1; text-align: center; background: #f5f5f5;">
+                                        </div>
+                                        <small class="form-hint">Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15</small>
                                     </div>
                                 </div>
+                                
+                                <!-- Status de Combate e Informações do Personagem lado a lado -->
+                                <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                    <!-- Status de Combate (coluna esquerda) -->
+                                    <div>
+                                        <h3 style="margin: 0 0 16px 0; font-size: 1.1em; color: #333;">Status de Combate</h3>
+                                        <div class="form-group">
+                                            <label for="defesa">Defesa</label>
+                                            <input type="number" id="defesa" name="defesa" min="0" value="0" required readonly>
+                                            <small class="form-hint">Constituição + 10</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="esquiva">Esquiva</label>
+                                            <input type="number" id="esquiva" name="esquiva" min="0" value="0" required readonly>
+                                            <small class="form-hint">Defesa + Perícia Reflexos + Destreza</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bloqueio">Bloqueio</label>
+                                            <input type="number" id="bloqueio" name="bloqueio" min="0" value="0" required readonly>
+                                            <small class="form-hint">Constituição × 2 + Metade da Fortitude</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Seleção de Classe, Raça e Origem (coluna direita) -->
+                                    <div>
+                                        <h3 style="margin: 0 0 16px 0; font-size: 1.1em; color: #333;">Informações do Personagem</h3>
+                                        <div class="form-group classe-group">
+                                            <label for="classe">Classe *</label>
+                                            <div class="origem-controls">
+                                                <select id="classe" name="classe" required>
+                                                    <option value="">Carregando...</option>
+                                                </select>
+                                                <button type="button" id="btn-escolher-classe-bonus" class="btn btn-secondary" style="margin-left:8px; display:none;" disabled>Escolher bônus</button>
+                                            </div>
+                                            <div id="classe-escolha-hint" class="form-hint" style="margin-top:6px;color:#666;font-size:0.9em;"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="raca">Raça *</label>
+                                            <select id="raca" name="raca" required>
+                                                <option value="">Carregando...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group origem-group">
+                                            <label for="origem">Origem *</label>
+                                            <div class="origem-controls">
+                                                <select id="origem" name="origem" required>
+                                                    <option value="">Carregando...</option>
+                                                </select>
+                                                <button type="button" id="btn-escolher-origem-pericias" class="btn btn-secondary" style="margin-left:8px; display:none;" disabled>Escolher perícias</button>
+                                            </div>
+                                            <div id="origem-escolha-hint" class="form-hint" style="margin-top:6px;color:#666;font-size:0.9em;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <!-- Campo oculto para manter compatibilidade com cálculos -->
                                 <input type="hidden" id="inventario" name="inventario" value="0">
                                 <input type="hidden" id="bonus-bolsa" name="bonus-bolsa" value="0">
                             </div>
 
-                            <div class="form-section">
-                                <h2>🎲 Atributos de Teste <span id="contador-atributos-teste" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
-                                <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
-                                <div class="atributos-grid-ficha" id="atributos-teste-ficha">
-                                    <!-- Será preenchido por JavaScript -->
+                            <div class="form-section atributos-pares">
+                                <div class="atributos-col">
+                                    <h2 style="margin-top:0">🎲 Atributos de Teste <span id="contador-atributos-teste" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
+                                    <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
+                                    <div class="atributos-grid-ficha" id="atributos-teste-ficha">
+                                        <!-- Será preenchido por JavaScript -->
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-section">
-                                <h2>✨ Atributos de Sorte <span id="contador-atributos-sorte" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
-                                <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
-                                <div class="atributos-grid-ficha" id="atributos-sorte-ficha">
-                                    <!-- Será preenchido por JavaScript -->
+                                <div class="atributos-col">
+                                    <h2 style="margin-top:0">✨ Atributos de Sorte <span id="contador-atributos-sorte" style="font-weight:normal;font-size:0.9em;margin-left:12px;color:#444"></span></h2>
+                                    <p class="form-hint">Valores de -5 a +5 (clique no nome para testar)</p>
+                                    <div class="atributos-grid-ficha" id="atributos-sorte-ficha">
+                                        <!-- Será preenchido por JavaScript -->
+                                    </div>
                                 </div>
                             </div>
 
@@ -262,7 +327,7 @@
 
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Salvar Ficha</button>
-                                <button type="button" class="btn btn-secondary" onclick="limparAtributosEPericias()">Limpar Formulário</button>
+                                <button type="button" id="btn-reset-total" class="btn btn-secondary" title="Apaga todas as informações da ficha (atributos, perícias, seleções, nível, inventário e estatísticas)">Apagar Tudo</button>
                             </div>
 
                             <div id="mensagem" class="mensagem"></div>
@@ -647,6 +712,32 @@
                     </div>
                 </div>
             </main>
+        </div>
+
+        <!-- Modal de Confirmação de Limpeza Total -->
+        <div id="modal-confirmar-limpar" class="modal" style="display: none;">
+            <div class="modal-content" style="max-width: 450px;">
+                <div class="modal-header">
+                    <h3>⚠️ Confirmar Limpeza Total</h3>
+                </div>
+                <div class="modal-body">
+                    <p style="margin-bottom: 12px;">Deseja realmente limpar <strong>TUDO</strong> da ficha?</p>
+                    <p style="margin-bottom: 8px;">Esta ação remove:</p>
+                    <ul style="margin: 8px 0 12px 20px; text-align: left;">
+                        <li>Atributos</li>
+                        <li>Perícias</li>
+                        <li>Classe, Raça e Origem</li>
+                        <li>Nível</li>
+                        <li>Inventário</li>
+                        <li>Estatísticas</li>
+                    </ul>
+                    <p style="color: #d32; font-weight: bold;">⚠️ Esta ação não pode ser desfeita!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modal-limpar-cancelar" class="btn btn-secondary">Cancelar</button>
+                    <button type="button" id="modal-limpar-confirmar" class="btn btn-danger">Limpar Tudo</button>
+                </div>
+            </div>
         </div>
 
                <script src="cordova.js"></script>

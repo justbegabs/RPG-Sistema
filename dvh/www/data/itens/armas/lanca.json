@@ -1,0 +1,17 @@
+{
+  "id": "lanca",
+  "nome": "Lança",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste longa com ponta perfurante, permite manter distância curta.",
+  "peso": 2,
+  "dano": "1d8",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Alcance", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 10
+}

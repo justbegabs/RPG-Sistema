@@ -1,0 +1,17 @@
+{
+  "id": "faca",
+  "nome": "Faca",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Faca de arremesso balanceada para ataques à distância.",
+  "peso": 1,
+  "dano": "1d4+1d3",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Pontaria",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Arremesso", "Leve", "Crítico: 18-20 multiplica dano por 3"],
+  "raridade": "comum",
+  "preco": 5
+}

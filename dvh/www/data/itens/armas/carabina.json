@@ -1,0 +1,17 @@
+{
+  "id": "carabina",
+  "nome": "Carabina",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma de fogo versátil usada em combate de curta distância.",
+  "peso": 5,
+  "dano": "1d8+4",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Armas de Fogo Grandes",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Semi-automática", "Controle de recuo", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 700
+}

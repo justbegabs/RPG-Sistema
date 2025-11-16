@@ -1,0 +1,17 @@
+{
+  "id": "bastao",
+  "nome": "Bastão",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste reforçada usada para defesa e ataques rápidos.",
+  "peso": 1,
+  "dano": "1d4+3",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Leve", "Versátil", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 5
+}

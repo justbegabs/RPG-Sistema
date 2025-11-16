@@ -1,0 +1,17 @@
+{
+  "id": "taser-pontaria",
+  "nome": "Taser (Pontaria)",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Dispositivo elétrico de choque com dardos à distância para incapacitar alvos remotamente.",
+  "peso": 1,
+  "dano": "1d4+3",
+  "tipoDano": "eletrico",
+  "alcance": "curta distância",
+  "pericia": "Pontaria",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Atordoamento (teste de resistência)", "Crítico: 18-20 multiplica dano por 3"],
+  "raridade": "comum",
+  "preco": 30
+}

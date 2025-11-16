@@ -116,6 +116,7 @@ function popularSelects() {
             localStorage.setItem('classe_selecionada', selectClasse.value);
             aplicarBonusSelecao('classe', selectClasse.value);
             atualizarEstadoEscolhaClasse(selectClasse.value);
+            atualizarInfoPersonagem();
         });
         
         // Restaura seleção anterior se existir
@@ -124,6 +125,7 @@ function popularSelects() {
             selectClasse.value = classeSalva;
             aplicarBonusSelecao('classe', classeSalva);
             atualizarEstadoEscolhaClasse(classeSalva);
+            atualizarInfoPersonagem();
         }
     }
     
@@ -142,6 +144,7 @@ function popularSelects() {
         selectRaca.addEventListener('change', () => {
             localStorage.setItem('raca_selecionada', selectRaca.value);
             aplicarBonusSelecao('raca', selectRaca.value);
+            atualizarInfoPersonagem();
         });
         
         // Restaura seleção anterior se existir
@@ -149,6 +152,7 @@ function popularSelects() {
         if (racaSalva) {
             selectRaca.value = racaSalva;
             aplicarBonusSelecao('raca', racaSalva);
+            atualizarInfoPersonagem();
         }
     }
     
@@ -167,6 +171,7 @@ function popularSelects() {
         selectOrigem.addEventListener('change', () => {
             localStorage.setItem('origem_selecionada', selectOrigem.value);
             aplicarBonusSelecao('origem', selectOrigem.value);
+            atualizarInfoPersonagem();
         });
         
         // Restaura seleção anterior se existir
@@ -174,6 +179,7 @@ function popularSelects() {
         if (origemSalva) {
             selectOrigem.value = origemSalva;
             aplicarBonusSelecao('origem', origemSalva);
+            atualizarInfoPersonagem();
         }
         
         // Botão para abrir modal de escolha de perícias (quando aplicável)
@@ -227,11 +233,78 @@ function popularSelects() {
     
     // Inicializa sistema de inventário
     inicializarInventario();
+
+    // Garante binding do botão de reset total mesmo se inline estiver desativado (suporta mobile)
+    const btnResetTotal = document.getElementById('btn-reset-total');
+    if (btnResetTotal) {
+        const handler = (e) => {
+            if (typeof limparFormularioCompleto === 'function') {
+                limparFormularioCompleto();
+            } else {
+                console.error('Função limparFormularioCompleto não encontrada!');
+            }
+        };
+        ['click','touchend','pointerup'].forEach(evt => btnResetTotal.addEventListener(evt, handler, { once: false }));
+    } else {
+        console.error('Botão btn-reset-total não encontrado!');
+    }
     
     // Aplica bônus se já houver seleções (após um pequeno delay para garantir que os dados estão carregados)
     setTimeout(() => {
         aplicarBonusSelecoesExistentes();
+        // Atualiza display de informações do personagem após carregar
+        atualizarInfoPersonagem();
     }, 100);
+}
+
+/**
+ * Atualiza os campos de exibição de informações do personagem
+ */
+function atualizarInfoPersonagem() {
+    // Atualiza display de Raça
+    const selectRaca = document.getElementById('raca');
+    const displayRaca = document.getElementById('info-raca-display');
+    if (selectRaca && displayRaca) {
+        const racaId = selectRaca.value;
+        if (racaId) {
+            const raca = DadosLoader.obterItemPorId('racas', racaId);
+            displayRaca.value = raca ? raca.nome : 'Raça';
+            displayRaca.style.color = raca ? '#333' : '#666';
+        } else {
+            displayRaca.value = 'Raça';
+            displayRaca.style.color = '#666';
+        }
+    }
+    
+    // Atualiza display de Classe
+    const selectClasse = document.getElementById('classe');
+    const displayClasse = document.getElementById('info-classe-display');
+    if (selectClasse && displayClasse) {
+        const classeId = selectClasse.value;
+        if (classeId) {
+            const classe = DadosLoader.obterItemPorId('classes', classeId);
+            displayClasse.value = classe ? classe.nome : 'Classe';
+            displayClasse.style.color = classe ? '#333' : '#666';
+        } else {
+            displayClasse.value = 'Classe';
+            displayClasse.style.color = '#666';
+        }
+    }
+    
+    // Atualiza display de Origem
+    const selectOrigem = document.getElementById('origem');
+    const displayOrigem = document.getElementById('info-origem-display');
+    if (selectOrigem && displayOrigem) {
+        const origemId = selectOrigem.value;
+        if (origemId) {
+            const origem = DadosLoader.obterItemPorId('origens', origemId);
+            displayOrigem.value = origem ? origem.nome : 'Origem';
+            displayOrigem.style.color = origem ? '#333' : '#666';
+        } else {
+            displayOrigem.value = 'Origem';
+            displayOrigem.style.color = '#666';
+        }
+    }
 }
 
 /**
@@ -582,12 +655,12 @@ function exibirResultadoFicha(id, valorAtributo, quantidadeDados, dadosRolados, 
             <strong>Dados rolados:</strong>
             <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
                 ${dadosRolados.map(dado => `
-                    <span style="padding:6px 8px; border-radius:6px; background:#eee; ${dado===resultado? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                    <span style="padding:6px 8px; border-radius:6px; background:#fff3e0; color:#e65100; border:2px solid #ffb74d; ${dado===resultado? 'box-shadow:0 0 8px #ff8c00; font-weight:700; background:#ffe0b2; border-color:#ff8c00;': ''}">${dado}</span>
                 `).join('')}
             </div>
         </div>
         <div style="margin-top:12px; font-size:18px;">
-            <strong>Resultado Final: <span style="color:#d32;">${resultado}</span></strong>
+            <strong>Resultado Final: <span style="color:#ff6b35;">${resultado}</span></strong>
         </div>
     `;
 
@@ -1834,10 +1907,12 @@ function atualizarEstadoEscolhaClasse(classeId) {
     const conf = window.CLASSE_ESCOLHAS?.[classeId];
     if (!classeId || !conf) {
         btn.disabled = true;
+        btn.style.display = 'none';
         hint.textContent = '';
         return;
     }
     btn.disabled = false;
+    btn.style.display = 'inline-block';
     const escolhasAll = JSON.parse(localStorage.getItem('classe_escolha') || '{}');
     const escolhido = escolhasAll[classeId];
     if (escolhido) {
@@ -1974,14 +2049,20 @@ function atualizarEstadoEscolhaOrigem(origemId) {
     const btn = document.getElementById('btn-escolher-origem-pericias');
     const hint = document.getElementById('origem-escolha-hint');
     if (!origemId) {
-        if (btn) btn.disabled = true;
+        if (btn) {
+            btn.disabled = true;
+            btn.style.display = 'none';
+        }
         if (hint) hint.textContent = '';
         return;
     }
     const item = DadosLoader.obterItemPorId('origens', origemId);
     const escolherCount = item?.bonus?.escolher_pericias || 0;
     if (escolherCount && escolherCount > 0) {
-        if (btn) btn.disabled = false;
+        if (btn) {
+            btn.disabled = false;
+            btn.style.display = 'inline-block';
+        }
         const escolhas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
         const escolhidas = escolhas[origemId] || [];
         if (escolhidas.length > 0) {
@@ -1997,7 +2078,10 @@ function atualizarEstadoEscolhaOrigem(origemId) {
             if (hint) hint.textContent = `Esta origem permite escolher ${escolherCount} perícia(s). Clique em 'Escolher perícias' para selecionar agora ou faça depois.`;
         }
     } else {
-        if (btn) btn.disabled = true;
+        if (btn) {
+            btn.disabled = true;
+            btn.style.display = 'none';
+        }
         if (hint) hint.textContent = '';
     }
 }
@@ -2030,11 +2114,18 @@ function removerBonus(tipo) {
                     pericias[periciaId] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
                 }
                 
-                // Remove o bônus do campo específico
+                // Remove o bônus do campo específico, sem ultrapassar 0 (evita negativos por descompasso de estado)
                 const valorAtual = pericias[periciaId][campoBonusChave] || 0;
-                const novoValor = valorAtual - bonusValor;
+                let novoValor = valorAtual - bonusValor;
+                if (bonusValor > 0) {
+                    // Removendo bônus positivo: não pode passar abaixo de 0
+                    novoValor = Math.max(0, novoValor);
+                } else if (bonusValor < 0) {
+                    // Removendo penalidade (valor negativo): não pode passar acima de 0
+                    novoValor = Math.min(0, novoValor);
+                }
                 
-                // Limita entre -5 e +5
+                // Limita entre -5 e +5 (segurança extra)
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
                 pericias[periciaId][campoBonusChave] = valorLimitado;
                 
@@ -2056,9 +2147,14 @@ function removerBonus(tipo) {
                     pericias[periciaId] = { d6: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
                 }
                 
-                // Remove a penalidade
+                // Remove a penalidade (bonusValor costuma ser negativo). Evita ultrapassar 0.
                 const valorAtual = pericias[periciaId][campoBonusChave] || 0;
-                const novoValor = valorAtual - bonusValor;
+                let novoValor = valorAtual - bonusValor;
+                if (bonusValor > 0) {
+                    novoValor = Math.max(0, novoValor);
+                } else if (bonusValor < 0) {
+                    novoValor = Math.min(0, novoValor);
+                }
                 
                 // Limita entre -5 e +5
                 const valorLimitado = Math.max(-5, Math.min(5, novoValor));
@@ -2376,12 +2472,12 @@ function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, p
             <strong>Dados D20 rolados:</strong>
             <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
                 ${dadosRolados.map(dado => `
-                    <span style="padding:6px 8px; border-radius:6px; background:#eee; ${dado===resultadoPool? 'box-shadow:0 0 6px #ffd54f; font-weight:700;': ''}">${dado}</span>
+                    <span style="padding:6px 8px; border-radius:6px; background:#fff3e0; color:#e65100; border:2px solid #ffb74d; ${dado===resultadoPool? 'box-shadow:0 0 8px #ff8c00; font-weight:700; background:#ffe0b2; border-color:#ff8c00;': ''}">${dado}</span>
                 `).join('')}
             </div>
         </div>
         <div style="margin-top:12px; font-size:18px;">
-            <strong>Resultado do Pool: <span style="color:#d32;">${resultadoPool}</span></strong>
+            <strong>Resultado do Pool: <span style="color:#ff6b35;">${resultadoPool}</span></strong>
             <div>Resultado Final (pool + perícia): <strong>${resultadoFinal >= 0 ? `+${resultadoFinal}` : resultadoFinal}</strong></div>
         </div>
     `;
@@ -2474,6 +2570,156 @@ function limparAtributosEPericias() {
     showMessage('Atributos e perícias limpos. Valores atuais das estatísticas mantidos.', 'success');
 }
 
+/**
+ * Limpa TODO o formulário/ficha: atributos, perícias, seleções, nível, inventário e estatísticas.
+ * Reseta também todas as chaves relevantes do localStorage.
+ */
+function limparFormularioCompleto() {
+    // Usa modal customizado ao invés de confirm() nativo (pode ser bloqueado no Cordova)
+    const modal = document.getElementById('modal-confirmar-limpar');
+    const btnConfirmar = document.getElementById('modal-limpar-confirmar');
+    const btnCancelar = document.getElementById('modal-limpar-cancelar');
+    
+    if (!modal || !btnConfirmar || !btnCancelar) {
+        console.error('Modal de confirmação não encontrado!');
+        showMessage('Erro: Modal de confirmação não disponível.', 'error');
+        return;
+    }
+    
+    // Mostra o modal
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+
+    // Handlers auxiliares (overlay + ESC)
+    const escHandler = (e) => { if (e.key === 'Escape') { cancelarHandler(); } };
+    const overlayClickHandler = (e) => { if (e.target === modal) { cancelarHandler(); } };
+    document.addEventListener('keydown', escHandler);
+    modal.addEventListener('click', overlayClickHandler);
+    
+    // Handler para confirmar
+    const confirmarHandler = () => {
+        modal.style.display = 'none';
+        btnConfirmar.removeEventListener('click', confirmarHandler);
+        btnCancelar.removeEventListener('click', cancelarHandler);
+        document.removeEventListener('keydown', escHandler);
+        modal.removeEventListener('click', overlayClickHandler);
+        executarLimpezaTotal();
+    };
+    
+    // Handler para cancelar
+    const cancelarHandler = () => {
+        modal.style.display = 'none';
+        btnConfirmar.removeEventListener('click', confirmarHandler);
+        btnCancelar.removeEventListener('click', cancelarHandler);
+        document.removeEventListener('keydown', escHandler);
+        modal.removeEventListener('click', overlayClickHandler);
+        showMessage('Ação cancelada. Nada foi alterado.', 'info');
+    };
+    
+    btnConfirmar.addEventListener('click', confirmarHandler);
+    btnCancelar.addEventListener('click', cancelarHandler);
+}
+
+/**
+ * Executa a limpeza total da ficha
+ */
+function executarLimpezaTotal() {
+
+    // Limpa seleções (classe/raça/origem) e escolhas
+    removerBonus('classe');
+    removerBonus('raca');
+    removerBonus('origem');
+    removerBonus('classe_escolha');
+
+    // Remove chaves de ficha e configurações
+    const chaves = [
+        'classe_selecionada', 'raca_selecionada', 'origem_selecionada',
+        'origem_escolhas', 'classe_escolha', 'nivelFichaAtual', 'atributos_personagem',
+        'pericias_estrutura', 'pericias_dados_adicionais', 'bonus_bolsa',
+        'rpg_fichas', 'fichas', 'inventario_itens'
+    ];
+    chaves.forEach(k => localStorage.removeItem(k));
+
+    // Reseta nível
+    window.nivelFichaAtual = 0;
+    const nivelInput = document.getElementById('nivel');
+    const nivelSlider = document.getElementById('nivel-slider');
+    if (nivelInput) {
+        nivelInput.value = 0;
+        try { nivelInput.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {}
+    }
+    if (nivelSlider) {
+        nivelSlider.value = 0;
+        try { nivelSlider.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {}
+    }
+
+    // Limpa inventário
+    if (typeof inventarioAtual !== 'undefined') {
+        inventarioAtual = [];
+    }
+
+    // Limpa UI de selects
+    const selectClasse = document.getElementById('classe');
+    const selectRaca = document.getElementById('raca');
+    const selectOrigem = document.getElementById('origem');
+    
+    if (selectClasse) { 
+        selectClasse.value = ''; 
+        if (selectClasse.options && selectClasse.options.length) selectClasse.selectedIndex = 0; 
+        try { selectClasse.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+    }
+    if (selectRaca) { 
+        selectRaca.value = ''; 
+        if (selectRaca.options && selectRaca.options.length) selectRaca.selectedIndex = 0; 
+        try { selectRaca.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+    }
+    if (selectOrigem) { 
+        selectOrigem.value = ''; 
+        if (selectOrigem.options && selectOrigem.options.length) selectOrigem.selectedIndex = 0; 
+        try { selectOrigem.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+    }
+
+    // Atualiza estado de botões/hints de escolha
+    if (typeof atualizarEstadoEscolhaClasse === 'function') atualizarEstadoEscolhaClasse(null);
+    if (typeof atualizarEstadoEscolhaOrigem === 'function') atualizarEstadoEscolhaOrigem(null);
+
+    // Atualiza display de informações do personagem
+    if (typeof atualizarInfoPersonagem === 'function') atualizarInfoPersonagem();
+
+    // Limpa atributos/perícias recriando estrutura base
+    popularAtributosFicha();
+    popularPericiasFicha();
+
+    // Reinicia estatísticas (marca como primeira vez para copiar total em atual)
+    primeiraVezCalculandoEstatisticas = true;
+    calcularEstatisticas();
+
+    // Zera campos atuais explicitamente caso não tenham sido criados ainda
+    ['vida-atual','mana-atual','sanidade-atual','alma-atual'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = 0;
+    });
+
+    // Atualiza inventário visual se funções existirem
+    if (typeof atualizarListaInventario === 'function') atualizarListaInventario();
+    if (typeof atualizarDisplayInventario === 'function') atualizarDisplayInventario();
+    if (typeof atualizarDisplayInventarioModal === 'function') atualizarDisplayInventarioModal();
+
+    // Limpa memória de bônus aplicados
+    if (typeof bonusAplicados !== 'undefined') {
+        bonusAplicados = { classe: null, raca: null, origem: null };
+    }
+    // Limpa ids selecionados em memória
+    if (typeof selecionadosIds !== 'undefined') {
+        selecionadosIds = { classe: null, raca: null, origem: null };
+    }
+
+    showMessage('Ficha completamente limpa e reiniciada.', 'success');
+}
+
+window.limparFormularioCompleto = limparFormularioCompleto;
+
 window.testarAtributoFicha = testarAtributoFicha;
 window.alterarAtributoFicha = alterarAtributoFicha;
 window.salvarAtributoFicha = salvarAtributoFicha;
@@ -2492,6 +2738,22 @@ window.testarPericiaFicha = testarPericiaFicha;
 window.togglePericiasGrupo = togglePericiasGrupo;
 window.calcularEstatisticas = calcularEstatisticas;
 window.limparAtributosEPericias = limparAtributosEPericias;
+// Delegação global como fallback: garante funcionamento do botão "Apagar Tudo" mesmo se o binding direto falhar
+document.addEventListener('click', (ev) => {
+    const btn = ev.target && (ev.target.id === 'btn-reset-total' ? ev.target : ev.target.closest ? ev.target.closest('#btn-reset-total') : null);
+    if (btn) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        try {
+            if (typeof limparFormularioCompleto === 'function') {
+                // console.debug('[Reset] Clique em Apagar Tudo'); // opcional
+                limparFormularioCompleto();
+            }
+        } catch (e) {
+            console.error('Erro ao executar limparFormularioCompleto:', e);
+        }
+    }
+});
 
 /**
  * Configura o evento de submit do formulário
@@ -3184,6 +3446,12 @@ function atualizarListaInventario() {
             'itens-origem': 'Itens de Origem'
         }[item.categoria] || 'Outro';
         
+        // Botões extras para armas
+        const botoesArma = item.categoria === 'armas' ? `
+            <button type="button" onclick="window.rolarDanoArma('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:11px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;" title="Rolar dano normal">🎲</button>
+            <button type="button" onclick="window.rolarCriticoArma('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:11px; background:#ff5722; color:white; border:none; border-radius:4px; cursor:pointer;" title="Rolar dano crítico">💥</button>
+        ` : '';
+        
         return `
             <div class="inventario-item" style="border:1px solid #ddd; border-radius:8px; padding:12px; background:#fafafa;">
                 <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
@@ -3196,7 +3464,8 @@ function atualizarListaInventario() {
                         </div>
                         ${item.funcao ? `<div style="font-size:13px; color:#444; margin-top:6px;">${item.funcao}</div>` : ''}
                     </div>
-                    <div style="display:flex; gap:4px;">
+                    <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                        ${botoesArma}
                         <button type="button" onclick="window.abrirModalItem('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#2196F3; color:white; border:none; border-radius:4px; cursor:pointer;">✏️</button>
                         <button type="button" onclick="window.removerItem('${item.id.replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">🗑️</button>
                     </div>
@@ -3204,6 +3473,135 @@ function atualizarListaInventario() {
             </div>
         `;
     }).join('');
+}
+
+/**
+ * Rola dados a partir de expressão (ex: "1d8", "1d4+2", "1d8+1d4")
+ */
+function rolarDados(expressao) {
+    if (!expressao) return 0;
+    
+    // Remove espaços e transforma em minúsculas
+    expressao = expressao.toLowerCase().replace(/\s/g, '');
+    console.log('rolarDados - expressao recebida:', expressao);
+    
+    let total = 0;
+    const partes = expressao.split('+');
+    console.log('rolarDados - partes:', partes);
+    
+    for (const parte of partes) {
+        if (parte.includes('d')) {
+            // Formato XdY
+            const [qtd, faces] = parte.split('d').map(n => parseInt(n) || 1);
+            let subtotal = 0;
+            for (let i = 0; i < qtd; i++) {
+                const rolagem = Math.floor(Math.random() * faces) + 1;
+                subtotal += rolagem;
+            }
+            console.log(`rolarDados - ${parte}: ${subtotal}`);
+            total += subtotal;
+        } else {
+            // Bônus fixo
+            const bonus = parseInt(parte) || 0;
+            console.log(`rolarDados - bonus fixo: ${bonus}`);
+            total += bonus;
+        }
+    }
+    
+    console.log('rolarDados - total final:', total);
+    return total;
+}
+
+/**
+ * Rola dano normal de uma arma
+ */
+function rolarDanoArma(itemId) {
+    const item = inventarioAtual.find(i => i.id === itemId);
+    if (!item) return;
+    
+    // Busca dados da arma no catálogo para pegar o dano correto
+    const catalogItem = window.DadosLoader?.obterItemCatalogo('armas', item.id.split('-').slice(0, -1).join('-'));
+    const dano = catalogItem?.dano || '1d4';
+    
+    const resultado = rolarDados(dano);
+    
+    mostrarNotificacao(`🎲 ${item.nome}: ${resultado} de dano`);
+}
+
+/**
+ * Rola dano crítico de uma arma considerando diferentes padrões:
+ * - Luta (Força) padrão: rola os dados duas vezes e soma (ex: 1d8 -> 2d8)
+ * - Pontaria 18-20 ×3: multiplica a rolagem única por 3
+ * - Pontaria fogo 19 ×2: multiplica a rolagem única por 2
+ * Regras identificadas pelas propriedades de crítico no JSON.
+ */
+function rolarCriticoArma(itemId) {
+    const item = inventarioAtual.find(i => i.id === itemId);
+    if (!item) return;
+    
+    // Identifica ID base (remove timestamp) e obtém dados do catálogo
+    const idBase = item.id.split('-').slice(0, -1).join('-');
+    const catalogItem = window.DadosLoader?.obterItemCatalogo('armas', idBase);
+    const dano = catalogItem?.dano || '1d4';
+    const pericia = (catalogItem?.pericia || '').toLowerCase();
+    const props = (catalogItem?.propriedades || []).join(' ').toLowerCase();
+    
+    let total = 0;
+    let descricao = '';
+    
+    const isCriticoX3 = props.includes('18-20') || props.includes('multiplica dano por 3');
+    const isCritico19x2 = props.includes('19') && props.includes('multiplica dano por 2');
+    const isCritico20x2 = props.includes('20') && props.includes('multiplica dano por 2');
+    
+    if (isCriticoX3) {
+        // Multiplica resultado único por 3
+        const base = rolarDados(dano);
+        total = base * 3;
+        descricao = `${base} × 3 = ${total}`;
+    } else if (isCritico19x2 || isCritico20x2) {
+        // Multiplica resultado único por 2
+        const base = rolarDados(dano);
+        total = base * 2;
+        descricao = `${base} × 2 = ${total}`;
+    } else {
+        // Padrão: rola duas vezes (dobrar dados)
+        const r1 = rolarDados(dano);
+        const r2 = rolarDados(dano);
+        total = r1 + r2;
+        descricao = `${r1} + ${r2} = ${total} (dados dobrados)`;
+    }
+    
+    mostrarNotificacao(`💥 CRÍTICO! ${item.nome}: ${descricao} de dano`, 'critico');
+}
+
+/**
+ * Mostra notificação temporária no topo da tela
+ */
+function mostrarNotificacao(mensagem, tipo = 'normal') {
+    const notif = document.createElement('div');
+    notif.textContent = mensagem;
+    notif.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${tipo === 'critico' ? '#ff5722' : '#4CAF50'};
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-size: 16px;
+        font-weight: bold;
+        animation: slideDown 0.3s ease;
+    `;
+    
+    document.body.appendChild(notif);
+    
+    setTimeout(() => {
+        notif.style.animation = 'slideUp 0.3s ease';
+        setTimeout(() => notif.remove(), 300);
+    }, 3000);
 }
 
 /**
@@ -3308,6 +3706,21 @@ function renderizarCatalogoItens() {
     container.innerHTML = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo)).join('');
 }
 
+// Extrai a faixa de crítico necessária de uma propriedade textual da arma
+function extrairCriticoNecessario(item) {
+    try {
+        const props = item?.propriedades || [];
+        const critProp = props.find(p => /crítico/i.test(p));
+        if (!critProp) return '20'; // padrão
+        // Captura formatos: "Crítico: 19 ...", "Crítico: 18-20 ...", "Crítico: 20 em Força ..."
+        const match = critProp.match(/Crítico:\s*([0-9]+(?:-[0-9]+)?)/i);
+        if (match) return match[1];
+        return '20';
+    } catch (e) {
+        return '20';
+    }
+}
+
 function renderizarSecaoCatalogo(categoria, titulo) {
     const itens = window.DadosLoader.obterItensPorCategoria(categoria) || [];
     if (!itens.length) return '';
@@ -3315,12 +3728,20 @@ function renderizarSecaoCatalogo(categoria, titulo) {
     const lista = itens.map(item => {
         const peso = (item.peso != null) ? item.peso : 0;
         const desc = item.descricao || '';
+        // Se for arma, adiciona perícia e crítico necessário
+        let linhaPericiaCritico = '';
+        if (categoria === 'armas') {
+            const pericia = item.pericia ? item.pericia : '—';
+            const critico = extrairCriticoNecessario(item);
+            linhaPericiaCritico = `<div style="font-size:12px; color:#444; margin-top:4px;">Perícia: <strong>${pericia}</strong> • Crítico: <strong>${critico}</strong></div>`;
+        }
         return `
             <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
                 <div style="flex:1;">
                     <div style="font-weight:bold;">${item.nome}</div>
                     <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
                     ${desc ? `<div style=\"font-size:12px; color:#444; margin-top:4px;\">${desc}</div>` : ''}
+                    ${linhaPericiaCritico}
                 </div>
                 <div>
                     <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${categoria}','${item.id}')">Adicionar</button>
@@ -3373,6 +3794,8 @@ function adicionarItemCatalogo(categoria, id) {
 
 // Exporta para uso global nos botões do HTML gerado
 window.adicionarItemCatalogo = adicionarItemCatalogo;
+window.rolarDanoArma = rolarDanoArma;
+window.rolarCriticoArma = rolarCriticoArma;
 
 /**
  * Toggle expansão/colapso de seção do catálogo

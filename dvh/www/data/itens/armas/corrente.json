@@ -1,0 +1,17 @@
+{
+  "id": "corrente",
+  "nome": "Corrente",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Segmentos de metal articulados usados para prender ou golpear.",
+  "peso": 1,
+  "dano": "1d4+2",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo/curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Flexível", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 11
+}

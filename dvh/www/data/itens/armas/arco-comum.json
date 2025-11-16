@@ -1,0 +1,17 @@
+{
+  "id": "arco-comum",
+  "nome": "Arco Comum",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arco simples feito de madeira flexível, ideal para iniciantes.",
+  "peso": 2,
+  "dano": "1d8",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Arcos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Disparo", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 60
+}

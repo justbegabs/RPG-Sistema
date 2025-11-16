@@ -1,0 +1,18 @@
+{
+  "id": "cartas",
+  "nome": "Cartas de Arremesso",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Cartas especiais afiadas usadas para ataques à distância. Cada carta pode ter efeito diferente.",
+  "peso": 1,
+  "dano": "especial",
+  "tipoDano": "variavel",
+  "alcance": "curta/média distância",
+  "pericia": "Pontaria",
+  "atributo": "Destreza",
+  "proficiencia": "armas exóticas",
+  "propriedades": ["Efeito variável por carta", "Arremesso", "Crítico: 18-20 multiplica dano por 3"],
+  "funcao": "Dano e efeito dependem da carta sorteada. Consulte baralho de cartas.",
+  "raridade": "incomum",
+  "preco": 50
+}

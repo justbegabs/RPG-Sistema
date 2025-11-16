@@ -1,0 +1,17 @@
+{
+  "id": "soqueira",
+  "nome": "Soqueira",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Peça metálica para os punhos que potencializa socos em combate corpo a corpo.",
+  "peso": 0.5,
+  "dano": "1d4+2",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Leve", "+Força adicional", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 8
+}

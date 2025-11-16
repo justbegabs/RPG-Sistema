@@ -1,0 +1,17 @@
+{
+  "id": "revolver",
+  "nome": "Revólver",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma de fogo com tambor, confiável e de alcance médio.",
+  "peso": 2,
+  "dano": "1d6+2",
+  "tipoDano": "perfurante",
+  "alcance": "média distância",
+  "pericia": "Armas de Fogo Pequenas",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Disparo", "Tambor (6 tiros)", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 180
+}

@@ -1,0 +1,17 @@
+{
+  "id": "besta",
+  "nome": "Besta",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma de disparo mecânico que lança virotes com força concentrada.",
+  "peso": 2,
+  "dano": "1d10",
+  "tipoDano": "perfurante",
+  "alcance": "média distância",
+  "pericia": "Arcos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Recarga", "Disparo silencioso", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 90
+}

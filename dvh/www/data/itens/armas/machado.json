@@ -1,0 +1,17 @@
+{
+  "id": "machado",
+  "nome": "Machado",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Machado robusto usado para cortes pesados em combate corpo a corpo.",
+  "peso": 2,
+  "dano": "1d10",
+  "tipoDano": "cortante",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Pesado", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 15
+}

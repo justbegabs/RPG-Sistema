@@ -1,0 +1,17 @@
+{
+  "id": "pistola",
+  "nome": "Pistola",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma de fogo leve de curto alcance eficaz até média distância.",
+  "peso": 2,
+  "dano": "1d6",
+  "tipoDano": "perfurante",
+  "alcance": "curta/média distância",
+  "pericia": "Armas de Fogo Pequenas",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": ["Disparo", "Recarga rápida", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 120
+}

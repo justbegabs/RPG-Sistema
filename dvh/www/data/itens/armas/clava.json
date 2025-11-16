@@ -1,0 +1,17 @@
+{
+  "id": "clava",
+  "nome": "Clava",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste pesada de madeira ou metal usada para esmagar o inimigo.",
+  "peso": 2,
+  "dano": "1d8",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Simples", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 6
+}

@@ -1,0 +1,17 @@
+{
+  "id": "escopeta",
+  "nome": "Escopeta",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma de fogo pesada que dispara projéteis espalhados a curta distância.",
+  "peso": 5,
+  "dano": "1d12",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Armas de Fogo Grandes",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Disparo espalhado", "Recarga manual", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 650
+}

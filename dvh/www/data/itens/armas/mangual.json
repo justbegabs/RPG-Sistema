@@ -1,0 +1,17 @@
+{
+  "id": "mangual",
+  "nome": "Mangual",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Cabo ligado a esfera com pontas para golpes devastadores.",
+  "peso": 2,
+  "dano": "1d12",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo/curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Impacto Pesado", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 22
+}

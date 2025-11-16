@@ -1,0 +1,17 @@
+{
+  "id": "submetralhadora",
+  "nome": "Submetralhadora",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma automática leve para disparos rápidos em alcance médio.",
+  "peso": 2,
+  "dano": "1d8+2",
+  "tipoDano": "perfurante",
+  "alcance": "média distância",
+  "pericia": "Armas de Fogo Pequenas",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Rajada (3 tiros)", "Controle de recuo", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 400
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Ficha - RPG Sistema</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #c0392b;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+        .info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Limpar Ficha</h1>
+        <p>Esta ação irá <strong>apagar completamente</strong> todas as informações salvas da ficha, incluindo:</p>
+        <div class="info">
+            • Classe, Raça e Origem selecionadas<br>
+            • Atributos de Teste e Sorte<br>
+            • Todas as Perícias<br>
+            • Inventário<br>
+            • Nível do personagem<br>
+            • Estatísticas calculadas<br>
+            • Fichas salvas
+        </div>
+        <p style="color: #e74c3c; font-weight: bold; margin-top: 20px;">
+            ⚠️ Esta ação não pode ser desfeita!
+        </p>
+        <button onclick="limparTudo()">Limpar Todas as Informações</button>
+        <div class="success" id="success">✅ Ficha limpa com sucesso! Você pode fechar esta página.</div>
+        <a href="index.html" class="back-link">← Voltar para a Ficha</a>
+    </div>
+
+    <script>
+        function limparTudo() {
+            if (!confirm('Tem certeza que deseja apagar TODAS as informações? Esta ação não pode ser desfeita!')) {
+                return;
+            }
+
+            // Lista de todas as chaves do localStorage usadas pelo sistema
+            const chaves = [
+                'classe_selecionada',
+                'raca_selecionada',
+                'origem_selecionada',
+                'classe_escolha',
+                'origem_escolhas',
+                'nivelFichaAtual',
+                'atributos_personagem',
+                'pericias_estrutura',
+                'pericias_dados_adicionais',
+                'bonus_bolsa',
+                'inventario_itens',
+                'rpg_fichas',
+                'fichas'
+            ];
+
+            // Remove cada chave
+            chaves.forEach(chave => {
+                localStorage.removeItem(chave);
+            });
+
+            // Limpa também qualquer outra chave relacionada
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.includes('ficha') || key.includes('pericia') || key.includes('atributo'))) {
+                    localStorage.removeItem(key);
+                    i--; // Ajusta o índice após remoção
+                }
+            }
+
+            // Mostra mensagem de sucesso
+            document.getElementById('success').style.display = 'block';
+            
+            console.log('✅ Todas as informações foram limpas do localStorage');
+            console.log('📊 Estado atual do localStorage:', localStorage.length, 'itens restantes');
+        }
+    </script>
+</body>
+</html>

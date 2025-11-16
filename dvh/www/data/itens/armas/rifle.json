@@ -1,0 +1,17 @@
+{
+  "id": "rifle",
+  "nome": "Rifle",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Rifle de precisão para disparos a longa distância.",
+  "peso": 5,
+  "dano": "1d12+1d4",
+  "tipoDano": "perfurante",
+  "alcance": "longa distância",
+  "pericia": "Armas de Fogo Grandes",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Disparo único", "Mira avançada", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 800
+}

@@ -1,0 +1,17 @@
+{
+  "id": "nunchaku",
+  "nome": "Nunchaku",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Par de hastes conectadas por corrente, eficaz em combos rápidos.",
+  "peso": 1,
+  "dano": "1d6+1d4",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Leve", "Manuseio Ágil", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 18
+}

@@ -25,8 +25,11 @@ function initRouter() {
     if (menuToggle) {
         menuToggle.addEventListener('click', () => {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
+            const isOpen = sidebar?.classList.toggle('active');
+            if (isOpen) {
+                document.body.classList.add('sidebar-open');
+            } else {
+                document.body.classList.remove('sidebar-open');
             }
         });
     }
@@ -59,8 +62,32 @@ function initRouter() {
     // Configura a barra de navegação inferior interativa (scroll)
     setupBottomNavScroll();
 
+    // Configura o toggle de modo escuro
+    setupDarkModeToggle();
+
     // Carrega a página inicial
     navigateToPage('home');
+}
+
+/**
+ * Configura o toggle de modo escuro
+ */
+function setupDarkModeToggle() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (!darkModeToggle) return;
+
+    // Carrega preferência salva
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+    }
+
+    // Toggle ao clicar
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isNowDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isNowDark);
+    });
 }
 
 /**
@@ -122,51 +149,40 @@ function navigateToPage(pageId, params = {}) {
     const menuToggle = document.getElementById('menuToggle');
     
     if (pageId === 'home') {
-        // Página home: mostra barra inferior sempre visível, esconde sidebar
+        // Página home: barra inferior visível, sidebar fechada
         if (bottomNav) {
             bottomNav.style.display = 'block';
-            // Remove a classe hidden se estiver presente e garante que está visível
             bottomNav.classList.remove('nav-hidden');
-            // Força a barra a ficar visível
             bottomNav.style.transform = 'translateY(0)';
             bottomNav.style.opacity = '1';
         }
-        // Atualiza o fundo do body para o tema escuro
         document.body.style.background = 'linear-gradient(135deg, #0a1929 0%, #1a3a5a 50%, #0f2537 100%)';
-        if (sidebar) {
-            sidebar.style.display = 'none';
-        }
-        if (menuToggle) {
-            menuToggle.style.display = 'none';
-        }
-        if (mainContent) {
-            mainContent.style.marginLeft = '0';
-        }
+        if (sidebar) { sidebar.classList.remove('active'); }
+        document.body.classList.remove('sidebar-open');
+        if (menuToggle) { menuToggle.style.display = 'block'; }
         // Scroll para o topo quando voltar para home
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-        // Restaura o fundo padrão do body nas outras páginas
-        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-        // Outras páginas: esconde barra inferior, mostra sidebar
-        if (bottomNav) {
-            bottomNav.style.display = 'none';
-        }
-        if (sidebar) {
-            sidebar.style.display = 'block';
-        }
-        if (menuToggle) {
-            menuToggle.style.display = 'block';
-        }
-        if (mainContent && window.innerWidth > 768) {
-            mainContent.style.marginLeft = '280px';
-        } else if (mainContent) {
-            mainContent.style.marginLeft = '0';
+        // Outras páginas: barra inferior oculta, manter sidebar aberta em telas largas
+        document.body.style.background = 'linear-gradient(135deg, #ff8c00 0%, #ff6b35 100%)';
+        if (bottomNav) { bottomNav.style.display = 'none'; }
+        if (window.innerWidth > 768) {
+            // Mantém sidebar aberta e empurra conteúdo
+            if (sidebar && !sidebar.classList.contains('active')) {
+                sidebar.classList.add('active');
+            }
+            document.body.classList.add('sidebar-open');
+        } else {
+            // Em telas pequenas continua fechando após navegação
+            if (sidebar) { sidebar.classList.remove('active'); }
+            document.body.classList.remove('sidebar-open');
         }
     }
 
-    // Fecha o menu mobile após navegação
-    if (sidebar && window.innerWidth <= 768) {
+    // Em mobile (<768) garante fechamento após clique em item
+    if (window.innerWidth <= 768 && sidebar) {
         sidebar.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     }
 
     // Carrega dados específicos da página se necessário

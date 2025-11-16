@@ -1,0 +1,17 @@
+{
+  "id": "tridente",
+  "nome": "Tridente",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste com três pontas, eficaz para perfurar e manter distância.",
+  "peso": 2,
+  "dano": "1d12",
+  "tipoDano": "perfurante",
+  "alcance": "corpo a corpo/curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Alcance", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 20
+}

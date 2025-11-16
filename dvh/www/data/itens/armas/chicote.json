@@ -1,0 +1,17 @@
+{
+  "id": "chicote",
+  "nome": "Chicote",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Tira flexível que pode atingir alvos a curta ou média distância.",
+  "peso": 2,
+  "dano": "1d10+2",
+  "tipoDano": "cortante",
+  "alcance": "curta/média distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Alcance Flexível", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 16
+}

@@ -1,0 +1,17 @@
+{
+  "id": "taser-luta",
+  "nome": "Taser (Luta)",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Dispositivo elétrico de choque para incapacitar o alvo em combate corpo a corpo.",
+  "peso": 1,
+  "dano": "1d4+3",
+  "tipoDano": "eletrico",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Atordoamento (teste de resistência)", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 30
+}

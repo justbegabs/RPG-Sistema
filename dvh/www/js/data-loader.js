@@ -90,10 +90,43 @@ const ARQUIVOS_ORIGENS = [
 
 // Arquivos de itens (catálogo)
 const ARQUIVOS_ITENS_ARMAS = [
+    // Originais
     'adaga.json',
     'arco-longo.json',
     'cajado-arcano.json',
-    'espada-longa.json'
+    'espada-longa.json',
+    // Armas de luta (Força)
+    'soqueira.json',
+    'machado.json',
+    'nunchaku.json',
+    'martelo.json',
+    'lanca.json',
+    'chicote.json',
+    'clava.json',
+    'tridente.json',
+    'foice.json',
+    'bastao.json',
+    'maca.json',
+    'alabarda.json',
+    'mangual.json',
+    'corrente.json',
+    'taser.json',
+    // Armas de pontaria (Destreza)
+    'faca.json',
+    'taser-pontaria.json',
+    'cartas.json',
+    // Armas de fogo pequenas (Destreza)
+    'pistola.json',
+    'revolver.json',
+    'submetralhadora.json'
+    ,// Armas de fogo grandes (Destreza)
+    'rifle.json',
+    'escopeta.json',
+    'carabina.json'
+    ,// Arcos e bestas (Destreza)
+    'besta.json',
+    'arco-comum.json',
+    'arco-composto.json'
 ];
 
 const ARQUIVOS_ITENS_COMUNS = [

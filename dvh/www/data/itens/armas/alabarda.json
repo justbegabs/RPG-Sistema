@@ -1,0 +1,17 @@
+{
+  "id": "alabarda",
+  "nome": "Alabarda",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste longa com lâmina e ponta perfurante, ideal para manter inimigos afastados.",
+  "peso": 2,
+  "dano": "1d8",
+  "tipoDano": "cortante/perfurante",
+  "alcance": "corpo a corpo",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Alcance", "Versátil", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 17
+}

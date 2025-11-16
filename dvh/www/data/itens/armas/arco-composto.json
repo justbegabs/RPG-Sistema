@@ -1,0 +1,17 @@
+{
+  "id": "arco-composto",
+  "nome": "Arco Composto",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arco reforçado com sistema de polias para maior potência e alcance.",
+  "peso": 2,
+  "dano": "1d12",
+  "tipoDano": "perfurante",
+  "alcance": "média distância",
+  "pericia": "Arcos",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Mira estável", "Disparo potente", "Crítico: 19 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 200
+}

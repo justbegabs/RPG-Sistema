@@ -1,0 +1,17 @@
+{
+  "id": "maca",
+  "nome": "Maça",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Cabeça pesada para esmagar inimigos protegidos.",
+  "peso": 2,
+  "dano": "1d8+1d4",
+  "tipoDano": "concussao",
+  "alcance": "corpo a corpo/curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Impacto", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 13
+}

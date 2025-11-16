@@ -1,0 +1,17 @@
+{
+  "id": "foice",
+  "nome": "Foice",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Lâmina curva montada em haste para cortes amplos.",
+  "peso": 2,
+  "dano": "1d8",
+  "tipoDano": "cortante",
+  "alcance": "corpo a corpo/curta distância",
+  "pericia": "Luta",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Corte Amplo", "Crítico: 20 em Força dobra o dano"],
+  "raridade": "comum",
+  "preco": 14
+}
