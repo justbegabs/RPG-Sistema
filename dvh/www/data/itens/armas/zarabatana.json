@@ -1,0 +1,20 @@
+{
+  "id": "zarabatana",
+  "nome": "Zarabatana",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Tubo para disparo de dardos leves, silencioso e preciso.",
+  "peso": 1,
+  "dano": "1d6+1d4",
+  "tipoDano": "perfurante",
+  "alcance": "média distância",
+  "pericia": "Dardos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Possível envenenamento",
+    "Crítico: 18 multiplica dano por 3"
+  ],
+  "raridade": "comum",
+  "preco": 12
+}

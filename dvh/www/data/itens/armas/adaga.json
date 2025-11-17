@@ -1,0 +1,17 @@
+{
+  "id": "adaga",
+  "nome": "Adaga",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Adaga de lâmina curta; ideal para golpes rápidos.",
+  "peso": 1,
+  "dano": "1d4+3",
+  "tipoDano": "perfurante",
+  "alcance": "corpo a corpo",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Leve", "Sangramento", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 5
+}

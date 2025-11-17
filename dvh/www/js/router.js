@@ -163,26 +163,13 @@ function navigateToPage(pageId, params = {}) {
         // Scroll para o topo quando voltar para home
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-        // Outras páginas: barra inferior oculta, manter sidebar aberta em telas largas
+        // Outras páginas: barra inferior oculta, sidebar fechada por padrão
         document.body.style.background = 'linear-gradient(135deg, #ff8c00 0%, #ff6b35 100%)';
         if (bottomNav) { bottomNav.style.display = 'none'; }
-        if (window.innerWidth > 768) {
-            // Mantém sidebar aberta e empurra conteúdo
-            if (sidebar && !sidebar.classList.contains('active')) {
-                sidebar.classList.add('active');
-            }
-            document.body.classList.add('sidebar-open');
-        } else {
-            // Em telas pequenas continua fechando após navegação
-            if (sidebar) { sidebar.classList.remove('active'); }
-            document.body.classList.remove('sidebar-open');
-        }
-    }
-
-    // Em mobile (<768) garante fechamento após clique em item
-    if (window.innerWidth <= 768 && sidebar) {
-        sidebar.classList.remove('active');
+        // Sidebar sempre fechada ao navegar, só abre com toggle manual
+        if (sidebar) { sidebar.classList.remove('active'); }
         document.body.classList.remove('sidebar-open');
+        if (menuToggle) { menuToggle.style.display = 'block'; }
     }
 
     // Carrega dados específicos da página se necessário

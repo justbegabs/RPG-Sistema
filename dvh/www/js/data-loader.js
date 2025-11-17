@@ -111,10 +111,39 @@ const ARQUIVOS_ITENS_ARMAS = [
     'mangual.json',
     'corrente.json',
     'taser.json',
+    // Armas de Espadas (Força)
+    // Espadas (Força)
+    'espada.json',
+    'katana.json',
+    'punhal.json',
+    'faca-espadas.json',
+    'sabre.json',
+    'cimitarra.json',
+    'gladio.json',
+    'naginata.json',
+    'machete.json',
+    'estoque.json',
+    'lamina-escondida.json',
     // Armas de pontaria (Destreza)
     'faca.json',
     'taser-pontaria.json',
     'cartas.json',
+    // Dardos (Destreza)
+    'zarabatana.json',
+    'dardos-conjunto.json',
+    // Explosivos (Destreza)
+    'lanca-chamas.json',
+    'canhao-plasma.json',
+    'arma-particulas.json',
+    'arma-som.json',
+    'granada.json',
+    'mina-terrestre.json',
+    // Improvisadas (Variável)
+    'arma-improvisada.json',
+    // Armadilhas (Destreza)
+    'nanobots.json',
+    'drone.json',
+    'armadilhas-diversas.json',
     // Armas de fogo pequenas (Destreza)
     'pistola.json',
     'revolver.json',

@@ -21,6 +21,7 @@ function onDeviceReady() {
     
     // Inicializa o sistema
     init();
+    try { setupOverlayBindings(); } catch (e) {}
 }
 
 /**
@@ -81,6 +82,9 @@ async function init() {
     
     // Carrega as fichas existentes
     loadFichas();
+
+    // Liga overlay OBS aos campos
+    try { setupOverlayBindings(); } catch (e) {}
 }
 
 /**
@@ -663,6 +667,17 @@ function exibirResultadoFicha(id, valorAtributo, quantidadeDados, dadosRolados, 
             <strong>Resultado Final: <span style="color:#ff6b35;">${resultado}</span></strong>
         </div>
     `;
+
+    // Atualiza overlay (OBS) com último resultado de atributo
+    try {
+        localStorage.setItem('overlay_last_roll', JSON.stringify({
+            tipo: 'atributo',
+            titulo: nomeAtributo,
+            resultado,
+            dados: dadosRolados,
+            ts: Date.now()
+        }));
+    } catch (e) { /* noop */ }
 
     modal.style.display = 'flex';
     modal.style.alignItems = 'center';
@@ -1408,6 +1423,7 @@ function calcularEstatisticas() {
     atualizarCampoEstatisticaComAjuste('vida-total', 'vida-atual', Math.max(1, vidaTotal), primeiraVezCalculandoEstatisticas);
     atualizarCampoEstatisticaComAjuste('mana-total', 'mana-atual', Math.max(0, manaTotal), primeiraVezCalculandoEstatisticas);
     atualizarCampoEstatisticaComAjuste('sanidade-total', 'sanidade-atual', Math.max(0, sanidadeTotal), primeiraVezCalculandoEstatisticas);
+    try { if (typeof pushOverlayState === 'function') pushOverlayState(); } catch (e) {}
     
     // Calcula Alma Total: Magia × 5 + Resiliência × 3 + Intelecto × 2 + 15 + bônus de raça + efeitos de classe
     let bonusAlma = 0;
@@ -2481,6 +2497,16 @@ function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, p
             <div>Resultado Final (pool + perícia): <strong>${resultadoFinal >= 0 ? `+${resultadoFinal}` : resultadoFinal}</strong></div>
         </div>
     `;
+    // Atualiza overlay (OBS) com último resultado de perícia
+    try {
+        localStorage.setItem('overlay_last_roll', JSON.stringify({
+            tipo: 'pericia',
+            titulo: `${nomePericia}`,
+            resultado: resultadoFinal,
+            dados: dadosRolados,
+            ts: Date.now()
+        }));
+    } catch (e) { /* noop */ }
 
     modal.style.display = 'flex';
     modal.style.alignItems = 'center';
@@ -2490,6 +2516,44 @@ function exibirResultadoPericiaFicha(nomePericia, nomeAtributo, valorAtributo, p
         modal.style.display = 'none'; 
         btnFechar.onclick = null; 
     };
+}
+
+// ===== Overlay (OBS) Bindings =====
+function pushOverlayState() {
+    try {
+        const nome = document.getElementById('nome');
+        const vidaA = document.getElementById('vida-atual');
+        const vidaT = document.getElementById('vida-total');
+        const sanA = document.getElementById('sanidade-atual');
+        const sanT = document.getElementById('sanidade-total');
+        const manaA = document.getElementById('mana-atual');
+        const manaT = document.getElementById('mana-total');
+        
+        // Salva cada campo individualmente para o overlay ler
+        if (nome) localStorage.setItem('overlay_nome', nome.value || '');
+        if (vidaA) localStorage.setItem('vida-atual', vidaA.value || '0');
+        if (vidaT) localStorage.setItem('vida-total', vidaT.value || '0');
+        if (sanA) localStorage.setItem('sanidade-atual', sanA.value || '0');
+        if (sanT) localStorage.setItem('sanidade-total', sanT.value || '0');
+        if (manaA) localStorage.setItem('mana-atual', manaA.value || '0');
+        if (manaT) localStorage.setItem('mana-total', manaT.value || '0');
+    } catch (e) {}
+}
+
+function setupOverlayBindings() {
+    const nome = document.getElementById('nome');
+    const vidaA = document.getElementById('vida-atual');
+    const vidaT = document.getElementById('vida-total');
+    const sanA = document.getElementById('sanidade-atual');
+    const sanT = document.getElementById('sanidade-total');
+    const manaA = document.getElementById('mana-atual');
+    const manaT = document.getElementById('mana-total');
+    [nome, vidaA, vidaT, sanA, sanT, manaA, manaT].forEach(el => {
+        if (!el) return;
+        el.addEventListener('input', pushOverlayState);
+        el.addEventListener('change', pushOverlayState);
+    });
+    pushOverlayState();
 }
 
 // Torna as funções globais para uso nos onclick do HTML (após definição)

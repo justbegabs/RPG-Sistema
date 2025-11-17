@@ -1,0 +1,17 @@
+{
+  "id": "naginata",
+  "nome": "Naginata",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Haste com lâmina curva na ponta.",
+  "peso": 4,
+  "dano": "2d4+1d3",
+  "tipoDano": "cortante",
+  "alcance": "médio",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Sangramento", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "incomum",
+  "preco": 40
+}

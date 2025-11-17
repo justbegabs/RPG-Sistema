@@ -1,0 +1,20 @@
+{
+  "id": "mina-terrestre",
+  "nome": "Mina Terrestre",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Carga explosiva colocada no solo com acionamento por pressão.",
+  "peso": 1,
+  "dano": "4d8",
+  "tipoDano": "variado",
+  "alcance": "média distância",
+  "pericia": "Explosivos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Queimadura",
+    "Crítico: 20 multiplica dano por 2"
+  ],
+  "raridade": "incomum",
+  "preco": 80
+}

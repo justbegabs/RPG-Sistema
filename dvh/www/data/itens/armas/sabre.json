@@ -1,0 +1,17 @@
+{
+  "id": "sabre",
+  "nome": "Sabre",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Lâmina curva balanceada para cortes rápidos.",
+  "peso": 2,
+  "dano": "1d8+1d3",
+  "tipoDano": "cortante",
+  "alcance": "corpo a corpo",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 35
+}

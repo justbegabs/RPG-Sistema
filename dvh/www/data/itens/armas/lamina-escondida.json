@@ -1,0 +1,17 @@
+{
+  "id": "lamina-escondida",
+  "nome": "Lâmina Escondida",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Mecanismo oculto que projeta uma lâmina.",
+  "peso": 1,
+  "dano": "1d12+1d4",
+  "tipoDano": "cortante",
+  "alcance": "0 (toque)",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Sangramento", "Pode ser envenenada", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "rara",
+  "preco": 60
+}

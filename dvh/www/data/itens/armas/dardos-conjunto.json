@@ -1,0 +1,20 @@
+{
+  "id": "dardos-conjunto",
+  "nome": "Dardos (conjunto com 10)",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Conjunto de 10 dardos equilibrados para arremesso.",
+  "peso": 1,
+  "dano": "2d4",
+  "tipoDano": "perfurante",
+  "alcance": "curta distância",
+  "pericia": "Dardos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Conjunto com 10",
+    "Crítico: 18 multiplica dano por 3"
+  ],
+  "raridade": "comum",
+  "preco": 8
+}

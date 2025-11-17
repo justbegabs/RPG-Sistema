@@ -21,6 +21,8 @@ const DATA_FILE = path.join(__dirname, 'fichas.json');
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Servir arquivos estáticos da pasta www para uso no navegador/OBS
+app.use(express.static(path.join(__dirname, 'www')));
 
 // Inicializa arquivo de dados se não existir
 if (!fs.existsSync(DATA_FILE)) {

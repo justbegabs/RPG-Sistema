@@ -1,0 +1,17 @@
+{
+  "id": "estoque",
+  "nome": "Estoque",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Espada de perfuração para golpes precisos.",
+  "peso": 2,
+  "dano": "1d6",
+  "tipoDano": "perfurante",
+  "alcance": "corpo a corpo",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Sangramento", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 22
+}

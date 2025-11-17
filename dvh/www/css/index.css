@@ -32,7 +32,7 @@ body:has(#page-home.active) {
 .app-container {
     display: flex;
     min-height: 100vh;
-    position: relative;
+    /* position: relative removido para permitir position: fixed nos botões */
 }
 
 /* Quando estiver na página home, o app-container também usa o fundo escuro */
@@ -253,7 +253,6 @@ body.sidebar-open .sidebar {
 /* Ajuste do conteúdo principal: sem margem fixa; aplica quando sidebar aberta */
 .main-content { 
     margin-left: 0 !important; 
-    position: relative; 
     z-index: 1; /* abaixo da sidebar (1000) e do botão dark-mode (1001) */
 }
 /* Removido deslocamento lateral para que a sidebar seja overlay */
@@ -313,9 +312,9 @@ body.sidebar-open .main-content { margin-left: 0 !important; }
     font-weight: bold;
 }
 
-/* Menu Toggle (Mobile) */
+/* Menu Toggle (sempre visível como overlay) */
 .menu-toggle {
-    display: none;
+    display: block;
     position: fixed;
     top: 15px;
     left: 15px;
@@ -368,8 +367,7 @@ body.dark-mode .dark-mode-icon::before {
 .main-content {
     flex: 1;
     margin-left: 280px;
-    padding: 20px;
-    padding-bottom: 200px; /* Espaço para a barra inferior */
+    padding: 70px 20px 200px 20px; /* Espaço no topo para botões fixos */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
 }
@@ -401,6 +399,7 @@ body:has(#page-home.active) .main-content {
     padding: 20px 30px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-top: 10px; /* Espaço abaixo dos botões fixos */
     margin-bottom: 20px;
 }
 
@@ -1894,10 +1893,6 @@ header h1 {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-
     .sidebar {
         transform: translateX(-100%);
     }

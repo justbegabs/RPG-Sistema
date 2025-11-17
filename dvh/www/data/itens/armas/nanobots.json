@@ -1,0 +1,22 @@
+{
+  "id": "nanobots",
+  "nome": "Nanobots",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Enxame de nanobots que atacam alvos à distância.",
+  "peso": 1,
+  "dano": "1d6+1d4",
+  "tipoDano": "eletrico",
+  "alcance": "longa distância",
+  "pericia": "Armadilhas",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Atordoamento",
+    "Eletrocussão",
+    "Pode causar queimaduras, congelamento ou envenenamento",
+    "Crítico: 20 multiplica dano por 3"
+  ],
+  "raridade": "incomum",
+  "preco": 50
+}

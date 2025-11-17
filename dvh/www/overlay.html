@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overlay OBS - RPG</title>
+  <style>
+    :root {
+      --accent: #ff8c00;
+      --bg: rgba(15, 15, 20, 0.0); /* transparente para sobrepor no OBS */
+      --panel: rgba(20, 24, 32, 0.75);
+      --text: #fff;
+      --muted: #cbd5e0;
+      --vida: #ff8c00;
+      --sanidade: #9b59b6;
+      --mana: #e91e63;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--bg); color: var(--text);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .overlay {
+      display: flex; gap: 16px; align-items: flex-start; padding: 12px;
+    }
+    .card {
+      background: var(--panel); border: 2px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 12px 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .name {
+      font-weight: 800; font-size: 20px; letter-spacing: 0.3px; margin-bottom: 12px;
+      color: var(--text); text-align: center;
+    }
+    .stats-layout {
+      display: flex; gap: 12px; flex-direction: column;
+    }
+    .vertical-bars {
+      display: flex; gap: 12px; justify-content: center;
+    }
+    .vbar-container {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .vbar-label {
+      color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .vbar {
+      width: 40px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 999px;
+      position: relative; overflow: hidden; border: 2px solid rgba(255,255,255,0.15);
+    }
+    .vbar-fill {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 0%;
+      transition: height 250ms ease;
+    }
+    .vbar-fill.vida { background: linear-gradient(to top, var(--vida), #ffb74d); }
+    .vbar-fill.sanidade { background: linear-gradient(to top, var(--sanidade), #b370cf); }
+    .vbar-val {
+      font-weight: 700; font-size: 12px; text-align: center; margin-top: 4px;
+    }
+    .hbar-container {
+      display: flex; flex-direction: column; gap: 6px; width: 100%;
+    }
+    .hbar-label {
+      color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;
+    }
+    .hbar {
+      height: 24px; background: rgba(255,255,255,0.1); border-radius: 999px;
+      position: relative; overflow: hidden; border: 2px solid rgba(255,255,255,0.15);
+    }
+    .hbar-fill {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+      transition: width 250ms ease;
+      background: linear-gradient(to right, var(--mana), #f48fb1);
+    }
+    .hbar-val {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      font-weight: 700; font-size: 13px; z-index: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .roll { min-width: 200px; text-align: center; }
+    .roll .title { font-weight: 700; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .roll .result { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 2px 16px rgba(255,108,53,0.45); line-height: 1; margin: 8px 0; }
+    .roll .dice { margin-top: 6px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+    .die { padding: 4px 6px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="card id">
+      <div class="name" id="ov-nome">Personagem</div>
+      <div class="stats-layout">
+        <div class="vertical-bars">
+          <div class="vbar-container">
+            <div class="vbar-label">Vida</div>
+            <div class="vbar">
+              <div class="vbar-fill vida" id="ov-vida-fill"></div>
+            </div>
+            <div class="vbar-val" id="ov-vida-val">0/0</div>
+          </div>
+          <div class="vbar-container">
+            <div class="vbar-label">Sanidade</div>
+            <div class="vbar">
+              <div class="vbar-fill sanidade" id="ov-san-fill"></div>
+            </div>
+            <div class="vbar-val" id="ov-san-val">0/0</div>
+          </div>
+        </div>
+        <div class="hbar-container">
+          <div class="hbar-label">Mana</div>
+          <div class="hbar">
+            <div class="hbar-fill" id="ov-mana-fill"></div>
+            <div class="hbar-val" id="ov-mana-val">0/0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card roll">
+      <div class="title" id="ov-roll-title">Última Rolagem</div>
+      <div class="result" id="ov-roll-result">—</div>
+      <div class="dice" id="ov-roll-dice"></div>
+    </div>
+  </div>
+
+  <script>
+    function readJSON(key, def){
+      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e){ return def; }
+    }
+    function readText(key, def){ const v = localStorage.getItem(key); return (v!==null && v!==undefined) ? v : def; }
+    function readInt(key, def){ const v = localStorage.getItem(key); const n = parseInt(v); return isNaN(n) ? (def||0) : n; }
+
+    function update(){
+      // Lê dados salvos pela ficha
+      const formData = readJSON('ficha_form_data', {});
+      const nome = formData.nome || readText('overlay_nome', 'Personagem');
+      
+      // Lê estatísticas diretamente dos campos salvos
+      const vidaAtual = readInt('vida-atual', formData['vida-atual'] || 0);
+      const vidaTotal = readInt('vida-total', formData['vida-total'] || 0);
+      const sanAtual = readInt('sanidade-atual', formData['sanidade-atual'] || 0);
+      const sanTotal = readInt('sanidade-total', formData['sanidade-total'] || 0);
+      const manaAtual = readInt('mana-atual', formData['mana-atual'] || 0);
+      const manaTotal = readInt('mana-total', formData['mana-total'] || 0);
+      
+      const last = readJSON('overlay_last_roll', null);
+
+      document.getElementById('ov-nome').textContent = nome || 'Personagem';
+
+      const setBar = (fillId, valId, atual, total) => {
+        const t = Math.max(0, parseInt(total)||0);
+        const a = Math.min(t, Math.max(0, parseInt(atual)||0));
+        const pct = t>0 ? (a/t*100) : 0;
+        const fill = document.getElementById(fillId);
+        
+        // Ajusta a cor baseado na porcentagem (quanto menor, mais escuro)
+        let color1, color2;
+        if (fill.classList.contains('vida')) {
+          // Vida: laranja claro -> laranja escuro -> vermelho escuro
+          if (pct > 50) {
+            color1 = '#ff8c00'; color2 = '#ffb74d';
+          } else if (pct > 25) {
+            color1 = '#e67e00'; color2 = '#ff8c00';
+          } else {
+            color1 = '#8b0000'; color2 = '#e67e00';
+          }
+        } else if (fill.classList.contains('sanidade')) {
+          // Sanidade: roxo claro -> roxo escuro -> roxo muito escuro
+          if (pct > 50) {
+            color1 = '#9b59b6'; color2 = '#b370cf';
+          } else if (pct > 25) {
+            color1 = '#7d3c98'; color2 = '#9b59b6';
+          } else {
+            color1 = '#4a235a'; color2 = '#7d3c98';
+          }
+        } else {
+          // Mana: rosa claro -> rosa escuro -> magenta escuro
+          if (pct > 50) {
+            color1 = '#e91e63'; color2 = '#f48fb1';
+          } else if (pct > 25) {
+            color1 = '#c2185b'; color2 = '#e91e63';
+          } else {
+            color1 = '#880e4f'; color2 = '#c2185b';
+          }
+        }
+        
+        if (fill.classList.contains('vbar-fill')) {
+          fill.style.height = pct + '%';
+          fill.style.background = `linear-gradient(to top, ${color1}, ${color2})`;
+        } else {
+          fill.style.width = pct + '%';
+          fill.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+        }
+        document.getElementById(valId).textContent = `${a}/${t}`;
+      };
+      setBar('ov-vida-fill','ov-vida-val', vidaAtual, vidaTotal);
+      setBar('ov-san-fill','ov-san-val', sanAtual, sanTotal);
+      setBar('ov-mana-fill','ov-mana-val', manaAtual, manaTotal);
+
+      const title = document.getElementById('ov-roll-title');
+      const result = document.getElementById('ov-roll-result');
+      const dice = document.getElementById('ov-roll-dice');
+      if(last){
+        title.textContent = last.tipo === 'pericia' ? `Última Perícia: ${last.titulo}` : `Último Atributo: ${last.titulo}`;
+        result.textContent = last.resultado ?? '—';
+        dice.innerHTML = '';
+        if(Array.isArray(last.dados)){
+          last.dados.forEach(n => {
+            const span = document.createElement('span');
+            span.className = 'die';
+            span.textContent = n;
+            dice.appendChild(span);
+          });
+        }
+      } else {
+        title.textContent = 'Última Rolagem';
+        result.textContent = '—';
+        dice.innerHTML = '';
+      }
+    }
+
+    update();
+    setInterval(update, 500);
+  </script>
+</body>
+</html>

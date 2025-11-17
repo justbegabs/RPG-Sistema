@@ -1,0 +1,22 @@
+{
+  "id": "drone",
+  "nome": "Drone",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Drone de combate equipado para ataques à distância.",
+  "peso": 1,
+  "dano": "2d4",
+  "tipoDano": "eletrico",
+  "alcance": "longa distância",
+  "pericia": "Armadilhas",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Atordoamento",
+    "Eletrocussão",
+    "Pode causar queimaduras, congelamento ou envenenamento",
+    "Crítico: 20 multiplica dano por 3"
+  ],
+  "raridade": "incomum",
+  "preco": 60
+}

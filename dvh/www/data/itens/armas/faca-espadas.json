@@ -1,0 +1,17 @@
+{
+  "id": "faca-espadas",
+  "nome": "Faca",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Faca curta usada em combate corpo a corpo.",
+  "peso": 1,
+  "dano": "1d4+1d3",
+  "tipoDano": "cortante",
+  "alcance": "corpo a corpo",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas simples",
+  "propriedades": ["Leve", "Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 4
+}

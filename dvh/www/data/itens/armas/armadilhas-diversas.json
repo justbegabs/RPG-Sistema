@@ -1,0 +1,20 @@
+{
+  "id": "armadilhas-diversas",
+  "nome": "Armadilhas Diversas",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Conjunto de armadilhas variadas para uso tático.",
+  "peso": 1,
+  "dano": "1d4+3",
+  "tipoDano": "variado",
+  "alcance": "corpo a corpo",
+  "pericia": "Armadilhas",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Efeitos diversos",
+    "Crítico: 20 multiplica dano por 3"
+  ],
+  "raridade": "comum",
+  "preco": 25
+}

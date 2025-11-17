@@ -1,0 +1,17 @@
+{
+  "id": "arma-improvisada",
+  "nome": "Arma Improvisada",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Objeto do cotidiano usado como arma; parâmetros variam conforme a cena.",
+  "peso": 1,
+  "dano": "1d4",
+  "tipoDano": "variado",
+  "alcance": "depende",
+  "pericia": "depende",
+  "atributo": "depende",
+  "proficiencia": "armas simples",
+  "propriedades": ["Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 0
+}

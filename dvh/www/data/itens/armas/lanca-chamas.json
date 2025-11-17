@@ -1,0 +1,20 @@
+{
+  "id": "lanca-chamas",
+  "nome": "Lança-chamas",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Projetor de fogo para supressão a média distância.",
+  "peso": 5,
+  "dano": "2d12",
+  "tipoDano": "variado",
+  "alcance": "média distância",
+  "pericia": "Explosivos",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": [
+    "Queimadura",
+    "Crítico: 20 multiplica dano por 2"
+  ],
+  "raridade": "incomum",
+  "preco": 120
+}

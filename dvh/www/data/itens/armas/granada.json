@@ -1,0 +1,20 @@
+{
+  "id": "granada",
+  "nome": "Granada",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Explosivo arremessável de média distância com múltiplos efeitos.",
+  "peso": 1,
+  "dano": "4d6",
+  "tipoDano": "variado",
+  "alcance": "média distância",
+  "pericia": "Explosivos",
+  "atributo": "Destreza",
+  "proficiencia": "armas simples",
+  "propriedades": [
+    "Pode causar queimadura, atordoamento ou cegueira (cegueira não causa dano)",
+    "Crítico: 20 multiplica dano por 2"
+  ],
+  "raridade": "comum",
+  "preco": 40
+}

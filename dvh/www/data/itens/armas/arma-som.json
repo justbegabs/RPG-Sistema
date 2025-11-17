@@ -1,0 +1,20 @@
+{
+  "id": "arma-som",
+  "nome": "Arma de Som",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Emissor sônico de curto alcance que desorienta alvos.",
+  "peso": 5,
+  "dano": "1d8",
+  "tipoDano": "variado",
+  "alcance": "curta distância",
+  "pericia": "Explosivos",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": [
+    "Atordoamento",
+    "Crítico: 20 multiplica dano por 2"
+  ],
+  "raridade": "comum",
+  "preco": 110
+}

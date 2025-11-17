@@ -1,0 +1,17 @@
+{
+  "id": "gladio",
+  "nome": "Gládio",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Espada curta romana, eficiente em estocadas.",
+  "peso": 2,
+  "dano": "1d6",
+  "tipoDano": "cortante",
+  "alcance": "corpo a corpo",
+  "pericia": "Espadas",
+  "atributo": "Força",
+  "proficiencia": "armas marciais",
+  "propriedades": ["Crítico: 20 multiplica dano por 2"],
+  "raridade": "comum",
+  "preco": 20
+}

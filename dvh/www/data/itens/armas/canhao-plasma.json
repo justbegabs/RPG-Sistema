@@ -1,0 +1,20 @@
+{
+  "id": "canhao-plasma",
+  "nome": "Canhão de Plasma",
+  "tipo": "arma",
+  "categoria": "armas",
+  "descricao": "Arma energética de médio alcance com efeitos criogênicos.",
+  "peso": 5,
+  "dano": "1d12+1d6",
+  "tipoDano": "variado",
+  "alcance": "média distância",
+  "pericia": "Explosivos",
+  "atributo": "Destreza",
+  "proficiencia": "armas marciais",
+  "propriedades": [
+    "Congelamento",
+    "Crítico: 20 multiplica dano por 2"
+  ],
+  "raridade": "rara",
+  "preco": 180
+}
