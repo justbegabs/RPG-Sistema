@@ -1,0 +1,10 @@
+{
+  "id": "certificado-licenca",
+  "nome": "Certificado de Licença",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "atirador",
+  "descricao": "Documento que comprova qualificação para portar e usar armas de fogo, evitando problemas legais para o Atirador.",
+  "peso": 0,
+  "funcao": "Evita detenções por porte de arma quando exibido às autoridades"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "chave-fenda",
+  "nome": "Chave de Fenda",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "tecnologico",
+  "descricao": "Ferramenta que facilita a construção de aparelhos.",
+  "peso": 1,
+  "funcao": "+1 dado em testes de invenção de itens se passar no teste de Criatividade"
+}

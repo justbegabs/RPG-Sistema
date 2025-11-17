@@ -1,0 +1,10 @@
+{
+  "id": "anel-passo-silencioso",
+  "nome": "Anel do Passo Silencioso",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "espiao",
+  "descricao": "Anula os sons dos passos e evita rastros em terrenos que deixam vestígios.",
+  "peso": 0.5,
+  "funcao": "Anula ruído de passos e rastros (neve, areia, lama, terra etc.)"
+}

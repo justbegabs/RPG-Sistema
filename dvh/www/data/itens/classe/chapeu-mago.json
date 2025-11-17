@@ -1,0 +1,10 @@
+{
+  "id": "chapeu-mago",
+  "nome": "Chapéu",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "mago",
+  "descricao": "Objeto amaldiçoado achado, comprado ou herdado que facilita encantar objetos.",
+  "peso": 1,
+  "funcao": "+1 dado em testes para Encantamento de objetos (armas não)"
+}

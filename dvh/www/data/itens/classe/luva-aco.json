@@ -1,0 +1,10 @@
+{
+  "id": "luva-aco",
+  "nome": "Luva de Aço",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "combatente",
+  "descricao": "Acessório de malha de aço que intensifica golpes desarmados.",
+  "peso": 2,
+  "funcao": "Aumenta em +1 dado o dano de ataques desarmados"
+}

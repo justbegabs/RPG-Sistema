@@ -1,0 +1,10 @@
+{
+  "id": "baralho-viciado",
+  "nome": "Baralho Viciado",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "carteado",
+  "descricao": "Baralho que atende aos requisitos que o usuário quiser. Não aparenta ter poder especial... à primeira vista.",
+  "peso": 0.3,
+  "funcao": "Aprimora truques e manipulações em jogos de cartas"
+}

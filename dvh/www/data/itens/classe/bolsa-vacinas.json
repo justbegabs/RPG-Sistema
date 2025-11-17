@@ -1,0 +1,10 @@
+{
+  "id": "bolsa-vacinas",
+  "nome": "Bolsa de Vacinas",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "curandeiro",
+  "descricao": "Estojo com vacinas e soros de ação rápida.",
+  "peso": 3,
+  "funcao": "Restaura 50% da Vida total na Vida atual imediatamente; uso ilimitado"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "nota-papel",
+  "nome": "Nota de Papel",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "clerigo",
+  "descricao": "Frágil nota com o nome do Deus/Deuses/Panteão seguido pelo Clérigo.",
+  "peso": 0,
+  "funcao": "Foco sagrado pessoal para rituais e preces"
+}

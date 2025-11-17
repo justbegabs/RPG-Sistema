@@ -1,0 +1,10 @@
+{
+  "id": "coldre",
+  "nome": "Coldre",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "arsenalhumano",
+  "descricao": "Coldre que agiliza a troca de armas.",
+  "peso": 0.5,
+  "funcao": "Troca de armas torna-se uma ação livre enquanto equipado"
+}

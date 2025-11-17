@@ -1,0 +1,10 @@
+{
+  "id": "dicionario-infernal",
+  "nome": "Dicionário Infernal",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "demonologista",
+  "descricao": "Compêndio de linguagens de criaturas corrompidas para comunicação.",
+  "peso": 0.5,
+  "funcao": "Para se comunicar com o alvo, faça um teste de Lábia, Diplomacia ou Psicologia"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "pacote-racao",
+  "nome": "Pacote de Ração",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "domador",
+  "descricao": "Porções especiais para estabelecer vínculo com criaturas.",
+  "peso": 2,
+  "funcao": "Ao usar Empatia para pacto com criatura, recebe +1 dado (vantagem)"
+}

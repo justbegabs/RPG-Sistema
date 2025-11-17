@@ -1,0 +1,11 @@
+{
+  "id": "oculos-investigador",
+  "nome": "Óculos",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "investigador",
+  "descricao": "Dá o benefício de parecer mais inteligente, mas ficar desastrado.",
+  "peso": 0.5,
+  "funcao": "+1 em Intelecto e -1 em Destreza enquanto equipado",
+  "bonusAtributos": { "intelecto": 1, "destreza": -1 }
+}

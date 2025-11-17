@@ -1,0 +1,10 @@
+{
+  "id": "bolsa-pedras-magicas",
+  "nome": "Bolsa de Pedras Mágicas",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "armadilheiro",
+  "descricao": "Pequenas pedras imbuídas com magia de som; quando lançadas, fazem muito mais barulho que o normal.",
+  "peso": 0.5,
+  "funcao": "Gera distrações sonoras potentes ao arremessar"
+}

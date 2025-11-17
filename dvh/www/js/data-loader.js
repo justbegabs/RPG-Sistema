@@ -200,7 +200,22 @@ const ARQUIVOS_ITENS_CLASSE = [
     'ferramentas-tecnologico.json',
     'grimorio-mago.json',
     'kit-armadilhas.json',
-    'simbolo-sagrado.json'
+    'simbolo-sagrado.json',
+    // Novos itens de classe
+    'bolsa-pedras-magicas.json',
+    'certificado-licenca.json',
+    'baralho-viciado.json',
+    'nota-papel.json',
+    'luva-aco.json',
+    'bolsa-vacinas.json',
+    'dicionario-infernal.json',
+    'pacote-racao.json',
+    'anel-passo-silencioso.json',
+    'oculos-investigador.json',
+    'chapeu-mago.json',
+    'pacote-chiclete-magico.json',
+    'chave-fenda.json',
+    'coldre.json'
 ];
 
 const ARQUIVOS_ITENS_ORIGEM = [

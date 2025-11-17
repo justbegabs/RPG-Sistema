@@ -1,0 +1,10 @@
+{
+  "id": "pacote-chiclete-magico",
+  "nome": "Pacote de Chiclete Mágico",
+  "tipo": "equipamento de classe",
+  "categoria": "itens-classe",
+  "classe": "suporte",
+  "descricao": "Um pacote de chicletes com propriedades restaurativas.",
+  "peso": 1,
+  "funcao": "Recupera 25% da Sanidade total na atual e 50% da Mana total na atual; 1 uso por descanso mediano; sem limite de usos"
+}
