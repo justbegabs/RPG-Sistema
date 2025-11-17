@@ -1,0 +1,12 @@
+{
+  "id": "batom-vermelho",
+  "nome": "Batom Vermelho",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Bolsa de maquiagem com batom vermelho, brincos de pedras preciosas e perfume atrativo.",
+  "peso": 3,
+  "funcao": "+5 em testes de Sedução",
+  "bonus": { "seducao": 5 },
+  "raridade": "comum",
+  "preco": 30
+}

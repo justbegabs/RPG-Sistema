@@ -1,0 +1,11 @@
+{
+  "id": "oculos-infravermelho",
+  "nome": "Óculos Infravermelho",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Permite ver coisas e pessoas escondidas por alguns tipos de magias e funciona como infravermelho comum.",
+  "peso": 1,
+  "funcao": "Visão infravermelha e detecção básica contra algumas magias de ocultação",
+  "raridade": "incomum",
+  "preco": 55
+}

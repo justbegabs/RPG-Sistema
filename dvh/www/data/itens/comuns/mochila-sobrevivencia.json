@@ -1,0 +1,11 @@
+{
+  "id": "mochila-sobrevivencia",
+  "nome": "Mochila de Sobrevivência",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Mochila leve que permite carregar mais itens consigo.",
+  "peso": -3,
+  "funcao": "Reduz o peso total carregado em 3 unidades (ou equivalente)",
+  "raridade": "incomum",
+  "preco": 45
+}

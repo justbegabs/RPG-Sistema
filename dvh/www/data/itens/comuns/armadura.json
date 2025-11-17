@@ -1,0 +1,11 @@
+{
+  "id": "armadura",
+  "nome": "Armadura",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Armadura resistente que melhora a proteção geral.",
+  "peso": 5,
+  "funcao": "+5 em Defesa enquanto equipada",
+  "raridade": "comum",
+  "preco": 80
+}

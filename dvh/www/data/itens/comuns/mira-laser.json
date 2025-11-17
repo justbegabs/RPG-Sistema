@@ -1,0 +1,12 @@
+{
+  "id": "mira-laser",
+  "nome": "Mira Laser",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Mira para armas de fogo e arcos que melhora a precisão.",
+  "peso": 3,
+  "funcao": "+5 nos testes de Pontaria e Arcos",
+  "bonus": { "pontaria": 5, "arcos": 5 },
+  "raridade": "incomum",
+  "preco": 65
+}

@@ -1,0 +1,13 @@
+{
+  "id": "mascara-mil-rostos",
+  "nome": "Máscara dos Mil Rostos",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Permite mudar de aparência temporariamente.",
+  "peso": 2,
+  "funcao": "+2 em Enganação enquanto a ilusão durar; duração 1d4 rodadas ou 1h fora de batalha",
+  "bonus": { "enganacao": 2 },
+  "duracao": "1d4 rodadas ou 1h fora de batalha",
+  "raridade": "rara",
+  "preco": 120
+}

@@ -1,0 +1,12 @@
+{
+  "id": "silenciador",
+  "nome": "Silenciador",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Mala com silenciador para armas de fogo (pequenas e grandes) e roupas escuras. Deve ser equipado para contar o bônus; não acumula com outros bônus semelhantes.",
+  "peso": 3,
+  "funcao": "+5 em testes de Furtividade ao utilizar",
+  "bonus": { "furtividade": 5 },
+  "raridade": "incomum",
+  "preco": 70
+}

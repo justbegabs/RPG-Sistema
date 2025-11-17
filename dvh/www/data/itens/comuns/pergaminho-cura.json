@@ -1,0 +1,12 @@
+{
+  "id": "pergaminho-cura",
+  "nome": "Pergaminho da Cura",
+  "tipo": "consumível",
+  "categoria": "itens-comuns",
+  "descricao": "Pergaminho sagrado que auxilia na cura em emergências.",
+  "peso": 0.2,
+  "funcao": "Permite re-rolar um teste de Medicina para tirar alguém do estado Morrendo",
+  "usos": 5,
+  "raridade": "incomum",
+  "preco": 25
+}

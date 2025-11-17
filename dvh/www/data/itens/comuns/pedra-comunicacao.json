@@ -1,0 +1,11 @@
+{
+  "id": "pedra-comunicacao",
+  "nome": "Pedra de Comunicação",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Cristal pequeno que acende e esquenta para avisar novas mensagens; transmite mensagens (uma ou duas vias).",
+  "peso": 0.5,
+  "funcao": "Transmissão/recepção de mensagens; alerta luminoso e térmico",
+  "raridade": "incomum",
+  "preco": 40
+}

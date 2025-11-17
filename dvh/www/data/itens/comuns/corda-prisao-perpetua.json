@@ -1,0 +1,11 @@
+{
+  "id": "corda-prisao-perpetua",
+  "nome": "Corda de Prisão Perpétua",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Corda que se ajusta magicamente, impedindo que a vítima se solte.",
+  "peso": 1,
+  "funcao": "Para escapar, teste de Sorte DT 20; em falha, fica 1 rodada preso e a DT reduz 5 por rodada até se soltar",
+  "raridade": "incomum",
+  "preco": 35
+}

@@ -163,7 +163,29 @@ const ARQUIVOS_ITENS_COMUNS = [
     'kit-ferramentas.json',
     'mochila-aventureiro.json',
     'pocao-cura.json',
-    'tocha.json'
+    'tocha.json',
+    // Novos itens comuns
+    'amuleto-teletransporte.json',
+    'armadura.json',
+    'escudo.json',
+    'pedra-comunicacao.json',
+    'oculos-infravermelho.json',
+    'camera.json',
+    'ervas-medicinais.json',
+    'pergaminho-cura.json',
+    'mascara-mil-rostos.json',
+    'corda-prisao-perpetua.json',
+    'mochila-sobrevivencia.json',
+    'silenciador.json',
+    'mira-laser.json',
+    'laptop.json',
+    'equipamentos-laboratorio.json',
+    'celular.json',
+    'manuscritos-religiosos.json',
+    'livros-encantados.json',
+    'mapa-astral.json',
+    'bolsa-acampamento.json',
+    'batom-vermelho.json'
 ];
 
 const ARQUIVOS_ITENS_RACA = [

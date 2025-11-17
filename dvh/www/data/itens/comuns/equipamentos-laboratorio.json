@@ -1,0 +1,12 @@
+{
+  "id": "equipamentos-laboratorio",
+  "nome": "Equipamentos de Laboratório",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Luvas, pipetas, kits de impressões digitais, kit de identificação genética por saliva ou sangue.",
+  "peso": 3,
+  "funcao": "+5 em testes de Forense ou Genealogia",
+  "bonus": { "forense": 5, "genealogia": 5 },
+  "raridade": "incomum",
+  "preco": 75
+}

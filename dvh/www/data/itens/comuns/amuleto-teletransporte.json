@@ -1,0 +1,11 @@
+{
+  "id": "amuleto-teletransporte",
+  "nome": "Amuleto de Teletransporte",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Amuleto (cristal, relógio de bolso etc.) que permite teletransportar-se para qualquer lugar ao custo de mana.",
+  "peso": 0.5,
+  "funcao": "Teletransporta o usuário para qualquer lugar, custo 10 de Mana",
+  "raridade": "incomum",
+  "preco": 150
+}

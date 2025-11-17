@@ -1,0 +1,11 @@
+{
+  "id": "escudo",
+  "nome": "Escudo",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Escudo robusto para bloqueio ativo.",
+  "peso": 7,
+  "funcao": "+10 em Bloqueio quando bloqueia com o escudo na mão; requer teste de Escudos; em sucesso, bloqueia dano completamente",
+  "raridade": "comum",
+  "preco": 60
+}

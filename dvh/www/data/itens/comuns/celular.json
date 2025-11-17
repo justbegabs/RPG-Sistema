@@ -1,0 +1,12 @@
+{
+  "id": "celular",
+  "nome": "Celular",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Acesso a redes sociais e notícias.",
+  "peso": 3,
+  "funcao": "+5 em Atualidades, História, Ciências, Artes, Antropologia ou Cozinhar",
+  "bonus": { "atualidades": 5, "historia": 5, "ciencias": 5, "artes": 5, "antropologia": 5, "cozinhar": 5 },
+  "raridade": "comum",
+  "preco": 30
+}

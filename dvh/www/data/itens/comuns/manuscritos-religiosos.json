@@ -1,0 +1,12 @@
+{
+  "id": "manuscritos-religiosos",
+  "nome": "Manuscritos religiosos",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Textos sagrados que ampliam conhecimentos religiosos e mitológicos.",
+  "peso": 3,
+  "funcao": "+5 em Religião, Exorcismo ou Demonologia",
+  "bonus": { "religiao": 5, "exorcismo": 5, "demonologia": 5 },
+  "raridade": "comum",
+  "preco": 35
+}

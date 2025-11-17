@@ -3,9 +3,9 @@
   "nome": "Poção de Cura",
   "tipo": "consumível",
   "categoria": "itens-comuns",
-  "descricao": "Uma poção vermelha brilhante que restaura a vitalidade quando consumida.",
+  "descricao": "Poção que cura uma ferida específica ao custo de sanidade.",
   "peso": 0.5,
-  "efeito": "Restaura 2d4+2 pontos de vida",
+  "efeito": "Cura 2d6 em uma ferida (não cura acima do dano tomado); custo 2 de Sanidade",
   "uso": "Ação",
   "raridade": "comum",
   "preco": 50

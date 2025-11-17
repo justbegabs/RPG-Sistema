@@ -1,0 +1,12 @@
+{
+  "id": "livros-encantados",
+  "nome": "Livros encantados",
+  "tipo": "equipamento",
+  "categoria": "itens-comuns",
+  "descricao": "Bolsa de livros mágicos com diversos conhecimentos arcanos.",
+  "peso": 3,
+  "funcao": "+5 em Conhecimento Arcano, Conjuração, Encantamento, Ilusão, Runas ou Necromancia",
+  "bonus": { "conhecimento_arcano": 5, "conjuracao": 5, "encantamento": 5, "ilusao": 5, "runas": 5, "necromancia": 5 },
+  "raridade": "incomum",
+  "preco": 90
+}
