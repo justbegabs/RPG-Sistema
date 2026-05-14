@@ -300,6 +300,20 @@
                                 <div id="resultado-conteudo-pericias-ficha"></div>
                             </div>
 
+                            <!-- Habilidades e Magias lado a lado -->
+                            <div class="form-section" style="margin-bottom: 24px;">
+                                <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                                    <div style="flex:1; min-width:220px;">
+                                        <h2 style="margin-bottom:8px;">🛡️ Habilidades</h2>
+                                        <textarea id="habilidades" name="habilidades" rows="4" placeholder="Liste as habilidades especiais do personagem..." style="width:100%; resize:vertical;"></textarea>
+                                    </div>
+                                    <div style="flex:1; min-width:220px;">
+                                        <h2 style="margin-bottom:8px;">✨ Magias</h2>
+                                        <textarea id="magias" name="magias" rows="4" placeholder="Liste as magias conhecidas ou preparadas..." style="width:100%; resize:vertical;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-section">
                                 <h2>🎒 Inventário</h2>
                                 <div class="form-group">
@@ -337,6 +351,10 @@
                     <!-- Tab: Listar Fichas -->
                     <div id="listar-fichas" class="tab-content">
                         <div class="fichas-container">
+                            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                                <p style="margin: 0; color: #666; font-size: 14px;">📦 Modo: Armazenamento Local</p>
+                                <button type="button" id="btn-recarregar-fichas" class="btn btn-secondary" onclick="loadFichas()" style="padding: 8px 16px;">🔄 Recarregar Fichas</button>
+                            </div>
                             <div id="fichas-list" class="fichas-list">
                                 <p class="loading">Carregando fichas...</p>
                             </div>
@@ -363,6 +381,69 @@
                     </div>
                     <div id="raca-detail-content" class="detail-container">
                         <p class="loading">Carregando detalhes...</p>
+                        <form id="raca-habilidades-magias-form" style="margin-top:24px;">
+                            <h3>Habilidade de Raça <span style="color:#d32;font-weight:bold;">(Obrigatória)</span></h3>
+                            <textarea name="habilidade-raca" rows="2" placeholder="Descreva a habilidade principal da raça..." style="width:100%; margin-bottom:16px; border:2px solid #d32; background:#fff8f8;"></textarea>
+
+                            <div style="display:flex; gap:32px; flex-wrap:wrap;">
+                                <div style="flex:1; min-width:220px;">
+                                    <h4>Habilidades por Nível</h4>
+                                    <div style="margin-bottom:8px; color:#555; font-size:13px;">
+                                        <b>Escolha:</b> 1 de 0-25%, 2 de 25-70%, 3 de 70-90%, 4 em 100%<br>+1 de raça obrigatória
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 0 a 25% (1 escolha)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="hab-nv0-1" class="select-hab" style="flex:1; border:2px solid #1976d2;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 25 a 70% (2 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="hab-nv25-1" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv25-2" class="select-hab" style="flex:1;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 70 a 90% (3 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="hab-nv70-1" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv70-2" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv70-3" class="select-hab" style="flex:1;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 100% (4 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="hab-nv100-1" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv100-2" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv100-3" class="select-hab" style="flex:1;"></select>
+                                        <select name="hab-nv100-4" class="select-hab" style="flex:1;"></select>
+                                    </div>
+                                </div>
+                                <div style="flex:1; min-width:220px;">
+                                    <h4>Magias por Nível</h4>
+                                    <div style="margin-bottom:8px; color:#555; font-size:13px;">
+                                        <b>Escolha:</b> 1 de 0-25%, 2 de 25-80%, 3 de 80-95%, 4 em 100%
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 0 a 25% (1 escolha)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="magia-nv0-1" class="select-magia" style="flex:1; border:2px solid #1976d2;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 25 a 80% (2 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="magia-nv25-1" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv25-2" class="select-magia" style="flex:1;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 80 a 95% (3 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="magia-nv80-1" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv80-2" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv80-3" class="select-magia" style="flex:1;"></select>
+                                    </div>
+                                    <label style="font-weight:bold;">Nível 100% (4 escolhas)</label>
+                                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                        <select name="magia-nv100-1" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv100-2" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv100-3" class="select-magia" style="flex:1;"></select>
+                                        <select name="magia-nv100-4" class="select-magia" style="flex:1;"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
