@@ -2,10 +2,16 @@
   "id": "escudo",
   "nome": "Escudo",
   "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Escudo robusto para bloqueio ativo.",
+  "categoria": "comuns",
+  "descricao": "Um escudo que oferece +10 em Bloqueio se estiver portando ele na mao e bloquear o ataque. Exige teste de Escudos para sucesso.",
   "peso": 7,
-  "funcao": "+10 em Bloqueio quando bloqueia com o escudo na mão; requer teste de Escudos; em sucesso, bloqueia dano completamente",
+  "funcao": "Em bloqueio bem-sucedido, pode bloquear completamente o dano.",
   "raridade": "comum",
-  "preco": 60
+  "preco": 0,
+  "bonus": {
+    "bloqueio": 10
+  },
+  "teste": {
+    "pericia": "escudos"
+  }
 }

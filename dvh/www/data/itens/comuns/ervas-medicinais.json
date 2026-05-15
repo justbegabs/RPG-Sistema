@@ -1,12 +1,15 @@
 {
   "id": "ervas-medicinais",
   "nome": "Ervas Medicinais",
-  "tipo": "consumível",
-  "categoria": "itens-comuns",
-  "descricao": "Ingredientes que concedem bônus em Alquimia para curar alguém do estado Morrendo.",
+  "tipo": "consumivel",
+  "categoria": "comuns",
+  "descricao": "Ingredientes para dar bonus em um teste de Alquimia para curar alguem do estado Morrendo.",
   "peso": 0.1,
-  "funcao": "Permite rolar duas vezes o teste de Alquimia para curar alguém do estado Morrendo",
-  "usos": 2,
+  "funcao": "Permite rolar duas vezes um teste de Alquimia para curar estado Morrendo.",
   "raridade": "comum",
-  "preco": 12
+  "preco": 0,
+  "usos": 2,
+  "teste": {
+    "pericia": "alquimia"
+  }
 }

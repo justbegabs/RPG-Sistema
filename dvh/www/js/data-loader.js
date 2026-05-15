@@ -90,72 +90,57 @@ const ARQUIVOS_ORIGENS = [
 
 // Arquivos de itens (catálogo)
 const ARQUIVOS_ITENS_ARMAS = [
-    // Originais
     'adaga.json',
-    'arco-longo.json',
-    'cajado-arcano.json',
-    'espada-longa.json',
-    // Armas de luta (Força)
-    'soqueira.json',
-    'machado.json',
-    'nunchaku.json',
-    'martelo.json',
-    'lanca.json',
-    'chicote.json',
-    'clava.json',
-    'tridente.json',
-    'foice.json',
-    'bastao.json',
-    'maca.json',
     'alabarda.json',
-    'mangual.json',
-    'corrente.json',
-    'taser.json',
-    // Armas de Espadas (Força)
-    // Espadas (Força)
-    'espada.json',
-    'katana.json',
-    'punhal.json',
-    'faca-espadas.json',
-    'sabre.json',
-    'cimitarra.json',
-    'gladio.json',
-    'naginata.json',
-    'machete.json',
-    'estoque.json',
-    'lamina-escondida.json',
-    // Armas de pontaria (Destreza)
-    'faca.json',
-    'taser-pontaria.json',
-    'cartas.json',
-    // Dardos (Destreza)
-    'zarabatana.json',
-    'dardos-conjunto.json',
-    // Explosivos (Destreza)
-    'lanca-chamas.json',
-    'canhao-plasma.json',
+    'arco-composto.json',
+    'arco-comum.json',
+    'arma-improvisada.json',
     'arma-particulas.json',
     'arma-som.json',
-    'granada.json',
-    'mina-terrestre.json',
-    // Improvisadas (Variável)
-    'arma-improvisada.json',
-    // Armadilhas (Destreza)
-    'nanobots.json',
-    'drone.json',
     'armadilhas-diversas.json',
-    // Armas de fogo pequenas (Destreza)
-    'pistola.json',
-    'revolver.json',
-    'submetralhadora.json'
-    ,// Armas de fogo grandes (Destreza)
-    'rifle.json',
-    'escopeta.json',
-    'carabina.json'
-    ,// Arcos e bestas (Destreza)
+    'bastao.json',
     'besta.json',
-    'arco-comum.json',
-    'arco-composto.json'
+    'canhao-plasma.json',
+    'carabina.json',
+    'cartas.json',
+    'chicote.json',
+    'cimitarra.json',
+    'clava.json',
+    'corrente.json',
+    'dardos-conjunto.json',
+    'drone.json',
+    'escopeta.json',
+    'espada.json',
+    'estoque.json',
+    'faca-espadas.json',
+    'faca.json',
+    'foice.json',
+    'gladio.json',
+    'granada.json',
+    'katana.json',
+    'lamina-escondida.json',
+    'lanca-chamas.json',
+    'lanca.json',
+    'maca.json',
+    'machado.json',
+    'machete.json',
+    'mangual.json',
+    'martelo.json',
+    'mina-terrestre.json',
+    'naginata.json',
+    'nanobots.json',
+    'nunchaku.json',
+    'pistola.json',
+    'punhal.json',
+    'revolver.json',
+    'rifle.json',
+    'sabre.json',
+    'soqueira.json',
+    'submetralhadora.json',
+    'taser-pontaria.json',
+    'taser.json',
+    'tridente.json',
+    'zarabatana.json'
 ];
 
 const ARQUIVOS_ITENS_COMUNS = [

@@ -1,12 +1,18 @@
 {
   "id": "manuscritos-religiosos",
-  "nome": "Manuscritos religiosos",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Textos sagrados que ampliam conhecimentos religiosos e mitológicos.",
+  "nome": "Manuscritos Religiosos",
+  "tipo": "ferramenta",
+  "categoria": "comuns",
+  "descricao": "Independente da religiao, esses manuscritos ampliam conhecimento sobre mitologias e religioes.",
   "peso": 3,
-  "funcao": "+5 em Religião, Exorcismo ou Demonologia",
-  "bonus": { "religiao": 5, "exorcismo": 5, "demonologia": 5 },
+  "funcao": "Garante +5 em testes de Religiao, Exorcismo ou Demonologia.",
   "raridade": "comum",
-  "preco": 35
+  "preco": 0,
+  "bonus": {
+    "pericias": {
+      "religiao": 5,
+      "exorcismo": 5,
+      "demonologia": 5
+    }
+  }
 }

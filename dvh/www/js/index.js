@@ -3450,6 +3450,61 @@ let inventarioAtual = [];
 let itemEditandoId = null;
 let categoriaFiltroAtual = 'todos';
 
+function ehItemManual(item) {
+    if (!item) return false;
+    if (item.fonte === 'manual') return true;
+    if (item.fonte === 'catalogo') return false;
+    // Compatibilidade com itens antigos: IDs numéricos eram criados manualmente.
+    return /^\d+$/.test(String(item.id || ''));
+}
+
+function renderizarItensManuaisPagina() {
+    const container = document.getElementById('itens-manuais-page');
+    if (!container) return;
+
+    const manuais = inventarioAtual.filter(ehItemManual);
+    if (!manuais.length) {
+        container.innerHTML = '<p style="text-align:center; color:#999; padding:8px;">Nenhum item manual cadastrado ainda.</p>';
+        return;
+    }
+
+    const ordemCategorias = [
+        { key: 'armas', nome: '⚔️ Armas' },
+        { key: 'itens-comuns', nome: '🔧 Itens Comuns' },
+        { key: 'itens-raca', nome: '👥 Itens de Raça' },
+        { key: 'itens-classe', nome: '⚔️ Itens de Classe' },
+        { key: 'itens-origem', nome: '🌍 Itens de Origem' }
+    ];
+
+    const html = ordemCategorias.map(categoriaInfo => {
+        const itensCategoria = manuais.filter(item => item.categoria === categoriaInfo.key);
+        const lista = itensCategoria.length
+            ? itensCategoria.map(item => `
+                <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
+                    <div style="flex:1;">
+                        <div style="font-weight:bold;">${item.nome}</div>
+                        <div style="font-size:12px; color:#666;">Peso: ${item.peso}</div>
+                        ${item.funcao ? `<div style="font-size:12px; color:#444; margin-top:4px;">${item.funcao}</div>` : ''}
+                    </div>
+                    <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                        <button type="button" onclick="window.abrirModalItem('${String(item.id).replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#2196F3; color:white; border:none; border-radius:4px; cursor:pointer;">✏️</button>
+                        <button type="button" onclick="window.removerItem('${String(item.id).replace(/'/g, "\\'")}')" class="btn" style="padding:4px 8px; font-size:12px; background:#f44336; color:white; border:none; border-radius:4px; cursor:pointer;">🗑️</button>
+                    </div>
+                </div>
+            `).join('')
+            : '<p style="margin:0; color:#888; font-size:13px;">Sem itens manuais nesta categoria.</p>';
+
+        return `
+            <div style="border:1px solid #ddd; border-radius:8px; overflow:hidden;">
+                <div style="background:#f7f7f7; padding:8px 12px; font-weight:bold;">${categoriaInfo.nome} (${itensCategoria.length})</div>
+                <div style="padding:10px; display:grid; gap:8px;">${lista}</div>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = html;
+}
+
 /**
  * Inicializa o sistema de inventário
  */
@@ -3474,6 +3529,7 @@ function inicializarInventario() {
     const modalItemCancelar = document.getElementById('modal-item-cancelar');
     const modalItemSalvar = document.getElementById('modal-item-salvar');
     const btnAdicionarItem = document.getElementById('btn-adicionar-item');
+    const btnAdicionarItemPage = document.getElementById('btn-adicionar-item-page');
     
     // Fechar modal de inventário
     if (modalInventarioClose) {
@@ -3499,6 +3555,9 @@ function inicializarInventario() {
     // Adicionar novo item
     if (btnAdicionarItem) {
         btnAdicionarItem.addEventListener('click', () => abrirModalItem());
+    }
+    if (btnAdicionarItemPage) {
+        btnAdicionarItemPage.addEventListener('click', () => abrirModalItem());
     }
     
     // Configurar abas de categoria
@@ -3548,6 +3607,7 @@ function inicializarInventario() {
     
     // Atualiza display inicial
     atualizarDisplayInventario();
+    renderizarItensManuaisPagina();
 
     // Renderiza catálogo
     renderizarCatalogoItens();
@@ -3700,7 +3760,8 @@ function salvarItem() {
                 nome,
                 categoria,
                 peso,
-                funcao
+                funcao,
+                fonte: inventarioAtual[index].fonte || 'manual'
             };
         }
     } else {
@@ -3710,7 +3771,8 @@ function salvarItem() {
             nome,
             categoria,
             peso,
-            funcao
+            funcao,
+            fonte: 'manual'
         };
         inventarioAtual.push(novoItem);
     }
@@ -3719,6 +3781,7 @@ function salvarItem() {
     atualizarListaInventario();
     atualizarDisplayInventario();
     atualizarDisplayInventarioModal();
+    renderizarItensManuaisPagina();
     fecharModalItem();
 }
 
@@ -3762,6 +3825,7 @@ function removerItem(itemId) {
     console.log('Atualizando displays...');
     atualizarDisplayInventario();
     atualizarDisplayInventarioModal();
+    renderizarItensManuaisPagina();
     console.log('Remoção concluída');
 }
 
@@ -4083,23 +4147,30 @@ window.limparInventario = limparInventario;
  * Renderiza o catálogo completo (todas as categorias) no modal
  */
 function renderizarCatalogoItens() {
+    const containers = [
+        { el: document.getElementById('catalogo-itens'), escopo: 'modal' },
+        { el: document.getElementById('catalogo-itens-page'), escopo: 'page' }
+    ].filter(c => c.el);
+
     // Event delegation para expandir/colapsar seções do catálogo (modal e página)
-    [document.getElementById('catalogo-itens'), document.getElementById('catalogo-itens-page')].forEach(function(catalogo) {
+    containers.forEach(function(containerInfo) {
+        const catalogo = containerInfo.el;
+        catalogo.dataset.catalogoEscopo = containerInfo.escopo;
         if (catalogo && !catalogo._delegationSet) {
             catalogo.addEventListener('click', function(e) {
                 const header = e.target.closest('[data-categoria]');
                 if (header && header.parentElement && header.parentElement.classList.contains('catalogo-secao')) {
                     const categoria = header.getAttribute('data-categoria');
-                    if (categoria) toggleCatalogoSecao(categoria);
+                    if (categoria) {
+                        const escopo = catalogo.dataset.catalogoEscopo || 'modal';
+                        toggleCatalogoSecao(categoria, escopo);
+                    }
                 }
             });
             catalogo._delegationSet = true;
         }
     });
-    const containers = [
-        document.getElementById('catalogo-itens'),
-        document.getElementById('catalogo-itens-page')
-    ].filter(Boolean);
+
     if (!containers.length || !window.DadosLoader) return;
 
     const secoes = [
@@ -4110,8 +4181,10 @@ function renderizarCatalogoItens() {
         { cat: 'origem', titulo: '🌍 Itens de Origem' }
     ];
 
-    const html = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo)).join('');
-    containers.forEach(container => { container.innerHTML = html; });
+    containers.forEach(function(containerInfo) {
+        const html = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo, containerInfo.escopo)).join('');
+        containerInfo.el.innerHTML = html;
+    });
 }
 
 // Extrai a faixa de crítico necessária de uma propriedade textual da arma
@@ -4129,7 +4202,7 @@ function extrairCriticoNecessario(item) {
     }
 }
 
-function renderizarSecaoCatalogo(categoria, titulo) {
+function renderizarSecaoCatalogo(categoria, titulo, escopo) {
     const itens = window.DadosLoader.obterItensPorCategoria(categoria) || [];
     if (!itens.length) return '';
 
@@ -4162,9 +4235,9 @@ function renderizarSecaoCatalogo(categoria, titulo) {
         <div class="catalogo-secao" style="border:1px solid #ddd; border-radius:8px; overflow:hidden; margin-bottom:8px;">
             <div data-categoria="${categoria}" style="background:#f7f7f7; padding:8px 12px; font-weight:bold; cursor:pointer; user-select:none; display:flex; justify-content:space-between; align-items:center;">
                 <span>${titulo} <span style="color:#666; font-weight:normal;">(${itens.length})</span></span>
-                <span id="catalogo-icon-${categoria}" style="font-size:14px;">▶</span>
+                <span id="catalogo-icon-${escopo}-${categoria}" style="font-size:14px;">▶</span>
             </div>
-            <div id="catalogo-lista-${categoria}" style="padding:8px; display:none; grid-template-columns:1fr; gap:8px;">${lista}</div>
+            <div id="catalogo-lista-${escopo}-${categoria}" style="padding:8px; display:none; grid-template-columns:1fr; gap:8px;">${lista}</div>
         </div>
     `;
 }
@@ -4190,7 +4263,8 @@ function adicionarItemCatalogo(categoria, id) {
         nome: item.nome,
         categoria: categoria === 'comuns' ? 'itens-comuns' : (categoria === 'raca' ? 'itens-raca' : (categoria === 'classe' ? 'itens-classe' : (categoria === 'origem' ? 'itens-origem' : 'armas'))),
         peso: pesoItem,
-        funcao: item.funcao || item.descricao || ''
+        funcao: item.funcao || item.descricao || '',
+        fonte: 'catalogo'
     };
 
     inventarioAtual.push(novoItem);
@@ -4198,6 +4272,7 @@ function adicionarItemCatalogo(categoria, id) {
     atualizarListaInventario();
     atualizarDisplayInventario();
     atualizarDisplayInventarioModal();
+    renderizarItensManuaisPagina();
 }
 
 // Exporta para uso global nos botões do HTML gerado
@@ -4208,9 +4283,9 @@ window.rolarCriticoArma = rolarCriticoArma;
 /**
  * Toggle expansão/colapso de seção do catálogo
  */
-function toggleCatalogoSecao(categoria) {
-    const lista = document.getElementById(`catalogo-lista-${categoria}`);
-    const icon = document.getElementById(`catalogo-icon-${categoria}`);
+function toggleCatalogoSecao(categoria, escopo = 'modal') {
+    const lista = document.getElementById(`catalogo-lista-${escopo}-${categoria}`);
+    const icon = document.getElementById(`catalogo-icon-${escopo}-${categoria}`);
     
     if (!lista || !icon) return;
     
@@ -4240,53 +4315,71 @@ function filtrarCatalogoPorNome(termoBusca) {
         { cat: 'classe', titulo: '⚔️ Itens de Classe' },
         { cat: 'origem', titulo: '🌍 Itens de Origem' }
     ];
-    secoes.forEach(sec => {
-        const secaoDiv = document.querySelector(`.catalogo-secao > [data-categoria='${sec.cat}']`)?.parentElement;
-        const lista = document.getElementById(`catalogo-lista-${sec.cat}`);
-        const icon = document.getElementById(`catalogo-icon-${sec.cat}`);
-        if (!lista || !secaoDiv) return;
+    const containers = [
+        { el: document.getElementById('catalogo-itens'), escopo: 'modal' },
+        { el: document.getElementById('catalogo-itens-page'), escopo: 'page' }
+    ].filter(c => c.el);
 
-        if (!termo) {
-            // Sem busca: mostra todas as seções, mas colapsadas
-            secaoDiv.style.display = 'block';
-            lista.style.display = 'none';
-            if (icon) icon.textContent = '▶';
-            return;
-        }
+    containers.forEach(containerInfo => {
+        const container = containerInfo.el;
+        const escopo = containerInfo.escopo;
 
-        // Filtra itens da categoria
-        const itens = window.DadosLoader.obterItensPorCategoria(sec.cat) || [];
-        const itensFiltrados = itens.filter(item =>
-            item.nome.toLowerCase().includes(termo)
-        );
+        secoes.forEach(sec => {
+            const secaoDiv = container.querySelector(`.catalogo-secao > [data-categoria='${sec.cat}']`)?.parentElement;
+            const lista = document.getElementById(`catalogo-lista-${escopo}-${sec.cat}`);
+            const icon = document.getElementById(`catalogo-icon-${escopo}-${sec.cat}`);
+            if (!lista || !secaoDiv) return;
 
-        if (itensFiltrados.length === 0) {
-            // Esconde seção se nenhum item corresponde
-            secaoDiv.style.display = 'none';
-        } else {
-            // Mostra seção e expande automaticamente
-            secaoDiv.style.display = 'block';
-            lista.style.display = 'grid';
-            if (icon) icon.textContent = '▼';
+            if (!termo) {
+                // Sem busca: mostra todas as seções, mas colapsadas
+                secaoDiv.style.display = 'block';
+                lista.style.display = 'none';
+                if (icon) icon.textContent = '▶';
+                // Restaura conteúdo completo da seção para este escopo
+                const htmlSecao = renderizarSecaoCatalogo(sec.cat, sec.titulo, escopo);
+                const temp = document.createElement('div');
+                temp.innerHTML = htmlSecao;
+                const novaLista = temp.querySelector(`#catalogo-lista-${escopo}-${sec.cat}`);
+                if (novaLista) {
+                    lista.innerHTML = novaLista.innerHTML;
+                }
+                return;
+            }
 
-            // Re-renderiza apenas os itens filtrados
-            lista.innerHTML = itensFiltrados.map(item => {
-                const peso = (item.peso != null) ? item.peso : 0;
-                const desc = item.descricao || '';
-                return `
-                    <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
-                        <div style="flex:1;">
-                            <div style="font-weight:bold;">${item.nome}</div>
-                            <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
-                            ${desc ? `<div style=\"font-size:12px; color:#444; margin-top:4px;\">${desc}</div>` : ''}
+            // Filtra itens da categoria
+            const itens = window.DadosLoader.obterItensPorCategoria(sec.cat) || [];
+            const itensFiltrados = itens.filter(item =>
+                item.nome.toLowerCase().includes(termo)
+            );
+
+            if (itensFiltrados.length === 0) {
+                // Esconde seção se nenhum item corresponde
+                secaoDiv.style.display = 'none';
+            } else {
+                // Mostra seção e expande automaticamente
+                secaoDiv.style.display = 'block';
+                lista.style.display = 'grid';
+                if (icon) icon.textContent = '▼';
+
+                // Re-renderiza apenas os itens filtrados
+                lista.innerHTML = itensFiltrados.map(item => {
+                    const peso = (item.peso != null) ? item.peso : 0;
+                    const desc = item.descricao || '';
+                    return `
+                        <div style="border:1px solid #e0e0e0; border-radius:8px; padding:10px; background:#fff; display:flex; gap:10px; align-items:start;">
+                            <div style="flex:1;">
+                                <div style="font-weight:bold;">${item.nome}</div>
+                                <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
+                                ${desc ? `<div style=\"font-size:12px; color:#444; margin-top:4px;\">${desc}</div>` : ''}
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${sec.cat}','${item.id}')">Adicionar</button>
+                            </div>
                         </div>
-                        <div>
-                            <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${sec.cat}','${item.id}')">Adicionar</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+                    `;
+                }).join('');
+            }
+        });
     });
 }
 

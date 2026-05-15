@@ -1,12 +1,16 @@
 {
   "id": "camera",
-  "nome": "Câmera",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Permite registrar momentos, pessoas e lugares para documentação e lembrança.",
+  "nome": "Camera",
+  "tipo": "ferramenta",
+  "categoria": "comuns",
+  "descricao": "Permite registrar momentos, pessoas e lugares para posterior documentacao e lembranca.",
   "peso": 0.5,
-  "funcao": "Bônus de 1 dado em Raciocínio para lembrar do que foi fotografado (se anotado no inventário)",
-  "bonusDados": { "raciocinio": 1 },
+  "funcao": "Concede bonus de 1 dado em Raciocinio para lembrar de coisas fotografadas, desde que anotadas no inventario.",
   "raridade": "comum",
-  "preco": 20
+  "preco": 0,
+  "bonus": {
+    "pericias": {
+      "raciocinio": 1
+    }
+  }
 }

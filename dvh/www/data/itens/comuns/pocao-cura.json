@@ -1,12 +1,15 @@
 {
   "id": "pocao-cura",
-  "nome": "Poção de Cura",
-  "tipo": "consumível",
-  "categoria": "itens-comuns",
-  "descricao": "Poção que cura uma ferida específica ao custo de sanidade.",
+  "nome": "Pocao de Cura",
+  "tipo": "consumivel",
+  "categoria": "comuns",
+  "descricao": "Permite ao usuario curar 2D6 em uma ferida (nao cura mais do que a ferida tinha).",
   "peso": 0.5,
-  "efeito": "Cura 2d6 em uma ferida (não cura acima do dano tomado); custo 2 de Sanidade",
-  "uso": "Ação",
-  "raridade": "comum",
-  "preco": 50
+  "funcao": "Cura 2D6 ao custo de 2 pontos de Sanidade.",
+  "raridade": "incomum",
+  "preco": 0,
+  "dadoCura": "2d6",
+  "custo": {
+    "sanidade": 2
+  }
 }

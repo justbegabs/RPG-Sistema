@@ -1,12 +1,16 @@
 {
   "id": "mapa-astral",
   "nome": "Mapa Astral",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Ferramenta para leitura das estrelas e alinhamentos.",
+  "tipo": "ferramenta",
+  "categoria": "comuns",
+  "descricao": "Lendo as estrelas com o mapa, melhora previsoes e leituras astrais.",
   "peso": 3,
-  "funcao": "+5 em testes de Astrologia",
-  "bonus": { "astrologia": 5 },
+  "funcao": "Garante +5 em testes de Astrologia.",
   "raridade": "comum",
-  "preco": 20
+  "preco": 0,
+  "bonus": {
+    "pericias": {
+      "astrologia": 5
+    }
+  }
 }

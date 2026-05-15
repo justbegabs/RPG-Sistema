@@ -1,12 +1,16 @@
 {
   "id": "laptop",
   "nome": "Laptop",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Computador portátil para pesquisas e testes de tecnologia. Bônus concedido apenas com sinal.",
+  "tipo": "ferramenta",
+  "categoria": "comuns",
+  "descricao": "Um computador portatil com acessorios para uso em quase qualquer lugar.",
   "peso": 3,
-  "funcao": "+5 em testes de Tecnologia quando há sinal",
-  "bonus": { "tecnologia": 5 },
-  "raridade": "incomum",
-  "preco": 90
+  "funcao": "Garante +5 em testes de Tecnologia, caso tenha sinal.",
+  "raridade": "comum",
+  "preco": 0,
+  "bonus": {
+    "pericias": {
+      "tecnologia": 5
+    }
+  }
 }

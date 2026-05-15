@@ -2,10 +2,13 @@
   "id": "armadura",
   "nome": "Armadura",
   "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Armadura resistente que melhora a proteção geral.",
+  "categoria": "comuns",
+  "descricao": "Uma armadura que oferece +5 em Defesa.",
   "peso": 5,
-  "funcao": "+5 em Defesa enquanto equipada",
+  "funcao": "Concede +5 em Defesa enquanto equipada.",
   "raridade": "comum",
-  "preco": 80
+  "preco": 0,
+  "bonus": {
+    "defesa": 5
+  }
 }

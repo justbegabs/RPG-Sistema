@@ -1,11 +1,16 @@
 {
   "id": "corda-prisao-perpetua",
-  "nome": "Corda de Prisão Perpétua",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Corda que se ajusta magicamente, impedindo que a vítima se solte.",
+  "nome": "Corda de Prisao Perpetua",
+  "tipo": "artefato",
+  "categoria": "comuns",
+  "descricao": "Uma corda que ao amarrar em alguem se ajusta magicamente para impedir fuga.",
   "peso": 1,
-  "funcao": "Para escapar, teste de Sorte DT 20; em falha, fica 1 rodada preso e a DT reduz 5 por rodada até se soltar",
-  "raridade": "incomum",
-  "preco": 35
+  "funcao": "Para escapar, a vitima faz teste de Sorte DT 20. Em falha, fica 1 rodada presa; no turno seguinte a DT diminui em 5, repetindo ate escapar.",
+  "raridade": "raro",
+  "preco": 0,
+  "teste": {
+    "pericia": "sorte",
+    "dtInicial": 20,
+    "reducaoPorTurno": 5
+  }
 }

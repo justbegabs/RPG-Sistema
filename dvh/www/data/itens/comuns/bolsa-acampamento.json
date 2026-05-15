@@ -1,12 +1,16 @@
 {
   "id": "bolsa-acampamento",
   "nome": "Bolsa de Acampamento",
-  "tipo": "equipamento",
-  "categoria": "itens-comuns",
-  "descricao": "Mala com itens de acampamento: mapas, cantil, comida, panelas, barraca.",
+  "tipo": "ferramenta",
+  "categoria": "comuns",
+  "descricao": "Uma mala com itens de acampamento, como mapas, cantil, comida em pacotes, panelas e barracas montaveis.",
   "peso": 3,
-  "funcao": "+5 em testes de Sobrevivência",
-  "bonus": { "sobrevivencia": 5 },
+  "funcao": "Garante +5 em testes de Sobrevivencia.",
   "raridade": "comum",
-  "preco": 25
+  "preco": 0,
+  "bonus": {
+    "pericias": {
+      "sobrevivencia": 5
+    }
+  }
 }
