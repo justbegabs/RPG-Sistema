@@ -73,7 +73,25 @@ body:has(#page-home.active) .sidebar,
     color: white;
     margin: 0 0 20px 0;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    animation: fadeInDown 0.8s ease;
+  animation: pulsar 2s infinite alternate;
+}
+
+@keyframes pulsar {
+  0% {
+    text-shadow:
+      0 0 5px #ff00ff,
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff;
+  }
+
+  100% {
+    text-shadow:
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff,
+      0 0 80px #ff00ff;
+  }
 }
 
 .welcome-subtitle {
@@ -82,6 +100,29 @@ body:has(#page-home.active) .sidebar,
     margin: 0;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.neon {font-size: 60px;
+  color: #fff;
+  animation: pulsar 2s infinite alternate;
+}
+
+@keyframes pulsar {
+  0% {
+    text-shadow:
+      0 0 5px #ff00ff,
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff;
+  }
+
+  100% {
+    text-shadow:
+      0 0 10px #ff00ff,
+      0 0 20px #ff00ff,
+      0 0 40px #ff00ff,
+      0 0 80px #ff00ff;
+  }
 }
 
 .info-box {
@@ -1262,9 +1303,9 @@ body:has(#page-home.active) .main-content {
 }
 
 .pericias-grid-ficha {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     animation: slideDown 0.3s ease;
 }
 
@@ -1403,7 +1444,9 @@ body:has(#page-home.active) .main-content {
 @media (max-width: 768px) {
     .pericias-grid,
     .pericias-grid-ficha {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .pericias-grupo {

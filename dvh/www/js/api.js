@@ -6,7 +6,7 @@
 // URL da API - Altere para sua URL de servidor
 const API_URL = 'https://rpg-sistema.onrender.com/api/fichas';
 // Fallback: usar localStorage se a API não estiver disponível
-const USE_LOCAL_STORAGE = false;
+const USE_LOCAL_STORAGE = true;
 
 /**
  * Função para fazer POST de uma ficha de personagem
@@ -86,18 +86,26 @@ async function postFicha(ficha) {
 async function postFichaLocalStorage(ficha) {
     return new Promise((resolve, reject) => {
         try {
-            // Recupera fichas existentes
+            // Garante ID e timestamps se não vierem definidos
+            const fichaParaSalvar = {
+                ...ficha,
+                id: ficha?.id || generateId(),
+                dataCriacao: ficha?.dataCriacao || new Date().toISOString(),
+                dataAtualizacao: new Date().toISOString()
+            };
+
+            // Recupera fichas existentes (com migração se necessário)
             const fichas = getFichasLocalStorage();
             
             // Adiciona nova ficha
-            fichas.push(ficha);
+            fichas.push(fichaParaSalvar);
             
-            // Salva no localStorage
+            // Salva no localStorage unificado
             localStorage.setItem('rpg_fichas', JSON.stringify(fichas));
             
             resolve({
                 success: true,
-                data: ficha,
+                data: fichaParaSalvar,
                 message: 'Ficha salva com sucesso no armazenamento local!'
             });
         } catch (error) {
@@ -250,8 +258,34 @@ async function deleteFicha(id) {
  */
 function getFichasLocalStorage() {
     try {
-        const fichasJson = localStorage.getItem('rpg_fichas');
-        return fichasJson ? JSON.parse(fichasJson) : [];
+        // Tenta ler do formato atual
+        let fichasJson = localStorage.getItem('rpg_fichas');
+        if (fichasJson) {
+            try {
+                const parsed = JSON.parse(fichasJson);
+                // Garante array
+                return Array.isArray(parsed) ? parsed : (parsed ? Object.values(parsed) : []);
+            } catch (e) {
+                console.warn('Falha ao parsear rpg_fichas, tentando legado:', e);
+            }
+        }
+
+        // Se não houver, tenta ler do formato legado 'fichas'
+        const legadoJson = localStorage.getItem('fichas');
+        if (legadoJson) {
+            try {
+                const legadoParsed = JSON.parse(legadoJson);
+                const legadoArray = Array.isArray(legadoParsed) ? legadoParsed : Object.values(legadoParsed || {});
+                // Migra para a chave unificada e remove a antiga
+                localStorage.setItem('rpg_fichas', JSON.stringify(legadoArray));
+                localStorage.removeItem('fichas');
+                console.info('Migração: fichas -> rpg_fichas concluída.');
+                return legadoArray;
+            } catch (e2) {
+                console.error('Erro ao parsear fichas (legado):', e2);
+            }
+        }
+        return [];
     } catch (error) {
         console.error('Erro ao ler localStorage:', error);
         return [];

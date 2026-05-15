@@ -11,4 +11,15 @@
     }
   },
   "caracteristicas": ["Magia elemental", "Longevidade", "Sabedoria ancestral", "Resistência mágica"]
+  ,
+  "habilidadeRaca": "",
+  "habilidadesNivel0": ["", "", ""],
+  "habilidadesNivel25": ["", "", ""],
+  "habilidadesNivel70": ["", "", ""],
+  "habilidadesNivel90": ["", "", ""],
+  "habilidadesNivel100": ["", "", ""],
+  "magiasNivel0": ["", "", ""],
+  "magiasNivel25": ["", "", ""],
+  "magiasNivel80": ["", "", ""],
+  "magiasNivel100": ["", "", ""]
 }

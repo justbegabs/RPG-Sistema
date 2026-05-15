@@ -11,4 +11,23 @@
     }
   },
   "caracteristicas": ["Transformação", "Força aumentada", "Sentidos aguçados", "Fraqueza à prata"]
+  ,
+  "habilidadeRaca": "",
+  "habilidadesNivel0": ["", "", ""],
+  "habilidadesNivel25": ["", "", ""],
+  "habilidadesNivel70": ["", "", ""],
+  "habilidadesNivel90": ["", "", ""],
+  "habilidadesNivel100": ["", "", ""],
+  "magiasNivel0": [
+    "Membro da Alcateia — Membros da Alcateia do Lobisomem recebem +3 em Luta, Reflexos, Iniciativa, perícias de Magia, Fortitude e Atletismo enquanto o Lobisomem se manter concentrado em manter seus aliados mais fortes. Custo: -7 Alma, -7 Mana.",
+    "Pressentimento Predatório — Pode sentir perigo antes de acontecer. Com teste de Demonologia, pressente ou vê ameaças próximas conforme o sucesso. Custo: -7 Mana.",
+    "Melhoria controversa — Escolhe +2 em Força, Destreza, Constituição ou Resiliência (2 desses), mas ao usar o atributo deve testar Sorte. Custo: -7 Alma."
+  ],
+  "magiasNivel25": [
+    "Transformação Completa — Permite transformar-se em Lobo Completo após muita experiência. Processo doloroso. Custo: -3 Mana, -5 Vida.",
+    "Ecos do Luar — Em noites de lua cheia, pode testar Ilusão contra Vontade do alvo. Se vencer, causa Confusão. Custo: -7 Mana.",
+    "Instinto da Besta — Por 1D6 rodadas, teste de Conjuração para +5 em Luta, Reflexos, Furtividade, Iniciativa, Fortitude e Intimidação, mas -5 em Intelecto e Carisma. Custo: -7 Alma, -7 Mana."
+  ],
+  "magiasNivel80": ["", "", ""],
+  "magiasNivel100": ["", "", ""]
 }

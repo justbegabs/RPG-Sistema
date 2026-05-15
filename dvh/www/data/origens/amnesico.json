@@ -1,7 +1,7 @@
 {
   "id": "amnesico",
   "nome": "Amnésico",
-  "descricao": "Perdeu a memória, sem lembrar de seu passado ou identidade.",
+  "descricao": "devido a algum trauma ou experiência de qualquer tipo, perderam a memória de suas vidas. Vezes têm flashes de memória do que um dia viveram, mas não fazem muito sentido. - Bônus em ?????? e ??????.",
   "bonus": {
     "escolher_pericias": 2,
     "equipamento": "Objetos misteriosos, roupas desconhecidas, moedas"

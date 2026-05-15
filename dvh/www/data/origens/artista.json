@@ -1,7 +1,7 @@
 {
   "id": "artista",
   "nome": "Artista",
-  "descricao": "Dedicou a vida à arte, expressando emoções através de diferentes formas criativas.",
+  "descricao": "devotaram suas vidas às artes, sejam pintura, escultura, artes cênicas ou qualquer outro tipo. São muito bons e costumam ser famosos por isso. - Bônus em Artes e Cozinhar +2.",
   "bonus": {
     "pericias": {
       "artes": 2,

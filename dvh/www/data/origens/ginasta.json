@@ -1,7 +1,7 @@
 {
   "id": "ginasta",
   "nome": "Ginasta",
-  "descricao": "Treinou desde cedo em acrobacias e movimentos corporais avançados.",
+  "descricao": "pessoas que passaram a vida treinando seus corpos. São atléticos, rápidos e flexíveis. Se envolveram com aspectos místicos em alguma de suas competições ou treinos. Bônus em Atletismo e Acrobacia +2.",
   "bonus": {
       "pericias": {
         "atletismo": 2,

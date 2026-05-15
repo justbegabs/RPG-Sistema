@@ -79,6 +79,181 @@ async function init() {
     
     // Configura o formulário
     setupForm();
+    setupEscolhasMagiasHabilidades();
+    setupSelectsMagiasHabilidades();
+    // Preenche selects de magias/habilidades com opções do JSON da raça selecionada e impede repetição
+    function setupSelectsMagiasHabilidades() {
+        const form = document.getElementById('raca-habilidades-magias-form');
+        if (!form) return;
+        const selectRaca = document.getElementById('raca');
+        function getRacaSelecionada() {
+            if (!selectRaca) return null;
+            const id = selectRaca.value;
+            if (!id) return null;
+            return window.DadosLoader?.obterItemPorId('racas', id);
+        }
+        function preencherSelects() {
+            const raca = getRacaSelecionada();
+            if (!raca) return;
+            // Habilidades
+            const habs = [
+                ...(raca.habilidadesNivel0 || []),
+                ...(raca.habilidadesNivel25 || []),
+                ...(raca.habilidadesNivel70 || []),
+                ...(raca.habilidadesNivel90 || []),
+                ...(raca.habilidadesNivel100 || [])
+            ].filter(h => h && h.trim() !== '');
+            // Magias
+            const magias = [
+                ...(raca.magiasNivel0 || []),
+                ...(raca.magiasNivel25 || []),
+                ...(raca.magiasNivel80 || []),
+                ...(raca.magiasNivel100 || [])
+            ].filter(m => m && m.trim() !== '');
+
+            // Preencher selects de habilidades
+            const selectsHab = form.querySelectorAll('select.select-hab');
+            selectsHab.forEach(sel => {
+                const val = sel.value;
+                sel.innerHTML = '<option value="">Selecione...</option>' + habs.map(h => `<option value="${h}">${h}</option>`).join('');
+                if (val && habs.includes(val)) sel.value = val;
+            });
+            // Preencher selects de magias
+            const selectsMagia = form.querySelectorAll('select.select-magia');
+            selectsMagia.forEach(sel => {
+                const val = sel.value;
+                sel.innerHTML = '<option value="">Selecione...</option>' + magias.map(m => `<option value="${m}">${m}</option>`).join('');
+                if (val && magias.includes(val)) sel.value = val;
+            });
+        }
+        // Impede seleção repetida
+        function impedirRepeticao() {
+            // Habilidades
+            const selectsHab = Array.from(form.querySelectorAll('select.select-hab'));
+            const habSelecionadas = selectsHab.map(sel => sel.value).filter(v => v);
+            selectsHab.forEach(sel => {
+                Array.from(sel.options).forEach(opt => {
+                    if (!opt.value) return;
+                    opt.disabled = habSelecionadas.includes(opt.value) && sel.value !== opt.value;
+                });
+            });
+            // Magias
+            const selectsMagia = Array.from(form.querySelectorAll('select.select-magia'));
+            const magiasSelecionadas = selectsMagia.map(sel => sel.value).filter(v => v);
+            selectsMagia.forEach(sel => {
+                Array.from(sel.options).forEach(opt => {
+                    if (!opt.value) return;
+                    opt.disabled = magiasSelecionadas.includes(opt.value) && sel.value !== opt.value;
+                });
+            });
+        }
+        // Atualiza selects ao trocar raça
+        if (selectRaca) selectRaca.addEventListener('change', () => { preencherSelects(); impedirRepeticao(); });
+        // Atualiza ao abrir
+        preencherSelects(); impedirRepeticao();
+        // Atualiza ao mudar qualquer select
+        form.addEventListener('change', e => {
+            if (e.target && (e.target.classList.contains('select-hab') || e.target.classList.contains('select-magia'))) {
+                impedirRepeticao();
+            }
+        });
+    }
+    // Lógica dinâmica para magias/habilidades por faixa de nível
+    function setupEscolhasMagiasHabilidades() {
+        const form = document.getElementById('raca-habilidades-magias-form');
+        if (!form) return;
+
+        // Função para atualizar bloqueios e destaques
+        function atualizarCampos() {
+            // Nível atual
+            let nivel = 0;
+            const inputNivel = document.getElementById('nivel');
+            if (inputNivel && inputNivel.value) nivel = parseInt(inputNivel.value) || 0;
+            else if (window.nivelFichaAtual) nivel = window.nivelFichaAtual;
+
+            // HABILIDADES
+            // 1 de 0-25, 2 de 25-70, 3 de 70-90, 4 em 100 + 1 de raça obrigatória
+            const hab0 = form.querySelector('input[name="hab-nv0-1"]');
+            const hab25 = [form.querySelector('input[name="hab-nv25-1"]'), form.querySelector('input[name="hab-nv25-2"]')];
+            const hab70 = [form.querySelector('input[name="hab-nv70-1"]'), form.querySelector('input[name="hab-nv70-2"]'), form.querySelector('input[name="hab-nv70-3"]')];
+            const hab100 = [form.querySelector('input[name="hab-nv100-1"]'), form.querySelector('input[name="hab-nv100-2"]'), form.querySelector('input[name="hab-nv100-3"]'), form.querySelector('input[name="hab-nv100-4"]')];
+
+            // MAGIAS
+            // 1 de 0-25, 2 de 25-80, 3 de 80-95, 4 em 100
+            const mag0 = form.querySelector('input[name="magia-nv0-1"]');
+            const mag25 = [form.querySelector('input[name="magia-nv25-1"]'), form.querySelector('input[name="magia-nv25-2"]')];
+            const mag80 = [form.querySelector('input[name="magia-nv80-1"]'), form.querySelector('input[name="magia-nv80-2"]'), form.querySelector('input[name="magia-nv80-3"]')];
+            const mag100 = [form.querySelector('input[name="magia-nv100-1"]'), form.querySelector('input[name="magia-nv100-2"]'), form.querySelector('input[name="magia-nv100-3"]'), form.querySelector('input[name="magia-nv100-4"]')];
+
+            // HABILIDADE DE RAÇA sempre obrigatória
+            const habRaca = form.querySelector('textarea[name="habilidade-raca"]');
+            if (habRaca) {
+                habRaca.required = true;
+                habRaca.style.border = '2px solid #d32';
+            }
+
+            // HABILIDADES
+            if (hab0) {
+                hab0.required = true;
+                hab0.disabled = nivel < 0;
+                hab0.style.border = '2px solid #1976d2';
+            }
+            hab25.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 25;
+                    el.disabled = nivel < 25;
+                    el.style.border = nivel >= 25 ? '2px solid #1976d2' : '';
+                }
+            });
+            hab70.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 70;
+                    el.disabled = nivel < 70;
+                    el.style.border = nivel >= 70 ? '2px solid #1976d2' : '';
+                }
+            });
+            hab100.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 100;
+                    el.disabled = nivel < 100;
+                    el.style.border = nivel >= 100 ? '2px solid #1976d2' : '';
+                }
+            });
+
+            // MAGIAS
+            if (mag0) {
+                mag0.required = true;
+                mag0.disabled = nivel < 0;
+                mag0.style.border = '2px solid #1976d2';
+            }
+            mag25.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 25;
+                    el.disabled = nivel < 25;
+                    el.style.border = nivel >= 25 ? '2px solid #1976d2' : '';
+                }
+            });
+            mag80.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 80;
+                    el.disabled = nivel < 80;
+                    el.style.border = nivel >= 80 ? '2px solid #1976d2' : '';
+                }
+            });
+            mag100.forEach((el, i) => {
+                if (el) {
+                    el.required = nivel >= 100;
+                    el.disabled = nivel < 100;
+                    el.style.border = nivel >= 100 ? '2px solid #1976d2' : '';
+                }
+            });
+        }
+
+        // Atualiza ao abrir e ao mudar nível
+        atualizarCampos();
+        const inputNivel = document.getElementById('nivel');
+        if (inputNivel) inputNivel.addEventListener('input', atualizarCampos);
+    }
     
     // Carrega as fichas existentes
     loadFichas();
@@ -176,6 +351,19 @@ function popularSelects() {
             localStorage.setItem('origem_selecionada', selectOrigem.value);
             aplicarBonusSelecao('origem', selectOrigem.value);
             atualizarInfoPersonagem();
+
+            // Para origens com bônus por escolha de perícias, abre o modal automaticamente
+            // quando ainda não houver escolhas salvas para a origem selecionada.
+            if (!selectOrigem.value) return;
+            const origemSelecionada = DadosLoader.obterItemPorId('origens', selectOrigem.value);
+            const escolherCount = origemSelecionada?.bonus?.escolher_pericias || 0;
+            if (escolherCount > 0) {
+                const escolhas = JSON.parse(localStorage.getItem('origem_escolhas') || '{}');
+                const escolhidas = Array.isArray(escolhas[selectOrigem.value]) ? escolhas[selectOrigem.value] : [];
+                if (escolhidas.length === 0) {
+                    setTimeout(() => abrirModalEscolherPericias(selectOrigem.value, escolherCount), 0);
+                }
+            }
         });
         
         // Restaura seleção anterior se existir
@@ -388,6 +576,8 @@ function inicializarPericias() {
  * Aplica os bônus das seleções existentes (se houver)
  */
 function aplicarBonusSelecoesExistentes() {
+    resetarBonusesAutomaticosPericias();
+
     const selectClasse = document.getElementById('classe');
     const selectRaca = document.getElementById('raca');
     const selectOrigem = document.getElementById('origem');
@@ -409,6 +599,32 @@ function aplicarBonusSelecoesExistentes() {
             aplicarPericiasEscolhidasParaOrigem(origemId, escolhas[origemId]);
         }
     }
+}
+
+/**
+ * Zera bônus automáticos (origem/classe/raça) para evitar acúmulo ao reaplicar seleções.
+ * Mantém D6 e bônus do personagem intactos.
+ */
+function resetarBonusesAutomaticosPericias() {
+    const pericias = obterTodasPericias();
+    if (!pericias || typeof pericias !== 'object') return;
+
+    Object.keys(pericias).forEach(periciaId => {
+        if (!pericias[periciaId]) {
+            pericias[periciaId] = { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+            return;
+        }
+        pericias[periciaId].bonus_origem = 0;
+        pericias[periciaId].bonus_classe = 0;
+        pericias[periciaId].bonus_raca = 0;
+    });
+
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+
+    bonusAplicados.classe = null;
+    bonusAplicados.raca = null;
+    bonusAplicados.origem = null;
+    bonusAplicados.classe_escolha = null;
 }
 
 /**
@@ -767,7 +983,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
                            value="${periciaAdicionais.d4}" 
                            min="0" 
                            max="4" 
-                           readonly>
+                           onchange="salvarDadoAdicionalPericia('${pericia.id}', 'd4', this.value)">
                     <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd4')">🎲</button>
                 </div>`;
     }
@@ -782,7 +998,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
                            value="${periciaAdicionais.d6}" 
                            min="0" 
                            max="6" 
-                           readonly>
+                           onchange="salvarDadoAdicionalPericia('${pericia.id}', 'd6', this.value)">
                     <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd6')">🎲</button>
                 </div>`;
     }
@@ -797,7 +1013,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
                            value="${periciaAdicionais.d8}" 
                            min="0" 
                            max="8" 
-                           readonly>
+                           onchange="salvarDadoAdicionalPericia('${pericia.id}', 'd8', this.value)">
                     <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd8')">🎲</button>
                 </div>`;
     }
@@ -812,7 +1028,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
                            value="${periciaAdicionais.d10}" 
                            min="0" 
                            max="10" 
-                           readonly>
+                           onchange="salvarDadoAdicionalPericia('${pericia.id}', 'd10', this.value)">
                     <button type="button" class="btn-rolar" onclick="rolarDadoAdicionalPericia('${pericia.id}', 'd10')">🎲</button>
                 </div>`;
     }
@@ -831,7 +1047,7 @@ function criarPericiaFichaHTML(pericia, atributoKey, pericias, nivelPassed) {
                            value="${periciaData.d6}" 
                            min="0" 
                            max="6" 
-                           onchange="rolarD6Pericia('${pericia.id}')">
+                           onchange="salvarD6Pericia('${pericia.id}', this.value)">
                     <button type="button" class="btn-rolar" onclick="rolarD6Pericia('${pericia.id}')">🎲</button>
                 </div>
                 ${camposDadosAdicionais}
@@ -964,6 +1180,51 @@ function rolarDadoAdicionalPericia(periciaId, tipoDado) {
     // Atualiza o total
     atualizarTotalPericia(periciaId);
     atualizarContadorDadosAdicionais();
+}
+
+function salvarDadoAdicionalPericia(periciaId, tipoDado, valor) {
+    const nivel = obterNivelAtual();
+    const disponivel = obterDadosDisponiveisPorNivel(nivel);
+    if (!disponivel[tipoDado]) {
+        return;
+    }
+
+    const maximoValor = parseInt(tipoDado.substring(1)) || 0;
+    const novoValor = Math.max(0, Math.min(maximoValor, parseInt(valor) || 0));
+    const dadosAdicionais = obterDadosAdicionaisPericias();
+    if (!dadosAdicionais[periciaId]) {
+        dadosAdicionais[periciaId] = { d4: 0, d6: 0, d8: 0, d10: 0 };
+    }
+
+    const valorAnterior = parseInt(dadosAdicionais[periciaId][tipoDado]) || 0;
+    if (valorAnterior <= 0 && novoValor > 0) {
+        const periciasComDado = Object.entries(dadosAdicionais)
+            .filter(([id, p]) => id !== periciaId && (parseInt(p[tipoDado]) || 0) > 0)
+            .length;
+        const maxDado = disponivel[tipoDado].max;
+        if (periciasComDado >= maxDado) {
+            const idCampo = tipoDado === 'd6' ? `pericia-d6-add-${periciaId}` : `pericia-${tipoDado}-${periciaId}`;
+            const campoDado = document.getElementById(idCampo);
+            if (campoDado) {
+                campoDado.value = valorAnterior;
+            }
+            alert(`⚠️ Limite de ${maxDado} perícias com ${tipoDado.toUpperCase()} atingido!`);
+            return;
+        }
+    }
+
+    dadosAdicionais[periciaId][tipoDado] = novoValor;
+    salvarDadosAdicionaisPericias(dadosAdicionais);
+
+    const idCampo = tipoDado === 'd6' ? `pericia-d6-add-${periciaId}` : `pericia-${tipoDado}-${periciaId}`;
+    const campoDado = document.getElementById(idCampo);
+    if (campoDado) {
+        campoDado.value = novoValor;
+    }
+
+    atualizarTotalPericia(periciaId);
+    atualizarContadorDadosAdicionais();
+    calcularEstatisticas();
 }
 
 /**
@@ -1234,6 +1495,44 @@ function rolarD6Pericia(periciaId) {
 }
 
 /**
+ * Salva manualmente o valor de D6 de uma perícia
+ */
+function salvarD6Pericia(periciaId, valor) {
+    const pericias = obterTodasPericias();
+    const periciaData = pericias[periciaId] || { d6: 0, bonus_personagem: 0, bonus_origem: 0, bonus_classe: 0, bonus_raca: 0 };
+    const valorAnterior = parseInt(periciaData.d6) || 0;
+    const novoValor = Math.max(0, Math.min(6, parseInt(valor) || 0));
+
+    if (valorAnterior <= 0 && novoValor > 0) {
+        const periciasComD6 = Object.entries(pericias)
+            .filter(([id, p]) => id !== periciaId && (parseInt(p.d6) || 0) > 0)
+            .length;
+        const limiteD6 = calcularLimiteD6(obterNivelAtual());
+        if (periciasComD6 >= limiteD6) {
+            const campoD6 = document.getElementById(`pericia-d6-${periciaId}`);
+            if (campoD6) {
+                campoD6.value = valorAnterior;
+            }
+            alert(`⚠️ Limite de ${limiteD6} perícias com D6 atingido!`);
+            return;
+        }
+    }
+
+    periciaData.d6 = novoValor;
+    pericias[periciaId] = periciaData;
+    localStorage.setItem('pericias_estrutura', JSON.stringify(pericias));
+
+    const campoD6 = document.getElementById(`pericia-d6-${periciaId}`);
+    if (campoD6) {
+        campoD6.value = novoValor;
+    }
+
+    atualizarTotalPericia(periciaId);
+    atualizarContadorD6();
+    calcularEstatisticas();
+}
+
+/**
  * Atualiza o total de uma perícia
  */
 function atualizarTotalPericia(periciaId) {
@@ -1334,7 +1633,7 @@ function atualizarContadorD6() {
  * Salva perícia individual
  */
 function salvarPericiaFicha(id, valor) {
-    // Salva no novo formato pericias_estrutura (mapeando o valor recebido para bonus_origem)
+    // Salva o bônus manual do personagem na perícia
     const saved = localStorage.getItem('pericias_estrutura');
     const dados = saved ? JSON.parse(saved) : {};
     if (!dados[id]) {
@@ -1342,6 +1641,11 @@ function salvarPericiaFicha(id, valor) {
     }
     dados[id].bonus_personagem = Math.max(-5, Math.min(5, parseInt(valor) || 0));
     localStorage.setItem('pericias_estrutura', JSON.stringify(dados));
+
+    const campoPersonagem = document.getElementById(`pericia-personagem-${id}`);
+    if (campoPersonagem) {
+        campoPersonagem.value = dados[id].bonus_personagem;
+    }
 
     // Atualiza total na interface
     atualizarTotalPericia(id);
@@ -1418,7 +1722,6 @@ function calcularEstatisticas() {
         const get = (attr) => parseInt(atributos[attr]) || 0;
         vidaTotal += steps * (get(prog.vida.attr) * prog.vida.mult);
         sanidadeTotal += steps * (get(prog.sanidade.attr) * prog.sanidade.mult);
-        manaTotal += steps * (get(prog.mana.attr) * prog.mana.mult);
     }
     atualizarCampoEstatisticaComAjuste('vida-total', 'vida-atual', Math.max(1, vidaTotal), primeiraVezCalculandoEstatisticas);
     atualizarCampoEstatisticaComAjuste('mana-total', 'mana-atual', Math.max(0, manaTotal), primeiraVezCalculandoEstatisticas);
@@ -1468,18 +1771,26 @@ function calcularEstatisticas() {
     atualizarCampoEstatistica('defesa', Math.max(0, defesa));
     
     // Calcula Esquiva: Defesa + Perícia Reflexos + Destreza
-    // Obtém valor numérico da perícia 'reflexos' (pode vir do helper em pericias.js ou do storage)
+    // Usa o total completo de Reflexos, incluindo dados adicionais disponíveis no nível.
     let reflexos = 0;
-    if (typeof obterValorPericia === 'function') {
+    const reflexosData = pericias['reflexos'];
+    if (reflexosData) {
+        reflexos = (parseInt(reflexosData.d6) || 0)
+            + (parseInt(reflexosData.bonus_personagem) || 0)
+            + (parseInt(reflexosData.bonus_origem) || 0)
+            + (parseInt(reflexosData.bonus_classe) || 0)
+            + (parseInt(reflexosData.bonus_raca) || 0);
+
         try {
-            reflexos = obterValorPericia('reflexos') || 0;
+            const dadosAdicionais = obterDadosAdicionaisPericias();
+            const reflexosAdicionais = dadosAdicionais['reflexos'] || { d4: 0, d6: 0, d8: 0, d10: 0 };
+            const disponivel = obterDadosDisponiveisPorNivel(obterNivelAtual());
+            if (disponivel.d4) reflexos += (parseInt(reflexosAdicionais.d4) || 0);
+            if (disponivel.d6) reflexos += (parseInt(reflexosAdicionais.d6) || 0);
+            if (disponivel.d8) reflexos += (parseInt(reflexosAdicionais.d8) || 0);
+            if (disponivel.d10) reflexos += (parseInt(reflexosAdicionais.d10) || 0);
         } catch (e) {
-            reflexos = 0;
-        }
-    } else {
-        const reflexosData = pericias['reflexos'];
-        if (reflexosData) {
-            reflexos = (parseInt(reflexosData.d6) || 0) + (parseInt(reflexosData.bonus_personagem) || 0) + (parseInt(reflexosData.bonus_origem) || 0) + (parseInt(reflexosData.bonus_classe) || 0) + (parseInt(reflexosData.bonus_raca) || 0);
+            // Se algo falhar ao ler dados adicionais, mantém cálculo com base principal da perícia.
         }
     }
     const destreza = atributos.destreza || 0;
@@ -1487,18 +1798,26 @@ function calcularEstatisticas() {
     atualizarCampoEstatistica('esquiva', Math.max(0, esquiva));
     
     // Calcula Bloqueio: Constituição × 2 + Metade da Fortitude (arredondado para cima)
-    // Obtém valor numérico da perícia 'fortitude'
+    // Usa o total completo da perícia Fortitude, incluindo dados adicionais disponíveis no nível.
     let fortitude = 0;
-    if (typeof obterValorPericia === 'function') {
+    const fortData = pericias['fortitude'];
+    if (fortData) {
+        fortitude = (parseInt(fortData.d6) || 0)
+            + (parseInt(fortData.bonus_personagem) || 0)
+            + (parseInt(fortData.bonus_origem) || 0)
+            + (parseInt(fortData.bonus_classe) || 0)
+            + (parseInt(fortData.bonus_raca) || 0);
+
         try {
-            fortitude = obterValorPericia('fortitude') || 0;
+            const dadosAdicionais = obterDadosAdicionaisPericias();
+            const fortAdicionais = dadosAdicionais['fortitude'] || { d4: 0, d6: 0, d8: 0, d10: 0 };
+            const disponivel = obterDadosDisponiveisPorNivel(obterNivelAtual());
+            if (disponivel.d4) fortitude += (parseInt(fortAdicionais.d4) || 0);
+            if (disponivel.d6) fortitude += (parseInt(fortAdicionais.d6) || 0);
+            if (disponivel.d8) fortitude += (parseInt(fortAdicionais.d8) || 0);
+            if (disponivel.d10) fortitude += (parseInt(fortAdicionais.d10) || 0);
         } catch (e) {
-            fortitude = 0;
-        }
-    } else {
-        const fortData = pericias['fortitude'];
-        if (fortData) {
-            fortitude = (parseInt(fortData.d6) || 0) + (parseInt(fortData.bonus_personagem) || 0) + (parseInt(fortData.bonus_origem) || 0) + (parseInt(fortData.bonus_classe) || 0) + (parseInt(fortData.bonus_raca) || 0);
+            // Se algo falhar ao ler dados adicionais, mantém cálculo com base principal da perícia.
         }
     }
     const metadeFortitude = Math.ceil(fortitude / 2);
@@ -1575,16 +1894,9 @@ function atualizarCampoEstatisticaComAjuste(idTotal, idAtual, valorTotal, inicia
         campoTotal.value = valorTotal;
         
         if (campoAtual) {
-            const valorAtualAnterior = parseInt(campoAtual.value) || 0;
-            
-            // Se o valor atual for maior que o novo total, ajusta para o total
-            if (valorAtualAnterior > valorTotal) {
-                campoAtual.value = valorTotal;
-            }
-            // Se for a primeira vez calculando, inicializa o atual com o total
-            else if (inicializar && valorAtualAnterior === 0 && valorTotal > 0) {
-                campoAtual.value = valorTotal;
-            }
+            // Sempre sincroniza o campo atual com o total durante os recálculos.
+            // O usuário ainda pode editar manualmente o campo atual depois.
+            campoAtual.value = valorTotal;
         }
     }
 }
@@ -1702,6 +2014,7 @@ function aplicarBonusCompleto(bonus, tipo) {
         'classe_escolha': 'bonus_classe'
     };
     const campoBonusChave = mapaTipo[tipo];
+    const tipoCampoInput = tipo === 'classe_escolha' ? 'classe' : tipo;
     
     if (!campoBonusChave) return;
     
@@ -1719,12 +2032,12 @@ function aplicarBonusCompleto(bonus, tipo) {
                 const valorAtual = pericias[periciaId][campoBonusChave] || 0;
                 const novoValor = valorAtual + bonusValor;
                 
-                // Limita entre -5 e +5
-                const valorLimitado = Math.max(-5, Math.min(5, novoValor));
+                // Permite valores de bônus de classe configurados acima de +5 (ex.: +7)
+                const valorLimitado = Math.max(-10, Math.min(10, novoValor));
                 pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                const campoInput = document.getElementById(`pericia-${tipoCampoInput}-${periciaId}`);
                 if (campoInput) {
                     campoInput.value = valorLimitado;
                 }
@@ -1746,12 +2059,12 @@ function aplicarBonusCompleto(bonus, tipo) {
                 const valorAtual = pericias[periciaId][campoBonusChave] || 0;
                 const novoValor = valorAtual + bonusValor;
                 
-                // Limita entre -5 e +5
-                const valorLimitado = Math.max(-5, Math.min(5, novoValor));
+                // Permite valores de bônus de classe configurados acima de +5 (ex.: +7)
+                const valorLimitado = Math.max(-10, Math.min(10, novoValor));
                 pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                const campoInput = document.getElementById(`pericia-${tipoCampoInput}-${periciaId}`);
                 if (campoInput) {
                     campoInput.value = valorLimitado;
                 }
@@ -2050,6 +2363,8 @@ function abrirModalEscolherPericiaClasse(classeId) {
         todas[classeId] = escolhida;
         localStorage.setItem('classe_escolha', JSON.stringify(todas));
         atualizarEstadoEscolhaClasse(classeId);
+        popularPericiasFicha();
+        calcularEstatisticas();
         fechar();
     }
 
@@ -2118,6 +2433,7 @@ function removerBonus(tipo) {
         'classe_escolha': 'bonus_classe'
     };
     const campoBonusChave = mapaTipo[tipo];
+    const tipoCampoInput = tipo === 'classe_escolha' ? 'classe' : tipo;
     
     if (!campoBonusChave) return;
     
@@ -2141,12 +2457,12 @@ function removerBonus(tipo) {
                     novoValor = Math.min(0, novoValor);
                 }
                 
-                // Limita entre -5 e +5 (segurança extra)
-                const valorLimitado = Math.max(-5, Math.min(5, novoValor));
+                // Permite reverter corretamente bônus aplicados acima de +5
+                const valorLimitado = Math.max(-10, Math.min(10, novoValor));
                 pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                const campoInput = document.getElementById(`pericia-${tipoCampoInput}-${periciaId}`);
                 if (campoInput) {
                     campoInput.value = valorLimitado;
                 }
@@ -2172,12 +2488,12 @@ function removerBonus(tipo) {
                     novoValor = Math.min(0, novoValor);
                 }
                 
-                // Limita entre -5 e +5
-                const valorLimitado = Math.max(-5, Math.min(5, novoValor));
+                // Permite reverter corretamente bônus aplicados acima de +5
+                const valorLimitado = Math.max(-10, Math.min(10, novoValor));
                 pericias[periciaId][campoBonusChave] = valorLimitado;
                 
                 // Atualiza na interface
-                const campoInput = document.getElementById(`pericia-${tipo}-${periciaId}`);
+                const campoInput = document.getElementById(`pericia-${tipoCampoInput}-${periciaId}`);
                 if (campoInput) {
                     campoInput.value = valorLimitado;
                 }
@@ -2759,12 +3075,6 @@ function executarLimpezaTotal() {
     primeiraVezCalculandoEstatisticas = true;
     calcularEstatisticas();
 
-    // Zera campos atuais explicitamente caso não tenham sido criados ainda
-    ['vida-atual','mana-atual','sanidade-atual','alma-atual'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = 0;
-    });
-
     // Atualiza inventário visual se funções existirem
     if (typeof atualizarListaInventario === 'function') atualizarListaInventario();
     if (typeof atualizarDisplayInventario === 'function') atualizarDisplayInventario();
@@ -2791,6 +3101,8 @@ window.popularAtributosFicha = popularAtributosFicha;
 window.popularPericiasFicha = popularPericiasFicha;
 window.alterarPericiaFicha = alterarPericiaFicha;
 window.salvarPericiaFicha = salvarPericiaFicha;
+window.salvarD6Pericia = salvarD6Pericia;
+window.salvarDadoAdicionalPericia = salvarDadoAdicionalPericia;
 window.rolarD6Pericia = rolarD6Pericia;
 window.atualizarTotalPericia = atualizarTotalPericia;
 window.atualizarContadorD6 = atualizarContadorD6;

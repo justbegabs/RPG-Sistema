@@ -1,7 +1,7 @@
 {
   "id": "criancaperdida",
   "nome": "Criança Perdida",
-  "descricao": "Foi separado de sua família em tenra idade, aprendendo a sobreviver sozinho.",
+  "descricao": "foram separados de seus pais na infância por criaturas e seres malignos. Foram mantidas em cativeiro em uma terra encantada até perceberem a realidade e fugirem, normalmente são 10 anos ou mais, mais velhos do que aparentam. - Bônus em Empatia e Ilusão +2.",
   "bonus": {
       "pericias": {
         "empatia": 2,

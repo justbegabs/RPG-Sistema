@@ -11,4 +11,19 @@
     }
   },
   "caracteristicas": ["Magia ritual", "Conhecimento oculto", "Familiars", "Vulnerabilidade à magia divina"]
+  ,
+  "habilidadeRaca": "",
+  "habilidadesNivel0": ["", "", ""],
+  "habilidadesNivel25": ["", "", ""],
+  "habilidadesNivel70": ["", "", ""],
+  "habilidadesNivel90": ["", "", ""],
+  "habilidadesNivel100": ["", "", ""],
+  "magiasNivel0": [
+    "Transmutação - Consegue transformar objetos em outros objetos ( 15% de Experiência ) ou em criaturas ( 30% de Experiência ). Caso transforme um objeto em criatura, a duração é de 2 minutos. Custo -15 Pontos de Mana.",
+    "Véu da Obediência - Faz com que a Vontade do alvo seja diminuída pela metade caso ele não tenha avistado o invocador, ou ele não o considere uma ameaça. Custo -10 Pontos de Mana.",
+    "Altar do Repouso - Ela pode criar um refúgio mágico que faz com que seus aliados tenham um descanso revigorante, mas ela tem um descanso mediano por gastar seu esforço para conjurar o refúgio constantemente durante o tempo. Custo -15 Pontos de Mana."
+  ],
+  "magiasNivel25": ["", "", ""],
+  "magiasNivel80": ["", "", ""],
+  "magiasNivel100": ["", "", ""]
 }

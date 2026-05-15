@@ -11,5 +11,16 @@
     }
   },
   "caracteristicas": ["Visão no escuro", "Resistência a veneno", "Proficiência com armas", "Construção"]
+  ,
+  "habilidadeRaca": "",
+  "habilidadesNivel0": ["", "", ""],
+  "habilidadesNivel25": ["", "", ""],
+  "habilidadesNivel70": ["", "", ""],
+  "habilidadesNivel90": ["", "", ""],
+  "habilidadesNivel100": ["", "", ""],
+  "magiasNivel0": ["", "", ""],
+  "magiasNivel25": ["", "", ""],
+  "magiasNivel80": ["", "", ""],
+  "magiasNivel100": ["", "", ""]
 }
 

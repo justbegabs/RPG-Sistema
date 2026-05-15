@@ -1,7 +1,7 @@
 {
   "id": "herdeiro",
   "nome": "Herdeiro",
-  "descricao": "Nascido em família rica, herdeiro de fortuna e legado familiar.",
+  "descricao": "nunca tiveram que se preocupar com dinheiro, já nasceram em berço de ouro. São de linhagens conhecidas, como MontClair ou Fireheart. Bônus em Lábia e Intimidação +2.",
   "bonus": {
     "pericias": {
       "labia": 2,
