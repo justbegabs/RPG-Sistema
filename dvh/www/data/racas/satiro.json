@@ -1,7 +1,7 @@
 {
   "id": "satiro",
   "nome": "Sátiro",
-  "descricao": "Criatura meio humano meio bode, conhecida por festividades e música.",
+  "descricao": "Criaturas com a parte de cima humanas com chifres e as pernas de bode com cascos. Têm grande ligação com a natureza e com o Deus Pã, fazendo peregrinações para procurá-lo, desde que a natureza começou a ser destruída pelas outras raças e eles sentiram que Pã não estava mais entre eles. São um pouco travessos, mas sempre protetores. Gostam de música e dança.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": 3
     }
   },
-  "caracteristicas": ["Música encantadora", "Alegria contagiante", "Agilidade", "Conhecimento da natureza"]
+  "caracteristicas": ["Música encantadora", "Alegria contagiante", "Agilidade", "Conhecimento da natureza", "Ligação com o Deus Pã"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

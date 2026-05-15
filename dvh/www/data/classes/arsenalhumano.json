@@ -1,7 +1,7 @@
 {
   "id": "arsenalhumano",
   "nome": "Arsenal Humano",
-  "descricao": "Combatente que domina múltiplas armas e táticas de combate.",
+  "descricao": "Habilidades com armas diversas e facilidade de troca rápida. Caso cause dano com 5 armas diferentes o mesmo alvo em rodadas seguidas vai ganhando bônus em seus ataques.\n\n- No primeiro turno, escolhendo qualquer arma é um ataque normal.\n- Segundo turno recebe +3 de acerto\n- Terceiro turno +1 dado do mesmo tipo da arma ( se forem dois dados - como 1d4+1d3 -, usar o maior )\n- Quarto turno +7 de acerto e +2d6 de dano\n- Quinto turno, crítico x5 + o multiplicador normal da arma e a margem de ameaça desce em 4 pontos ( se for 20, desce para 16, se for 18, desce para 14 ).\n\nCaso erre um ataque, recomeça do primeiro turno.\n\nNão podem usar a habilidade Ambidestro.\n\nBônus em Espadas ou Luta +7\nBônus de 7 em Defesa\nVida aumentada por nível = Resiliência vezes 3.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "forca",
   "habilidades": ["Múltiplas armas", "Adaptação tática", "Versatilidade"],
   "dadosVida": "1d10",

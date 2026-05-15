@@ -1,7 +1,7 @@
 {
   "id": "demonio",
   "nome": "Demônio",
-  "descricao": "Ser infernal com poderes das trevas e resistência ao fogo.",
+  "descricao": "Seres do submundo, inferno ou purgatório, o nome não importa. Suas almas são completamente corrompidas e passaram por portões do Limiar Sombrio para voltar à realidade. Possuem formas desumanas, podendo possuir chifres, rabos, escamas, garras afiadas, olhos vermelhos ou pretos sem pupilas, presas afiadas, língua bifurcada e/ou cascos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": 0
     }
   },
-  "caracteristicas": ["Resistência ao fogo", "Visão no escuro", "Magia das trevas", "Asas demoníacas"]
+  "caracteristicas": ["Resistência ao fogo", "Visão no escuro", "Magia das trevas", "Asas demoníacas", "Forma desumana", "Alma 0 obrigatória"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

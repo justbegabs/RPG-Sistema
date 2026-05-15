@@ -1,7 +1,7 @@
 {
   "id": "investigador",
   "nome": "Investigador",
-  "descricao": "Detetive e pesquisador que resolve mistérios através de dedução e análise.",
+  "descricao": "Tem altas habilidades investigativas e prefere ficar na linha de trás, perceptivo e inteligente.\n\nBônus em Investigação ou Forense +7\nBônus de 2 Perícias a mais\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 3.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Investigação", "Dedução", "Análise"],
   "dadosVida": "1d8",

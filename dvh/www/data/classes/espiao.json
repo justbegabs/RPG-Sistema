@@ -1,7 +1,7 @@
 {
   "id": "espiao",
   "nome": "Espião",
-  "descricao": "Agente secreto especializado em infiltração, espionagem e sabotagem.",
+  "descricao": "Sua vida é feita para ficar nas sombras e passar despercebido pela sociedade.\n\nBônus em Trapaça ou Furtividade +7\nBônus de 7 em Defesa\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 3.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "destreza",
   "habilidades": ["Furtividade", "Infiltração", "Disfarce"],
   "dadosVida": "1d8",

@@ -1,7 +1,7 @@
 {
   "id": "nogitsune",
   "nome": "Nogitsune",
-  "descricao": "Raposa do mal com poderes de ilusão e caos.",
+  "descricao": "São Kitsunes de Alma Corrompida. São sarcásticas, irônicas e buscam o caos pela diversão. Geralmente são vistos como criaturas malignas, mas, na verdade, só querem um pouco de emoção.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Ilusões poderosas", "Manipulação", "Magia do caos", "Múltiplas formas"]
+  "caracteristicas": ["Ilusões poderosas", "Manipulação", "Magia do caos", "Múltiplas formas", "Alma corrompida"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

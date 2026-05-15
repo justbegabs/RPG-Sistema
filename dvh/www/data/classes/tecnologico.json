@@ -1,7 +1,7 @@
 {
   "id": "tecnologico",
   "nome": "Tecnológico",
-  "descricao": "Especialista em tecnologia avançada, usando dispositivos e engenharia.",
+  "descricao": "Usa de muitos aparelhos eletrônicos como meio de sobreviver. Serve tanto de suporte quanto de ataque.\n\nBônus em Tecnologia ou Explosivos +7\nBônus de 2 Perícias a mais\nVida aumentada por nível = Resiliência vezes 3.\nSanidade aumentada por nível = Carisma vezes 3.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Engenharia", "Tecnologia", "Inovação"],
   "dadosVida": "1d8",

@@ -1,7 +1,7 @@
 {
   "id": "semideus",
   "nome": "Semi-deus",
-  "descricao": "Descendente de deuses e mortais, com poderes divinos limitados.",
+  "descricao": "Filhos de deuses de quaisquer panteões com humanos. São extremamente fortes e temidos pela maioria. Possuem chamas celestiais em suas almas, o que quase impede elas de serem corrompidas. Quase. Alguns Deuses passam para seus filhos chamas celestiais impuras, o que faz com que atraia a corrupção. Tudo depende de quem se é filho, não importa o panteão ou a religião.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Poderes divinos limitados", "Longevidade", "Força aumentada", "Herança divina"]
+  "caracteristicas": ["Poderes divinos limitados", "Longevidade", "Força aumentada", "Herança divina", "Chamas celestiais na alma"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

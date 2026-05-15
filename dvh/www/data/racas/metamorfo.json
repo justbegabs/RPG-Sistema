@@ -1,7 +1,7 @@
 {
   "id": "metamorfo",
   "nome": "Metamorfo",
-  "descricao": "Ser que pode assumir qualquer forma física.",
+  "descricao": "Criaturas que conseguem se transformar em outros seres ou outras raças, mas depois de uma transformação não perdem os atributos físicos de formas passadas, elas ficam armazenadas no cérebro como um guarda-roupa de corpos. Eles conseguem copiar voz e aparência, mas memórias são mais difíceis de serem copiadas.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Mudança de forma", "Mimetismo", "Adaptabilidade", "Infiltração"]
+  "caracteristicas": ["Mudança de forma", "Mimetismo", "Adaptabilidade", "Infiltração", "Copiar voz e aparência"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

@@ -1,7 +1,7 @@
 {
   "id": "elfo",
   "nome": "Elfo",
-  "descricao": "Elegante e longevo, com afinidade natural com a magia.",
+  "descricao": "Povo com grande quantidade de Alma. Possuem orelhas pontudas, aparências belas e suaves. Preferem usar arcos do que outras armas. Possuem mais conexão com a natureza, vidas semi-imortais e sentidos mais aguçados. Possuem conexão com o plano divino, poderes empáticos e de manipulação, cura acelerada.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": 3
     }
   },
-  "caracteristicas": ["Visão no escuro", "Resistência a encantamento", "Longevidade", "Magia natural"]
+  "caracteristicas": ["Visão no escuro", "Resistência a encantamento", "Longevidade", "Magia natural", "Conexão com o plano divino"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

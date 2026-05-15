@@ -1,7 +1,7 @@
 {
   "id": "esqueleto",
   "nome": "Esqueleto",
-  "descricao": "Morto-vivo mantido por magia negra, sem necessidade de órgãos.",
+  "descricao": "Não são mais vivos, mas ainda têm vida. Sua aparência é definida por ossos em seu corpo todo, com possíveis pedaços de pele podres. Podem ser Esqueletos de qualquer espécie. Sabem como é a experiência de já terem sido vivos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": -3
     }
   },
-  "caracteristicas": ["Imunidade a veneno", "Não precisa respirar", "Resistência a dano", "Vulnerabilidade à magia divina"]
+  "caracteristicas": ["Imunidade a veneno", "Não precisa respirar", "Resistência a dano", "Vulnerabilidade à magia divina", "Não possui órgãos vivos"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

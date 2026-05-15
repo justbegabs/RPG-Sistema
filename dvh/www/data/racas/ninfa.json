@@ -1,7 +1,7 @@
 {
   "id": "ninfa",
   "nome": "Ninfa",
-  "descricao": "Espírito da natureza com beleza etérea e poderes naturais.",
+  "descricao": "Espíritos da natureza, representações do que é belo. São associadas a diversos Deuses da mitologia Grega. São naturalmente protegidas por Bruxas. Podem ser representações de uma diversidade enorme de elementos da natureza, mas os principais são rios, montanhas, florestas e mares.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Magia da natureza", "Beleza etérea", "Conexão com elementos", "Longevidade"]
+  "caracteristicas": ["Magia da natureza", "Beleza etérea", "Conexão com elementos", "Longevidade", "Ligação com deuses gregos"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

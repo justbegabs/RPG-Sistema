@@ -1,7 +1,7 @@
 {
   "id": "kanima",
   "nome": "Kanima",
-  "descricao": "Híbrido humano-lagarto com habilidades de escalada e camuflagem.",
+  "descricao": "Seres que foram transformados por Lobisomens, mas tinham Almas Corrompidas demais e sofreram uma transformação diferente. De dia são humanos comuns que não sabem nem que são criaturas mágicas, até serem avisadas sobre o fato, e de noite são criaturas meio lagartos, com veneno em suas garras e sentidos mais aguçados. Kanimas buscam sempre seguir as ordens de um mestre.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -13,7 +13,7 @@
       }
     }
   },
-  "caracteristicas": ["Escalada", "Camuflagem", "Visão térmica", "Pele escamosa"]
+  "caracteristicas": ["Escalada", "Camuflagem", "Visão térmica", "Pele escamosa", "Garras venenosas", "Obediência ao mestre"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

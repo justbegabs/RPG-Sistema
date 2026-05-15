@@ -1,7 +1,7 @@
 {
   "id": "bruxa",
   "nome": "Bruxa",
-  "descricao": "Usuária de magia que canaliza poder através de rituais e pactos.",
+  "descricao": "Feiticeiro ou Bruxa, uma espécie que possui muito poder mágico e pode performar experimentos com isso, conjurar magias mais facilmente e fazer transmutações sem ser com meios alquímicos. Não possuem muitas características físicas singulares, então podem se passar facilmente por humanos. Quando possuem características, são na cor da pele, como verde ou azul. Normalmente são acompanhadas por familiares, seres animais que são fiéis companheiros protetores.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Magia ritual", "Conhecimento oculto", "Familiars", "Vulnerabilidade à magia divina"]
+  "caracteristicas": ["Magia ritual", "Conhecimento oculto", "Familiars", "Transmutação facilitada", "Vulnerabilidade à magia divina"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

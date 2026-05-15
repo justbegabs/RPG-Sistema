@@ -269,6 +269,9 @@ async function carregarDados() {
     try {
         await DadosLoader.inicializar();
         console.log('Dados carregados com sucesso');
+        if (typeof renderizarCatalogoItens === 'function') {
+            renderizarCatalogoItens();
+        }
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
         showMessage('Erro ao carregar dados. Verifique a conexão.', 'error');
@@ -3549,13 +3552,16 @@ function inicializarInventario() {
     // Renderiza catálogo
     renderizarCatalogoItens();
     
-    // Configura busca no catálogo
-    const campoBusca = document.getElementById('catalogo-busca');
-    if (campoBusca) {
-        campoBusca.addEventListener('input', (e) => {
+    // Configura busca no catálogo (modal e página)
+    const camposBusca = [
+        document.getElementById('catalogo-busca'),
+        document.getElementById('catalogo-busca-page')
+    ].filter(Boolean);
+    camposBusca.forEach(campo => {
+        campo.addEventListener('input', (e) => {
             filtrarCatalogoPorNome(e.target.value);
         });
-    }
+    });
 }
 
 /**
@@ -3763,7 +3769,16 @@ function removerItem(itemId) {
  * Filtra itens por categoria
  */
 function filtrarPorCategoria(categoria) {
-    categoriaFiltroAtual = categoria;
+    // Mapeamento das abas para as chaves do catálogo
+    const mapaCategorias = {
+        'itens-comuns': 'comuns',
+        'itens-classe': 'classe',
+        'itens-raca': 'raca',
+        'itens-origem': 'origem',
+        'armas': 'armas',
+        'todos': 'todos'
+    };
+    categoriaFiltroAtual = mapaCategorias[categoria] || categoria;
     
     // Atualiza visual das abas
     const tabs = document.querySelectorAll('.inventario-tab-btn');
@@ -4068,8 +4083,24 @@ window.limparInventario = limparInventario;
  * Renderiza o catálogo completo (todas as categorias) no modal
  */
 function renderizarCatalogoItens() {
-    const container = document.getElementById('catalogo-itens');
-    if (!container || !window.DadosLoader) return;
+    // Event delegation para expandir/colapsar seções do catálogo (modal e página)
+    [document.getElementById('catalogo-itens'), document.getElementById('catalogo-itens-page')].forEach(function(catalogo) {
+        if (catalogo && !catalogo._delegationSet) {
+            catalogo.addEventListener('click', function(e) {
+                const header = e.target.closest('[data-categoria]');
+                if (header && header.parentElement && header.parentElement.classList.contains('catalogo-secao')) {
+                    const categoria = header.getAttribute('data-categoria');
+                    if (categoria) toggleCatalogoSecao(categoria);
+                }
+            });
+            catalogo._delegationSet = true;
+        }
+    });
+    const containers = [
+        document.getElementById('catalogo-itens'),
+        document.getElementById('catalogo-itens-page')
+    ].filter(Boolean);
+    if (!containers.length || !window.DadosLoader) return;
 
     const secoes = [
         { cat: 'armas', titulo: '⚔️ Armas' },
@@ -4079,7 +4110,8 @@ function renderizarCatalogoItens() {
         { cat: 'origem', titulo: '🌍 Itens de Origem' }
     ];
 
-    container.innerHTML = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo)).join('');
+    const html = secoes.map(sec => renderizarSecaoCatalogo(sec.cat, sec.titulo)).join('');
+    containers.forEach(container => { container.innerHTML = html; });
 }
 
 // Extrai a faixa de crítico necessária de uma propriedade textual da arma
@@ -4128,7 +4160,7 @@ function renderizarSecaoCatalogo(categoria, titulo) {
 
     return `
         <div class="catalogo-secao" style="border:1px solid #ddd; border-radius:8px; overflow:hidden; margin-bottom:8px;">
-            <div style="background:#f7f7f7; padding:8px 12px; font-weight:bold; cursor:pointer; user-select:none; display:flex; justify-content:space-between; align-items:center;" onclick="toggleCatalogoSecao('${categoria}')">
+            <div data-categoria="${categoria}" style="background:#f7f7f7; padding:8px 12px; font-weight:bold; cursor:pointer; user-select:none; display:flex; justify-content:space-between; align-items:center;">
                 <span>${titulo} <span style="color:#666; font-weight:normal;">(${itens.length})</span></span>
                 <span id="catalogo-icon-${categoria}" style="font-size:14px;">▶</span>
             </div>
@@ -4208,14 +4240,12 @@ function filtrarCatalogoPorNome(termoBusca) {
         { cat: 'classe', titulo: '⚔️ Itens de Classe' },
         { cat: 'origem', titulo: '🌍 Itens de Origem' }
     ];
-    
     secoes.forEach(sec => {
+        const secaoDiv = document.querySelector(`.catalogo-secao > [data-categoria='${sec.cat}']`)?.parentElement;
         const lista = document.getElementById(`catalogo-lista-${sec.cat}`);
-        const secaoDiv = lista?.parentElement;
         const icon = document.getElementById(`catalogo-icon-${sec.cat}`);
-        
         if (!lista || !secaoDiv) return;
-        
+
         if (!termo) {
             // Sem busca: mostra todas as seções, mas colapsadas
             secaoDiv.style.display = 'block';
@@ -4223,13 +4253,13 @@ function filtrarCatalogoPorNome(termoBusca) {
             if (icon) icon.textContent = '▶';
             return;
         }
-        
+
         // Filtra itens da categoria
         const itens = window.DadosLoader.obterItensPorCategoria(sec.cat) || [];
-        const itensFiltrados = itens.filter(item => 
+        const itensFiltrados = itens.filter(item =>
             item.nome.toLowerCase().includes(termo)
         );
-        
+
         if (itensFiltrados.length === 0) {
             // Esconde seção se nenhum item corresponde
             secaoDiv.style.display = 'none';
@@ -4238,7 +4268,7 @@ function filtrarCatalogoPorNome(termoBusca) {
             secaoDiv.style.display = 'block';
             lista.style.display = 'grid';
             if (icon) icon.textContent = '▼';
-            
+
             // Re-renderiza apenas os itens filtrados
             lista.innerHTML = itensFiltrados.map(item => {
                 const peso = (item.peso != null) ? item.peso : 0;
@@ -4248,7 +4278,7 @@ function filtrarCatalogoPorNome(termoBusca) {
                         <div style="flex:1;">
                             <div style="font-weight:bold;">${item.nome}</div>
                             <div style="font-size:12px; color:#666;">Peso: ${peso} • ${item.raca ? 'Raça: '+item.raca : item.classe ? 'Classe: '+item.classe : item.origem ? 'Origem: '+item.origem : ''}</div>
-                            ${desc ? `<div style="font-size:12px; color:#444; margin-top:4px;">${desc}</div>` : ''}
+                            ${desc ? `<div style=\"font-size:12px; color:#444; margin-top:4px;\">${desc}</div>` : ''}
                         </div>
                         <div>
                             <button type="button" class="btn btn-primary" style="white-space:nowrap;" onclick="adicionarItemCatalogo('${sec.cat}','${item.id}')">Adicionar</button>

@@ -1,7 +1,7 @@
 {
   "id": "domador",
   "nome": "Domador",
-  "descricao": "Especialista em treinar e controlar animais e criaturas.",
+  "descricao": "Têm habilidades de fazer pactos com criaturas. Utilizando tatuagens ou cristais podem armazenar essas criaturas e soltá-las. Em níveis mais altos, pode-se criar uma fusão com a criatura que foi feita o pacto. Algumas criaturas podem ser combinadas, formando poderes especiais. Não funciona em bosses.\n\nBônus em Conjuração ou Demonologia +7\nBônus de 7 em Pontos de Mana\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 3.",
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Adestramento", "Comunicação animal", "Liderança"],
   "dadosVida": "1d10",

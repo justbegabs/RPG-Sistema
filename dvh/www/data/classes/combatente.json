@@ -1,7 +1,7 @@
 {
   "id": "combatente",
   "nome": "Combatente",
-  "descricao": "Lutador especializado em combate corpo a corpo com diversas armas.",
+  "descricao": "Foca seus ataques no corpo-a-corpo e é focado em combate.\n\nBônus em Luta ou Espadas +5\nBônus de 7 de Vida\nVida aumentada por nível = Resiliência vezes 4.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "forca",
   "habilidades": ["Combate corpo a corpo", "Resistência", "Versatilidade em armas"],
   "dadosVida": "1d10",

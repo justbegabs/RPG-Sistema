@@ -1,7 +1,7 @@
 {
   "id": "sereia",
   "nome": "Sereia",
-  "descricao": "Ser aquático com cauda de peixe e voz encantadora.",
+  "descricao": "Criaturas aquáticas com poderes de se transformarem em criaturas humanoides, mas em sua forma humana têm vários pontos mais fracos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -13,7 +13,7 @@
       }
     }
   },
-  "caracteristicas": ["Respiração aquática", "Voz encantadora", "Natação aprimorada", "Conexão com o mar"]
+  "caracteristicas": ["Respiração aquática", "Voz encantadora", "Natação aprimorada", "Conexão com o mar", "Fragilidade em terra firme"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

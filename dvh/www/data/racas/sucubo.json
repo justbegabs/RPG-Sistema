@@ -1,7 +1,7 @@
 {
   "id": "sucubo",
   "nome": "Súcubo",
-  "descricao": "Demônio sedutor que manipula através do desejo e da sedução.",
+  "descricao": "Grupo de seres que costumam ser mal vistos por serem sedutores e um pouco atirados. São parte demônios parte humanos. Possuem aparências belas e atrativas para atrair mais vítimas, pois podem se alimentar da energia sexual ou romântica das pessoas. Podem também controlar a mente de seus alvos ou manipular sonhos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": -3
     }
   },
-  "caracteristicas": ["Sedução", "Manipulação mental", "Magia de encantamento", "Asas demoníacas"]
+  "caracteristicas": ["Sedução", "Manipulação mental", "Magia de encantamento", "Asas demoníacas", "Alimenta-se de energia emocional e sexual"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

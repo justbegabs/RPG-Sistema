@@ -1,7 +1,7 @@
 {
   "id": "veliria",
   "nome": "Velíria",
-  "descricao": "Raça ancestral com conexão profunda com a magia e elementos.",
+  "descricao": "Tem aparências hipnóticas, parecendo belas em uma camada de ilusão, mas sendo demoníacas por baixo. Possuem corpos alongados e esguios, com peles pálidas, quase fantasmagóricas. Olhos brilhantes azuis ou brancos, vestes esvoaçantes e finas. São quase espíritos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Magia elemental", "Longevidade", "Sabedoria ancestral", "Resistência mágica"]
+  "caracteristicas": ["Magia elemental", "Longevidade", "Sabedoria ancestral", "Resistência mágica", "Aparência hipnótica"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

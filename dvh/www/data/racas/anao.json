@@ -1,7 +1,7 @@
 {
   "id": "anao",
   "nome": "Anão",
-  "descricao": "Resistente e robusto, excelente em combate e mineração.",
+  "descricao": "De estatura baixa, comumente entre 1 a 1,5 metro, costumam ser fortes e musculosos. Suas barbas são características marcantes, mas não necessárias. Normalmente dividem-se em clãs, gostam de forjar itens com metalurgia ou até mesmo joalheria. São sarcásticos, mas suas Almas não são Corrompidas. Possuem diversas sub-raças como Montanhosos ou do Vale, mas os mais raros são os do Ferro.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Visão no escuro", "Resistência a veneno", "Proficiência com armas", "Construção"]
+  "caracteristicas": ["Visão no escuro", "Resistência a veneno", "Proficiência com armas", "Construção", "Forja e joalheria"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

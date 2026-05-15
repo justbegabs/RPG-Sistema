@@ -1,7 +1,7 @@
 {
   "id": "atirador",
   "nome": "Atirador",
-  "descricao": "Especialista em combate à distância com armas de fogo ou arcos.",
+  "descricao": "Prefere utilizar de armas de longa distância, focado em combate.\n\nBônus em Armas de Fogo ( grandes ) ou Arcos +7\nBônus de 7 de Vida\nVida aumentada por nível = Resiliência vezes 3.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "destreza",
   "habilidades": ["Precisão", "Combate à distância", "Mira aprimorada"],
   "dadosVida": "1d8",

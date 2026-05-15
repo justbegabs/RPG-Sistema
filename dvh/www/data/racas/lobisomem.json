@@ -1,7 +1,7 @@
 {
   "id": "lobisomem",
   "nome": "Lobisomem",
-  "descricao": "Ser que se transforma em lobo, com força e ferocidade aumentadas.",
+  "descricao": "Podem ser nascidos ou transformados. Normalmente se juntam em clãs ou tribos para se protegerem e se denominam entre Alpha, Beta e Ômega, sendo o Alpha o mais forte do bando e quem possui o poder de transformar outros, o Beta, mais comum dentre os Lobisomens, possuindo muitos poderes excepcionais, e o Ômega, que é um Lobisomem solitário e não possui um clã, se vira sozinho. Alguns Lobisomens podem virar lobos completos.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Transformação", "Força aumentada", "Sentidos aguçados", "Fraqueza à prata"]
+  "caracteristicas": ["Transformação", "Alfa, Beta e Ômega", "Força aumentada", "Sentidos aguçados", "Fraqueza à prata"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

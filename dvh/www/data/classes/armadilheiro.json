@@ -1,7 +1,7 @@
 {
   "id": "armadilheiro",
   "nome": "Armadilheiro",
-  "descricao": "Especialista em criar e usar armadilhas para capturar ou eliminar inimigos.",
+  "descricao": "Prefere ataques traiçoeiros com armadilhas e distrações.\n\nBônus em Armadilhas ou Explosivos +7\nBônus de 7 em Defesa\nVida aumentada por nível = Resiliência vezes 3.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Armadilhas", "Engenharia", "Criatividade tática"],
   "dadosVida": "1d8",

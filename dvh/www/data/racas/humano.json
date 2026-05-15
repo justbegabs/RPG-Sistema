@@ -1,7 +1,7 @@
 {
   "id": "humano",
   "nome": "Humano",
-  "descricao": "Adaptável e versátil, os humanos são a raça mais comum.",
+  "descricao": "Um povo que não possui muita distinção entre os outros. São os mais comuns dentre todos os outros, mas por isso possuem uma pequena quantidade de Alma. Sua melhor característica é que podem se misturar facilmente entre as multidões.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": -3
     }
   },
-  "caracteristicas": ["Versátil", "Adaptável", "Sem traços especiais", "Determinação"]
+  "caracteristicas": ["Versátil", "Adaptável", "Pequena quantidade de Alma", "Sem traços especiais", "Determinação"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

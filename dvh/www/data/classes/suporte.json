@@ -1,7 +1,7 @@
 {
   "id": "suporte",
   "nome": "Suporte",
-  "descricao": "Especialista em apoiar aliados através de buffs, curas e estratégia.",
+  "descricao": "Se foca em restaurar a sanidade e mana dos outros. Utiliza meios mágicos e científicos para isto.\n\nBônus em Exorcismo ou Vontade +7\nBônus de 7 em Sanidade\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 3.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Suporte tático", "Coordenação", "Fortificação"],
   "dadosVida": "1d8",

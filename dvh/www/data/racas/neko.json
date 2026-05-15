@@ -1,7 +1,7 @@
 {
   "id": "neko",
   "nome": "Neko",
-  "descricao": "Humanoide felino com agilidade e reflexos aprimorados.",
+  "descricao": "Raças de meio humanos e meio gatos. Têm traços mistos, dependendo da família podem ter orelhas de gato, rabos, olhos de gato, garras afiadas e/ou pele com pelagem felpuda, sendo mais semelhantes a gatos ou a humanos. Alguns Nekos possuem inclusive a habilidade de transformação em um gato completo.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Agilidade felina", "Sentidos aguçados", "Equilíbrio", "Gatos e caudas"]
+  "caracteristicas": ["Agilidade felina", "Sentidos aguçados", "Equilíbrio", "Gatos e caudas", "Transformação em gato completo"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

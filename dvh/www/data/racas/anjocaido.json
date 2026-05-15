@@ -1,7 +1,7 @@
 {
   "id": "anjocaido",
   "nome": "Anjo Caído",
-  "descricao": "Anjo que perdeu sua graça, mantendo poderes mas com coração sombrio.",
+  "descricao": "Anjos que foram expulsos dos seus panteões designados e mandados para os círculos do submundo.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Magia das trevas", "Asas quebradas", "Conhecimento antigo", "Tormenta interior"]
+  "caracteristicas": ["Magia das trevas", "Asas quebradas", "Conhecimento antigo", "Tormenta interior", "Expulsos dos panteões"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

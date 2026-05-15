@@ -1,7 +1,7 @@
 {
   "id": "anjo",
   "nome": "Anjo",
-  "descricao": "Ser celestial com poderes da luz e proteção divina.",
+  "descricao": "Seres angelicais, advindos da forma dos Deuses Primordiais, diferente do que as pessoas crêem que vieram da religião católica. Eles são a forma pura da bondade e da magia. São conectados diretamente com os deuses de todos os tipos e conseguem praticar exorcismos de criaturas demoníacas com maior facilidade.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": 3
     }
   },
-  "caracteristicas": ["Resistência a dano radiante", "Voo", "Magia da luz", "Proteção divina"]
+  "caracteristicas": ["Resistência a dano radiante", "Voo", "Magia da luz", "Proteção divina", "Exorcismo facilitado"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

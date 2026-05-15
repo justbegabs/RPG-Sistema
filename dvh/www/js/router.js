@@ -313,8 +313,8 @@ function displayRacaDetail(raca) {
     if (title) title.textContent = `👥 ${raca.nome}`;
     if (!content) return;
 
-    const bonus = raca.bonus?.traduzido || {};
-    const bonusTexto = raca.bonus?.atributos || 'Sem bônus';
+    const bonus = raca.bonus?.traduzido || raca.bonus || {};
+    const bonusInfo = formatRacaBonus(raca);
     const caracteristicas = raca.caracteristicas || [];
 
     content.innerHTML = `
@@ -329,33 +329,33 @@ function displayRacaDetail(raca) {
                 </div>
 
                 <div class="detail-section">
-                    <h3>⚡ Bônus de Atributos</h3>
-                    <p class="detail-info"><strong>${bonusTexto}</strong></p>
+                    <h3>⚡ ${bonusInfo.label}</h3>
+                    <p class="detail-info"><strong>${bonusInfo.texto}</strong></p>
+                        ${bonusInfo.alma ? `<p><strong>${bonusInfo.alma}</strong></p>` : ''}
                     ${Object.keys(bonus).length > 0 ? `
                         <div class="bonus-grid">
-                            ${Object.entries(bonus).map(([attr, valor]) => {
-                                const nomeAtributo = attr.charAt(0).toUpperCase() + attr.slice(1);
-                                return `
-                                    <div class="bonus-item">
-                                        <span class="bonus-label">${nomeAtributo}</span>
-                                        <span class="bonus-value ${valor > 0 ? 'positive' : valor < 0 ? 'negative' : ''}">
-                                            ${valor > 0 ? '+' : ''}${valor}
-                                        </span>
-                                    </div>
-                                `;
-                            }).join('')}
+                            ${bonus.pericias && typeof bonus.pericias === 'object' ? Object.entries(bonus.pericias).map(([pericia, valor]) => `
+                                <div class="bonus-item">
+                                    <span class="bonus-label">${pericia.charAt(0).toUpperCase() + pericia.slice(1).replace(/_/g, ' ')}</span>
+                                    <span class="bonus-value ${valor > 0 ? 'positive' : valor < 0 ? 'negative' : ''}">${valor > 0 ? '+' : ''}${valor}</span>
+                                </div>
+                            `).join('') : ''}
+                            ${bonus.pericias_penalidade && typeof bonus.pericias_penalidade === 'object' ? Object.entries(bonus.pericias_penalidade).map(([pericia, valor]) => `
+                                <div class="bonus-item">
+                                    <span class="bonus-label">${pericia.charAt(0).toUpperCase() + pericia.slice(1).replace(/_/g, ' ')}</span>
+                                    <span class="bonus-value negative">${valor}</span>
+                                </div>
+                            `).join('') : ''}
+                            ${bonus.alma !== undefined ? `
+                                <div class="bonus-item">
+                                    <span class="bonus-label">Alma</span>
+                                    <span class="bonus-value ${bonus.alma > 0 ? 'positive' : bonus.alma < 0 ? 'negative' : ''}">${bonus.alma > 0 ? '+' : ''}${bonus.alma}</span>
+                                </div>
+                            ` : ''}
                         </div>
                     ` : ''}
                 </div>
 
-                ${caracteristicas.length > 0 ? `
-                    <div class="detail-section">
-                        <h3>✨ Características</h3>
-                        <div class="detail-tags">
-                            ${caracteristicas.map(c => `<span class="tag tag-feature">${c}</span>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         </div>
     `;
@@ -371,50 +371,16 @@ function displayClasseDetail(classe) {
     if (title) title.textContent = `⚔️ ${classe.nome}`;
     if (!content) return;
 
-    const habilidades = classe.habilidades || [];
-    const proficiencias = classe.proficiencias || [];
-    const atributoPrincipal = classe.atributoPrincipal || 'N/A';
-
     content.innerHTML = `
         <div class="detail-card">
             <div class="detail-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <h1>${classe.nome}</h1>
-                <span class="detail-badge">${classe.dadosVida || 'N/A'}</span>
             </div>
             <div class="detail-body">
                 <div class="detail-section">
                     <h3>📖 Descrição</h3>
                     <p class="detail-description">${classe.descricao}</p>
                 </div>
-
-                <div class="detail-info-grid">
-                    <div class="info-item">
-                        <strong>Atributo Principal</strong>
-                        <span>${atributoPrincipal.charAt(0).toUpperCase() + atributoPrincipal.slice(1)}</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Dados de Vida</strong>
-                        <span>${classe.dadosVida || 'N/A'}</span>
-                    </div>
-                </div>
-
-                ${habilidades.length > 0 ? `
-                    <div class="detail-section">
-                        <h3>✨ Habilidades</h3>
-                        <div class="detail-tags">
-                            ${habilidades.map(h => `<span class="tag tag-skill">${h}</span>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
-
-                ${proficiencias.length > 0 ? `
-                    <div class="detail-section">
-                        <h3>🎯 Proficiências</h3>
-                        <div class="detail-tags">
-                            ${proficiencias.map(p => `<span class="tag tag-proficiency">${p}</span>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         </div>
     `;
@@ -459,14 +425,6 @@ function displayOrigemDetail(origem) {
                     <p class="detail-info">${equipamento}</p>
                 </div>
 
-                ${caracteristicas.length > 0 ? `
-                    <div class="detail-section">
-                        <h3>⭐ Características</h3>
-                        <div class="detail-tags">
-                            ${caracteristicas.map(c => `<span class="tag tag-feature">${c}</span>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         </div>
     `;
@@ -601,8 +559,7 @@ function createRacaCard(raca) {
     card.className = 'data-card clickable-card';
     card.style.cursor = 'pointer';
     
-    const bonusTexto = raca.bonus?.atributos || 'Sem bônus';
-    const caracteristicas = raca.caracteristicas || [];
+    const bonusInfo = formatRacaBonus(raca);
     
     card.innerHTML = `
         <div class="data-card-header">
@@ -611,13 +568,9 @@ function createRacaCard(raca) {
         <div class="data-card-body">
             <p class="data-description">${raca.descricao}</p>
             <div class="data-info">
-                <p><strong>Bônus de Atributos:</strong> ${bonusTexto}</p>
+                <p><strong>${bonusInfo.label}:</strong> ${bonusInfo.texto}</p>
+                ${bonusInfo.alma ? `<p><strong>${bonusInfo.alma}</strong></p>` : ''}
             </div>
-            ${caracteristicas.length > 0 ? `
-                <div class="data-tags">
-                    ${caracteristicas.map(c => `<span class="tag">${c}</span>`).join('')}
-                </div>
-            ` : ''}
         </div>
     `;
     
@@ -628,6 +581,43 @@ function createRacaCard(raca) {
     return card;
 }
 
+function formatRacaBonus(raca) {
+    const bonus = raca?.bonus?.traduzido || raca?.bonus || {};
+
+    if (bonus.atributos) {
+        return { label: 'Bônus de Atributos', texto: bonus.atributos };
+    }
+
+    const partes = [];
+
+    if (bonus.pericias && typeof bonus.pericias === 'object') {
+        const texto = Object.entries(bonus.pericias)
+            .map(([pericia, valor]) => `${pericia.charAt(0).toUpperCase() + pericia.slice(1).replace(/_/g, ' ')} ${valor > 0 ? '+' : ''}${valor}`)
+            .join(', ');
+        if (texto) partes.push(texto);
+    }
+
+    if (bonus.pericias_penalidade && typeof bonus.pericias_penalidade === 'object') {
+        const texto = Object.entries(bonus.pericias_penalidade)
+            .map(([pericia, valor]) => `${pericia.charAt(0).toUpperCase() + pericia.slice(1).replace(/_/g, ' ')} ${valor}`)
+            .join(', ');
+        if (texto) partes.push(texto);
+    }
+
+    if (bonus.alma !== undefined) {
+        return {
+            label: 'Bônus de Perícias',
+            texto: partes.length > 0 ? partes.join(' • ') : 'Sem bônus',
+            alma: `Alma ${bonus.alma > 0 ? '+' : ''}${bonus.alma}`
+        };
+    }
+
+    return {
+        label: 'Bônus de Perícias',
+        texto: partes.length > 0 ? partes.join(' • ') : 'Sem bônus'
+    };
+}
+
 /**
  * Cria um card HTML para uma classe
  */
@@ -635,38 +625,14 @@ function createClasseCard(classe) {
     const card = document.createElement('div');
     card.className = 'data-card clickable-card';
     card.style.cursor = 'pointer';
-    
-    const habilidades = classe.habilidades || [];
-    const proficiencias = classe.proficiencias || [];
-    const atributoPrincipal = classe.atributoPrincipal || 'N/A';
+    const descricaoResumo = getResumoClasse(classe.descricao || '');
     
     card.innerHTML = `
         <div class="data-card-header">
             <h3>${classe.nome}</h3>
-            <span class="data-badge">${classe.dadosVida || 'N/A'}</span>
         </div>
         <div class="data-card-body">
-            <p class="data-description">${classe.descricao}</p>
-            <div class="data-info">
-                <p><strong>Atributo Principal:</strong> ${atributoPrincipal.charAt(0).toUpperCase() + atributoPrincipal.slice(1)}</p>
-                <p><strong>Dados de Vida:</strong> ${classe.dadosVida || 'N/A'}</p>
-            </div>
-            ${habilidades.length > 0 ? `
-                <div class="data-section">
-                    <strong>Habilidades:</strong>
-                    <div class="data-tags">
-                        ${habilidades.map(h => `<span class="tag tag-skill">${h}</span>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            ${proficiencias.length > 0 ? `
-                <div class="data-section">
-                    <strong>Proficiências:</strong>
-                    <div class="data-tags">
-                        ${proficiencias.map(p => `<span class="tag tag-proficiency">${p}</span>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
+            <p class="data-description">${descricaoResumo}</p>
         </div>
     `;
     
@@ -675,6 +641,21 @@ function createClasseCard(classe) {
     });
     
     return card;
+}
+
+function getResumoClasse(descricao) {
+    // Mostra apenas a parte introdutoria no card; bonus ficam no detalhe da classe.
+    const marcadoresBonus = ['\n\nBônus ', '\n\nÔnus '];
+
+    let corte = descricao.length;
+    marcadoresBonus.forEach((marcador) => {
+        const indice = descricao.indexOf(marcador);
+        if (indice !== -1 && indice < corte) {
+            corte = indice;
+        }
+    });
+
+    return descricao.slice(0, corte).trim();
 }
 
 /**

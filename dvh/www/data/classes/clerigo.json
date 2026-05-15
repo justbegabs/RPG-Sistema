@@ -1,7 +1,7 @@
 {
   "id": "clerigo",
   "nome": "Clérigo",
-  "descricao": "Servo divino que usa magia para curar e proteger.",
+  "descricao": "Perde parte das memórias ao se tornar um clérigo para poder absorver o conhecimento dos Deuses.\n\nBônus em Conhecimento Arcano ou Religião +7.\nBônus de 7 em Sanidade\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 3.\nPontos de mana aumentados por nível = Magia vezes 2.",
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Cura divina", "Proteção", "Magia divina"],
   "dadosVida": "1d8",

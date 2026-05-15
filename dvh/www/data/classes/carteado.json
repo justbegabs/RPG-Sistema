@@ -1,7 +1,7 @@
 {
   "id": "carteado",
   "nome": "Carteado",
-  "descricao": "Jogador que usa cartas mágicas para realizar feitiços e invocações.",
+  "descricao": "Necessita de um baralho mágico, costumam vir de heranças familiares mas podem ser achados para comprar com muito esforço e por muito dinheiro. As magias são lançadas quando a carta atinge um alvo. Troca e venda de cartas são legalizadas, mas nenhuma pessoa que não seja um Carteado consegue tocar as cartas, as destruindo no processo.\n\nO usuário pode usar várias cartas de uma vez à troco de um pouco de sanidade e mana a mais ( 1d3 por carta a mais, totalizando 5 - um Royal Flush ). Têm um total de 52 cartas padrões e as cartas especiais que são mais raras e podem ser únicas. As cartas jogadas padrões mesmo que falhem voltam ao seu deck de cartas, as especiais se falham são destruídas em fogo mágico ( que não queima de fato )\n\nBônus em Pontaria ou Armadilhas +7\nBônus de 7 em Pontos de Mana\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 3.",
   "atributoPrincipal": "carisma",
   "habilidades": ["Magia de cartas", "Sorte", "Estratégia"],
   "dadosVida": "1d6",

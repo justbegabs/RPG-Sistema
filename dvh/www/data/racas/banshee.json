@@ -1,7 +1,7 @@
 {
   "id": "banshee",
   "nome": "Banshee",
-  "descricao": "Espírito feminino com grito sobrenatural que anuncia a morte.",
+  "descricao": "Normalmente mulheres que possuem poderes incríveis de ligação com os mortos. Podem sentir locais onde mortes trágicas ou mágicas aconteceram. Têm o poder do Grito da Banshee, que afasta criaturas sobrenaturais a custo de um pouco de sua Alma.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -11,7 +11,7 @@
       "alma": -3
     }
   },
-  "caracteristicas": ["Grito da morte", "Visão espiritual", "Imaterialidade parcial", "Premonição"]
+  "caracteristicas": ["Grito da morte", "Visão espiritual", "Imaterialidade parcial", "Premonição", "Ligação com os mortos"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

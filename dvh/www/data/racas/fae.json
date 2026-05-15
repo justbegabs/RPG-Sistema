@@ -1,7 +1,7 @@
 {
   "id": "fae",
   "nome": "Fae",
-  "descricao": "Criatura das fadas com magia natural e conexão com o reino feérico.",
+  "descricao": "Raças de fadas de todos os tipos, podendo possuir asas ou não. Faes são criaturas de Almas Puras no seu geral, mas existem as Fadas Corrompidas, que possuem personalidades mais sarcásticas e irônicas.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Magia natural", "Voo", "Ilusões", "Vulnerabilidade ao ferro"]
+  "caracteristicas": ["Magia natural", "Voo", "Ilusões", "Vulnerabilidade ao ferro", "Almas puras ou corrompidas"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

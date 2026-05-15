@@ -1,7 +1,7 @@
 {
   "id": "curandeiro",
   "nome": "Curandeiro",
-  "descricao": "Especialista em medicina e cura, salvando vidas através de conhecimento médico.",
+  "descricao": "Se foca em restaurar a vida dos outros. Utiliza de meios mágicos e científicos para isto.\n\nBônus em Alquimia ou Medicina +7\nBônus de 7 em Vida\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Magia vezes 2.\nPontos de mana aumentados por nível = Magia vezes 3.",
   "atributoPrincipal": "sabedoria",
   "habilidades": ["Medicina", "Cura", "Diagnóstico"],
   "dadosVida": "1d8",

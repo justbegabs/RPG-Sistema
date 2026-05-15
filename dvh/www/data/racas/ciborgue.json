@@ -1,7 +1,7 @@
 {
   "id": "ciborgue",
   "nome": "Ciborgue",
-  "descricao": "Ser humano com partes mecânicas e tecnológicas integradas.",
+  "descricao": "Criaturas que um dia já foram humanas, mas mexeram tanto tecnologicamente em seus corpos que já não podem mais serem chamados assim. Possuem partes de equipamentos eletrônicos e melhorias científicas em seus corpos, sendo poucas ou muitas, chegando perto de serem completos robôs.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Aprimoramentos tecnológicos", "Resistência física", "Interface tecnológica", "Vulnerabilidade elétrica"]
+  "caracteristicas": ["Aprimoramentos tecnológicos", "Resistência física", "Interface tecnológica", "Vulnerabilidade elétrica", "Corpo parcialmente mecânico"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

@@ -1,7 +1,7 @@
 {
   "id": "demonologista",
   "nome": "Demonologista",
-  "descricao": "Estudioso de demônios que invoca e controla criaturas infernais.",
+  "descricao": "Têm sua alma corrompida parcialmente para compreender os demônios e criaturas infernais.\n\nBônus em Necromancia ou Demonologia +7.\nÔnus de -3 em Alma\nBônus de 7 em Sanidade\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Carisma vezes 2.\nPontos de mana aumentados por nível = Magia vezes 3.",
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Invocações demoníacas", "Controle", "Conhecimento infernal"],
   "dadosVida": "1d6",

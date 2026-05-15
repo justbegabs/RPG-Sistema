@@ -1,7 +1,7 @@
 {
   "id": "mago",
   "nome": "Mago",
-  "descricao": "Usuário de magia arcana, estudioso dos segredos do universo.",
+  "descricao": "Usa mais de poderes e artefatos mágicos para combate. Tem habilidade de amaldiçoar armas e objetos para auxiliar em combate. As armas recebem bônus de ataque e os objetos podem ter os mais diversos usos, como criar criaturas a partir de coisas não-vivas para combate, para companhia ou até suporte.\n\nBônus em Encantamento ou Runas +7\nBônus de 7 em Pontos de Mana\nVida aumentada por nível = Resiliência vezes 2.\nSanidade aumentada por nível = Magia vezes 2.\nPontos de mana aumentados por nível = Magia vezes 3.",
   "atributoPrincipal": "inteligencia",
   "habilidades": ["Magia arcana", "Conhecimento", "Magias de combate"],
   "dadosVida": "1d6",

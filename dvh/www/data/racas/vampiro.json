@@ -1,7 +1,7 @@
 {
   "id": "vampiro",
   "nome": "Vampiro",
-  "descricao": "Ser imortal que se alimenta de sangue, com habilidades sobrenaturais e fraqueza à luz solar.",
+  "descricao": "Uma raça muito versátil, possuindo diversos poderes, mas diversos problemas. Não podem andar no Sol a menos que possuam um anel de herança. Eram humanos, mas são transformados após terem a mordida de um vampiro e depois sugarem o sangue de alguma outra espécie; caso contrário, morrem. São alérgicos a algumas ervas e plantas como Lavanda, Alecrim, Menta e principalmente Verbena, que é letal para eles. São proibidos de entrar em residências a não ser que sejam convidados.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Imortalidade", "Visão no escuro aprimorada", "Regeneração", "Fraqueza à luz solar"]
+  "caracteristicas": ["Imortalidade", "Visão no escuro aprimorada", "Regeneração", "Fraqueza à luz solar", "Fraqueza a ervas como verbena", "Convite obrigatório para residências"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],

@@ -1,7 +1,7 @@
 {
   "id": "kitsune",
   "nome": "Kitsune",
-  "descricao": "Humanoide raposa com múltiplas caudas e poderes ilusórios.",
+  "descricao": "Raças meio humanas, meio raposas. São todas de almas puras. Podem possuir caudas físicas ou manifestá-las como objetos. A cada 100 anos elas adquirem mais uma cauda, com total de 9, com exibição de poder e conhecimento. Se a cauda for uma manifestação em objeto e for quebrada ou danificada, almas corrompidas são invocadas para proteger as demais. Se todas as caudas forem quebradas, a Kitsune morre. Podem se transformar em raposas completas.",
   "bonus": {
     "traduzido": {
       "pericias": {
@@ -10,7 +10,7 @@
       }
     }
   },
-  "caracteristicas": ["Ilusões", "Múltiplas caudas", "Magia de fogo", "Transformação"]
+  "caracteristicas": ["Ilusões", "Múltiplas caudas", "Magia de fogo", "Transformação", "Caudas como símbolo de poder"]
   ,
   "habilidadeRaca": "",
   "habilidadesNivel0": ["", "", ""],
